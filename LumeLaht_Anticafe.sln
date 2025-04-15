@@ -1,0 +1,33 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.12.35527.113 d17.12
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "FrontEnd", "FrontEnd", "{DDA3AC95-A2EA-4CF6-8C25-BF7ABFA72691}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DataJson", "DataJson", "{2E4FDDB7-93B5-4DD1-A8F0-F3FFFACA0CEC}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "GatewayApi", "GatewayApi", "{B2BFE37F-D21C-47CA-8740-090934FC6C00}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "LumeLaht_RoomApi", "LumeLaht_RoomApi", "{0E3BC6CE-9E9C-4027-AC74-FA1FB2AADF4D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LumeLaht_RoomApi", "LumeLaht_RoomApi\LumeLaht_RoomApi.csproj", "{9EEBCABA-1CB9-4A6A-9D37-3642849C5083}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{9EEBCABA-1CB9-4A6A-9D37-3642849C5083}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9EEBCABA-1CB9-4A6A-9D37-3642849C5083}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9EEBCABA-1CB9-4A6A-9D37-3642849C5083}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9EEBCABA-1CB9-4A6A-9D37-3642849C5083}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{9EEBCABA-1CB9-4A6A-9D37-3642849C5083} = {0E3BC6CE-9E9C-4027-AC74-FA1FB2AADF4D}
+	EndGlobalSection
+EndGlobal
