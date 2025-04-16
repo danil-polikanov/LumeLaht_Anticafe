@@ -1,12 +1,12 @@
-﻿using LumaCove_Api.Domain.Entities;
+﻿using LumeLaht_RoomApi.Core_.Entities;
 using Microsoft.EntityFrameworkCore;
 
-namespace LumaCove_Api.Infrastructure.Data
+namespace LumeLaht_RoomApi.Infrastructure.Data
 {
-    public class AppDbContext:DbContext
+    public class AppDbContext : DbContext
     {
-        public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) 
-        { 
+        public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
+        {
 
         }
         public DbSet<Room> Rooms { get; set; }
@@ -18,7 +18,7 @@ namespace LumaCove_Api.Infrastructure.Data
             modelBuilder.Entity<RoomActivity>()
                 .HasKey(ra => new { ra.RoomId, ra.ActivityId });
 
-            modelBuilder.Entity<Address>().HasData(
+           modelBuilder.Entity<Address>().HasData(
                 new Address { AddressId = 1, City = "Narva", Region = "Ida-Virumaa", PostalCode = "12341", Country = "Estonia", PhoneNumber = "+37254356533" },
                 new Address { AddressId = 2, City = "Narva", Region = "Ida-Virumaa", PostalCode = "12342", Country = "Estonia", PhoneNumber = "+37254351534" },
                 new Address { AddressId = 3, City = "Jõhvi", Region = "Ida-Virumaa", PostalCode = "12343", Country = "Estonia", PhoneNumber = "+37254326535" },
@@ -28,7 +28,7 @@ namespace LumaCove_Api.Infrastructure.Data
             );
 
             modelBuilder.Entity<Activity>().HasData(
-                new Activity { ActivityId = 1, Name = "Monopolia",Description="Table Game"},
+                new Activity { ActivityId = 1, Name = "Monopolia", Description = "Table Game" },
                 new Activity { ActivityId = 2, Name = "Uno", Description = "Table Game" },
                 new Activity { ActivityId = 3, Name = "Chess", Description = "Table Game" },
                 new Activity { ActivityId = 4, Name = "Scrabble", Description = "Table Game" },

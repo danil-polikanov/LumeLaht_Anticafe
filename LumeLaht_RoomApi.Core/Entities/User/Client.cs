@@ -1,8 +1,8 @@
-﻿using LumaCove_Api.Domain.Interfaces;
+﻿using LumeLaht_RoomApi.Core_.Interfaces;
 
-namespace LumaCove_Api.Domain.Entities.User
+namespace LumeLaht_RoomApi.Core_.Entities.User
 {
-    public class Client:IUser
+    public class Client : IUser
     {
         public int UserId { get; set; }
         public string Name { get; set; }

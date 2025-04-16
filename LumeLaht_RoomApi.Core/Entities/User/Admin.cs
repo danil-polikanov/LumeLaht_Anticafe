@@ -1,8 +1,8 @@
-﻿using LumaCove_Api.Domain.Interfaces;
+﻿using LumeLaht_RoomApi.Core_.Interfaces;
 
-namespace LumaCove_Api.Domain.Entities.User
+namespace LumeLaht_RoomApi.Core_.Entities.User
 {
-    public class Employee:IUser
+    public class Admin : IUser
     {
         public int UserId { get; set; }
         public string Name { get; set; }
@@ -14,6 +14,5 @@ namespace LumaCove_Api.Domain.Entities.User
         public string PasswordConfirmed { get; set; }
         public string EmailConfirmed { get; set; }
         public string Phone { get; set; }
-
     }
 }

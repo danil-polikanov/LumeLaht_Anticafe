@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace LumaCove_Api.Domain.Entities
+namespace LumeLaht_RoomApi.Core_.Entities
 {
     public class RoomActivity
     {

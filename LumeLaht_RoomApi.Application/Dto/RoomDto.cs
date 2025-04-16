@@ -1,6 +1,5 @@
-﻿using LumaCove_Api.Domain.Entities;
-
-namespace LumaCove_Api.Domain.Dto
+﻿using LumeLaht_RoomApi.Core_.Entities;
+namespace LumeLaht_RoomApi.Application.Dto
 {
     public class RoomDto
     {

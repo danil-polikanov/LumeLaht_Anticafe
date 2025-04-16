@@ -1,5 +1,8 @@
-
-using LumaCove_Api.Infrastructure.Data;
+using LumaCove_RoomApi;
+using LumeLaht_RoomApi.Application.Services;
+using LumeLaht_RoomApi.Core_.Interfaces;
+using LumeLaht_RoomApi.Infrastructure.Data;
+using LumeLaht_RoomApi.Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
 using System;
 
@@ -10,6 +13,8 @@ namespace LumeLaht_RoomApi
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
+            builder.Services.AddScoped<IRoomRepository, RoomRepository>();
+            builder.Services.AddScoped<IRoomService, RoomService>();
             builder.Configuration.AddJsonFile("appsettings.Local.json", optional: true, reloadOnChange: true);
             builder.Services.AddDbContext<AppDbContext>(option =>
             {
@@ -19,7 +24,6 @@ namespace LumeLaht_RoomApi
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
 
-
             var app = builder.Build();
 
             if (app.Environment.IsDevelopment())
@@ -27,11 +31,9 @@ namespace LumeLaht_RoomApi
                 app.UseSwagger();
                 app.UseSwaggerUI();
             }
-
             app.UseHttpsRedirection();
 
             app.UseAuthorization();
-
 
             app.MapControllers();
 

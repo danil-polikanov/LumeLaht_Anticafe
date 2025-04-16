@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace LumaCove_Api.Domain.Entities
+namespace LumeLaht_RoomApi.Core_.Entities
 {
     public class Activity
     {
@@ -12,5 +12,5 @@ namespace LumaCove_Api.Domain.Entities
         [MaxLength(500)]
         public string Description { get; set; }
         public List<RoomActivity> RoomActivity { get; set; }
-    }                      
+    }
 }
