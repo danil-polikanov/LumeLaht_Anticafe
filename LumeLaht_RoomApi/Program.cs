@@ -5,6 +5,7 @@ using LumeLaht_RoomApi.Infrastructure.Data;
 using LumeLaht_RoomApi.Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
 using System;
+using System.Text.Json.Serialization;
 
 namespace LumeLaht_RoomApi
 {
@@ -20,7 +21,10 @@ namespace LumeLaht_RoomApi
             {
                 option.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
             });
-            builder.Services.AddControllers();
+            builder.Services.AddControllers().AddJsonOptions(options =>
+            {
+                options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve;
+            }); ;
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
 

@@ -21,12 +21,12 @@ namespace LumeLaht_RoomApi.Infrastructure.Repositories
 
         public async Task<IEnumerable<Room>> GetAllAsync()
         {
-            return await _context.Rooms.ToListAsync();
+            return await _context.Rooms.Include(ad=>ad.Address).Include(ra=>ra.RoomActivity).ThenInclude(aa=>aa.Activity).ToListAsync();
         }
 
         public async Task<Room> GetByIdAsync(int id)
         {
-            return await _context.Rooms.FirstOrDefaultAsync(r => r.RoomId == id);
+            return await _context.Rooms.Include(ad => ad.Address).Include(ra => ra.RoomActivity).ThenInclude(aa=>aa.Activity).FirstOrDefaultAsync(r => r.RoomId == id);
         }
 
         public async Task AddAsync(Room room)
