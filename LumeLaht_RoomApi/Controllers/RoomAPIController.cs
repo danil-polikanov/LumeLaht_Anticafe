@@ -1,4 +1,7 @@
-﻿using LumeLaht_RoomApi.Core_.Entities;
+﻿using AutoMapper;
+using Azure.Core;
+using LumeLaht_RoomApi.Application.Dto;
+using LumeLaht_RoomApi.Core_.Entities;
 using LumeLaht_RoomApi.Core_.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
@@ -10,9 +13,11 @@ namespace LumaCove_RoomApi.Controllers
     {
         private readonly IRoomService _roomService;
         private readonly ILogger<RoomController> _logger;
+        private readonly IMapper _mapper;
 
-        public RoomController(IRoomService roomService, ILogger<RoomController> logger)
+        public RoomController(IMapper mapper,IRoomService roomService, ILogger<RoomController> logger)
         {
+            _mapper = mapper;
             _roomService = roomService;
             _logger = logger;
         }
@@ -23,21 +28,24 @@ namespace LumaCove_RoomApi.Controllers
             var rooms = await _roomService.GetAllRoomsAsync();
             return Ok(rooms);
         }
-
         [HttpGet("{id}")]
-        public async Task<ActionResult<Room>> Get(int id)
+        public async Task<IActionResult> GetRoomById(int id)
         {
             var room = await _roomService.GetRoomByIdAsync(id);
             if (room == null)
+            {
                 return NotFound();
-            return Ok(room);
+            }
+            var response = _mapper.Map<RoomResponse>(room);
+            return Ok(response);
         }
-
         [HttpPost]
-        public async Task<ActionResult> Create([FromBody] Room room)
+        public async Task<ActionResult> Create(CreateRoomRequest request)
         {
+            var room = _mapper.Map<Room>(request);
             await _roomService.CreateRoomAsync(room);
-            return CreatedAtAction(nameof(Get), new { id = room.RoomId }, room);
+            var response = _mapper.Map<RoomResponse>(room);
+            return CreatedAtAction(nameof(GetRoomById), new { id = room.RoomId }, response);
         }
 
         [HttpPut("{id}")]

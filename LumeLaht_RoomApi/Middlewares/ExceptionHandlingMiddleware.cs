@@ -43,7 +43,7 @@ namespace LumeLaht_RoomApi.Middlewares
                 NotFoundException => StatusCodes.Status404NotFound,
                 ValidationException => StatusCodes.Status400BadRequest,
                 ConflictException => StatusCodes.Status409Conflict,
-                _ => StatusCodes.Status500InternalServerError
+                _ => StatusCodes.Status500InternalServerError 
             };
 
             context.Response.StatusCode = statusCode;
