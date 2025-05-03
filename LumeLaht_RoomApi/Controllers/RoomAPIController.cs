@@ -42,20 +42,18 @@ namespace LumaCove_RoomApi.Controllers
         [HttpPost]
         public async Task<ActionResult> Create(CreateRoomRequest request)
         {
-            var room = _mapper.Map<Room>(request);
-            await _roomService.CreateRoomAsync(room);
-            var response = _mapper.Map<RoomResponse>(room);
-            return CreatedAtAction(nameof(GetRoomById), new { id = room.RoomId }, response);
+            var created = await _roomService.CreateRoomAsync(request);
+            return CreatedAtAction(nameof(GetRoomById), new { id = created.RoomId }, created);
         }
 
         [HttpPut("{id}")]
-        public async Task<ActionResult> Update(int id, [FromBody] Room room)
+        public async Task<ActionResult> Update(int id,CreateRoomRequest request)
         {
-            if (id != room.RoomId)
+            if (id==null || request == null){
                 return BadRequest();
-
-            await _roomService.UpdateRoomAsync(room);
-            return NoContent();
+            }
+            var updated=await _roomService.UpdateRoomAsync(id, request);
+            return Ok(updated);
         }
 
         [HttpDelete("{id}")]

@@ -13,6 +13,6 @@ namespace LumeLaht_RoomApi.Core_.Interfaces
         Task<Room> GetByIdAsync(int id);
         Task AddAsync(Room room);
         Task UpdateAsync(Room room);
-        Task DeleteAsync(int id);
+        Task DeleteAsync(Room room);
     }
 }

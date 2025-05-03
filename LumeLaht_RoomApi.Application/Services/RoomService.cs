@@ -1,4 +1,6 @@
-﻿using LumeLaht_RoomApi.Core_.Entities;
+﻿using AutoMapper;
+using LumeLaht_RoomApi.Application.Dto;
+using LumeLaht_RoomApi.Core_.Entities;
 using LumeLaht_RoomApi.Core_.Interfaces;
 using Microsoft.Extensions.Logging;
 using System;
@@ -10,22 +12,49 @@ namespace LumeLaht_RoomApi.Application.Services
 {
     public class RoomService : IRoomService
     {
-        private readonly IRoomRepository _repository;
-        private readonly ILogger<RoomService> _logger;
-        public RoomService(IRoomRepository repository, ILogger<RoomService> logger)
+        private readonly IRoomRepository _roomRepository;
+        private readonly IMapper _mapper;
+
+        public RoomService(IRoomRepository roomRepository, IMapper mapper)
         {
-            _repository = repository;
-            _logger = logger;
+            _roomRepository = roomRepository;
+            _mapper = mapper;
         }
-        public async Task<IEnumerable<Room>> GetAllRoomsAsync() => await _repository.GetAllAsync();
 
-        public async Task<Room> GetRoomByIdAsync(int id) => await _repository.GetByIdAsync(id);
+        public async Task<List<RoomResponse>> GetAllRoomsAsync()
+        {
+            var rooms = await _roomRepository.GetAllAsync();
+            return _mapper.Map<List<RoomResponse>>(rooms);
+        }
 
-        public async Task CreateRoomAsync(Room room) => await _repository.AddAsync(room);
+        public async Task<RoomResponse> GetRoomByIdAsync(int id)
+        {
+            var room = await _roomRepository.GetByIdAsync(id);
+            return room == null ? null : _mapper.Map<RoomResponse>(room);
+        }
 
-        public async Task UpdateRoomAsync(Room room) => await _repository.UpdateAsync(room);
+        public async Task<RoomResponse> CreateRoomAsync(CreateRoomRequest request)
+        {
+            var room = _mapper.Map<Room>(request);
+            await _roomRepository.AddAsync(room); 
+            return _mapper.Map<RoomResponse>(room);
+        }
+        public async Task<RoomResponse> UpdateRoomAsync(int id,CreateRoomRequest request)
+        {
+            var room = _mapper.Map<Room>(request);
+            room.RoomId = id;
+            await _roomRepository.UpdateAsync(room);
+            return _mapper.Map<RoomResponse>(room);
+        }
 
-        public async Task DeleteRoomAsync(int id) => await _repository.DeleteAsync(id);
+
+        public async Task<bool> DeleteRoomAsync(int id)
+        {
+            var room = await _roomRepository.GetByIdAsync(id);
+            if (room == null) return false;
+            await _roomRepository.DeleteAsync(room);
+            return true;
+        }
     }
 
 }

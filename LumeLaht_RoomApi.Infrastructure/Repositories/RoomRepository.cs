@@ -41,9 +41,8 @@ namespace LumeLaht_RoomApi.Infrastructure.Repositories
             await _context.SaveChangesAsync();
         }
 
-        public async Task DeleteAsync(int id)
+        public async Task DeleteAsync(Room room)
         {
-            var room = await _context.Rooms.FindAsync(id);
             if (room != null)
             {
                 _context.Rooms.Remove(room);

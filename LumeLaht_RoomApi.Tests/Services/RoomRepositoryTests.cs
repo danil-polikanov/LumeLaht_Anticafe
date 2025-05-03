@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace LumeLaht_RoomApi.Application.Services
+namespace LumeLaht_RoomApi.Tests.Services
 {
-    internal class RoomProfile
+    internal class RoomRepositoryTests
     {
     }
 }
