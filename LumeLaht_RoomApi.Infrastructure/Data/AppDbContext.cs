@@ -19,12 +19,12 @@ namespace LumeLaht_RoomApi.Infrastructure.Data
                 .HasKey(ra => new { ra.RoomId, ra.ActivityId });
 
            modelBuilder.Entity<Address>().HasData(
-                new Address { AddressId = 1, City = "Narva", Region = "Ida-Virumaa", PostalCode = "12341", Country = "Estonia", PhoneNumber = "+37254356533" },
-                new Address { AddressId = 2, City = "Narva", Region = "Ida-Virumaa", PostalCode = "12342", Country = "Estonia", PhoneNumber = "+37254351534" },
-                new Address { AddressId = 3, City = "Jõhvi", Region = "Ida-Virumaa", PostalCode = "12343", Country = "Estonia", PhoneNumber = "+37254326535" },
-                new Address { AddressId = 4, City = "Narva", Region = "Ida-Virumaa", PostalCode = "12344", Country = "Estonia", PhoneNumber = "+37254365536" },
-                new Address { AddressId = 5, City = "Tallinn", Region = "Tallinn", PostalCode = "12345", Country = "Estonia", PhoneNumber = "+37254356537" },
-                new Address { AddressId = 6, City = "Tallinn", Region = "Tallinn", PostalCode = "12346", Country = "Estonia", PhoneNumber = "+37254356538" }
+                new Address { AddressId = 1, City = "Narva", Region = "Ida-Virumaa",AddressName="Gagarini 11", PostalCode = "12341", Country = "Estonia", PhoneNumber = "+37254356533" },
+                new Address { AddressId = 2, City = "Narva", Region = "Ida-Virumaa", AddressName = "Narva mnt 32", PostalCode = "12342", Country = "Estonia", PhoneNumber = "+37254351534" },
+                new Address { AddressId = 3, City = "Jõhvi", Region = "Ida-Virumaa", AddressName = "Taamsaare 24", PostalCode = "12343", Country = "Estonia", PhoneNumber = "+37254326535" },
+                new Address { AddressId = 4, City = "Narva", Region = "Ida-Virumaa", AddressName = "Vaba mnt 105", PostalCode = "12344", Country = "Estonia", PhoneNumber = "+37254365536" },
+                new Address { AddressId = 5, City = "Tallinn", Region = "Tallinn", AddressName = "Tallina mnt 25", PostalCode = "12345", Country = "Estonia", PhoneNumber = "+37254356537" },
+                new Address { AddressId = 6, City = "Tallinn", Region = "Tallinn", AddressName = "Tallina mnt 23", PostalCode = "12346", Country = "Estonia", PhoneNumber = "+37254356538" }
             );
 
             modelBuilder.Entity<Activity>().HasData(

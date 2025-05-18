@@ -9,6 +9,9 @@ namespace LumeLaht_RoomApi.Core_.Entities
         public int AddressId { get; set; }
         [Required]
         [MaxLength(100)]
+        public string AddressName { get; set; }
+        [Required]
+        [MaxLength(100)]
         public string City { get; set; }
         [Required]
         [MaxLength(100)]
