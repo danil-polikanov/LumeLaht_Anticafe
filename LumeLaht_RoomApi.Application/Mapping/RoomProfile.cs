@@ -17,6 +17,7 @@ namespace LumeLaht_RoomApi.Application.Mapping
             CreateMap<CreateRoomRequest, Room>();
             CreateMap<Room, RoomResponse>();
             CreateMap<Address, AddressResponse>();
+            CreateMap<Activity, ActivityResponse>();
         }
     }
 
