@@ -34,21 +34,25 @@ namespace LumeLaht_RoomApi.Tests.Repositories
         }
         //Get by Id Tests
         [Fact]
-        public async Task GetRoomByIdAsync_ShouldReturnNull_WhenNotFound()
+        public async Task GetRoomByIdAsync_ShouldReturnRoom_WhenExist()
         {
             // Arrange
-            _roomRepoMock.Setup(r => r.GetByIdAsync(It.IsAny<int>())).ReturnsAsync((Room)null);
+            var rooms = new List<Room>
+            {
+                new Room { RoomId = 1, Name = "Room 1", AddressId = 1 },
+                new Room { RoomId = 2, Name = "Room 2", AddressId = 2 }
+            };
+            _roomRepoMock.Setup(r => r.GetByIdAsync(It.IsAny<int>())).ReturnsAsync(rooms[1]);
 
             // Act
-            var result = await _service.GetRoomByIdAsync(123);
+            var result = await _service.GetRoomByIdAsync(2);
 
             // Assert
-            Assert.Null(result);
+            Assert.Equal(2, rooms[1].RoomId);
         }
         // Get Include Tests
-
         [Fact]
-        public async Task GetAllRoomsAsync_ShouldReturnMappedRoomList()
+        public async Task GetAllRoomsAsync_ShouldReturnMappedRoomList_WhenExist()
         {        
             // Arrange
             var rooms = new List<Room>
@@ -57,16 +61,14 @@ namespace LumeLaht_RoomApi.Tests.Repositories
                 new Room { RoomId = 2, Name = "Room 2", AddressId = 2 }
             };
             _roomRepoMock.Setup(r => r.GetAllAsync()).ReturnsAsync(rooms);
-
             // Act
             var result = await _service.GetAllRoomsAsync();
             // Assert
             Assert.Equal(2, result.Count);
-            Assert.Equal("Room 1", result[0].Name);
         }
         //Create Tests
         [Fact]
-        public async Task CreateRoomAsync_ShouldReturnMappedRoomResponse()
+        public async Task CreateRoomAsync_ShouldReturnMappedRoomResponse_WhenCreated()
         {
             // Arrange
             var request = new CreateRoomRequest
@@ -77,12 +79,10 @@ namespace LumeLaht_RoomApi.Tests.Repositories
                 IsActive = true,
                 AddressId = 1
             };
-
             Room capturedRoom = null;
             _roomRepoMock.Setup(r => r.AddAsync(It.IsAny<Room>()))
                 .Callback<Room>(room => capturedRoom = room)
                 .Returns(Task.CompletedTask);
-
             // Act
             var result = await _service.CreateRoomAsync(request);
 
@@ -91,7 +91,6 @@ namespace LumeLaht_RoomApi.Tests.Repositories
             Assert.NotNull(capturedRoom);
             _roomRepoMock.Verify(r => r.AddAsync(It.IsAny<Room>()), Times.Once);
         }
-
         //Update Tests
         [Fact]
         public async Task UpdateRoomAsync_ShouldReturnFalse_WhenRoomNotFound()

@@ -46,8 +46,6 @@ namespace LumeLaht_RoomApi.Application.Services
             await _roomRepository.UpdateAsync(room);
             return _mapper.Map<RoomResponse>(room);
         }
-
-
         public async Task<bool> DeleteRoomAsync(int id)
         {
             var room = await _roomRepository.GetByIdAsync(id);
