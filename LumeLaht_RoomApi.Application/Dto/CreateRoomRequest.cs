@@ -14,7 +14,7 @@ namespace LumeLaht_RoomApi.Application.Dto
         public double PricePerHour { get; set; }
         public bool IsActive { get; set; }
         public int AddressId { get; set; }
-        public Address Address { get; set; }
-        public List<Activity> Activities { get; set; }
+        public AddressResponse Address { get; set; }
+        public List<ActivityResponse> Activities { get; set; }
     }
 }

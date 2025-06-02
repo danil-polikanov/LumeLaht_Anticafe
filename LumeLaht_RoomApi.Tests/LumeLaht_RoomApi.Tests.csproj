@@ -22,6 +22,7 @@
   <ItemGroup>
     <ProjectReference Include="..\LumeLaht_RoomApi.Application\LumeLaht_RoomApi.Application.csproj" />
     <ProjectReference Include="..\LumeLaht_RoomApi.Infrastructure\LumeLaht_RoomApi.Infrastructure.csproj" />
+    <ProjectReference Include="..\LumeLaht_RoomApi\LumeLaht_RoomApi.csproj" />
   </ItemGroup>
 
 </Project>

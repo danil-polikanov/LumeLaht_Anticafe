@@ -37,7 +37,7 @@ namespace LumeLaht_RoomApi.Middlewares
         private async Task HandleExceptionAsync(HttpContext context, Exception exception)
         {
             context.Response.ContentType = "application/json";  // Create status code 
-
+            
             var statusCode = exception switch
             {
                 NotFoundException => StatusCodes.Status404NotFound,

@@ -49,9 +49,8 @@ namespace LumaCove_RoomApi.Controllers
         [HttpPut("{id}")]
         public async Task<ActionResult> Update(int id,CreateRoomRequest request)
         {
-            if (id==null || request == null){
-                return BadRequest();
-            }
+            if (id <= 0)
+                return BadRequest("Invalid Room ID");
             var updated=await _roomService.UpdateRoomAsync(id, request);
             return Ok(updated);
         }

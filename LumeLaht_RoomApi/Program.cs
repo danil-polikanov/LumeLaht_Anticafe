@@ -34,6 +34,8 @@ namespace LumeLaht_RoomApi
             builder.Services.AddTransient<ExceptionHandlingMiddleware>();
             builder.Services.AddTransient<RequestResponseLoggingMiddleware>();
             builder.Services.AddScoped<IRoomRepository, RoomRepository>();
+            builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
+            builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
             builder.Services.AddScoped<IRoomService, RoomService>();
             builder.Services.AddDbContext<AppDbContext>(option =>
             {

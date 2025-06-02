@@ -14,13 +14,16 @@ namespace LumeLaht_RoomApi.Application.Mapping
     {
         public RoomProfile()
         {
-            CreateMap<CreateRoomRequest, Room>();
+            CreateMap<CreateRoomRequest, Room>()
+                .ForMember(dest => dest.RoomActivity, opt => opt.Ignore());
             CreateMap<Room, RoomResponse>()
                 .ForMember(dest=>dest.Activity,opt=>opt
                 .MapFrom(src=>src.RoomActivity
                 .Select(ra=>ra.Activity)));
             CreateMap<Address, AddressResponse>();
+            CreateMap<AddressResponse, Address>();
             CreateMap<Activity, ActivityResponse>();
+            CreateMap<ActivityResponse, Activity>();
         }
     }
 
