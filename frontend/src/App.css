@@ -1,0 +1,11 @@
+.App {
+    background: url('../public/adam-mechedal-iWmfPbKmxEQ-unsplash.jpg')
+        center/cover fixed;
+    text-align: center;
+    min-height: 100vh;
+    color: white;
+}
+
+.App-link {
+    color: #61dafb;
+}

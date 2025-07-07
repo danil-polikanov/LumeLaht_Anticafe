@@ -1,0 +1,25 @@
+.header {
+    padding-top: 100px;
+}
+/* Header.module.css */
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.left,
+.center,
+.right {
+    display: flex;
+    flex: 1;
+    align-items: center;
+}
+
+.center {
+    justify-content: center;
+}
+
+.right {
+    justify-content: flex-end;
+}

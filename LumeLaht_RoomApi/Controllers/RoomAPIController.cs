@@ -15,7 +15,7 @@ namespace LumaCove_RoomApi.Controllers
         private readonly ILogger<RoomController> _logger;
         private readonly IMapper _mapper;
 
-        public RoomController(IMapper mapper,IRoomService roomService, ILogger<RoomController> logger)
+        public RoomController(IMapper mapper, IRoomService roomService, ILogger<RoomController> logger)
         {
             _mapper = mapper;
             _roomService = roomService;
@@ -23,39 +23,57 @@ namespace LumaCove_RoomApi.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Room>>> GetAll()
+        public async Task<ActionResult<IEnumerable<RoomResponse>>> GetAll()
         {
             var rooms = await _roomService.GetAllRoomsAsync();
             return Ok(rooms);
         }
+
         [HttpGet("{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> GetRoomById(int id)
         {
             var room = await _roomService.GetRoomByIdAsync(id);
             if (room == null)
-            {
                 return NotFound();
-            }
+
             var response = _mapper.Map<RoomResponse>(room);
             return Ok(response);
         }
+
         [HttpPost]
+        [ProducesResponseType(StatusCodes.Status201Created)]
         public async Task<ActionResult> Create(CreateRoomRequest request)
         {
+            if (request == null)
+                return BadRequest("Request is null");
+
             var created = await _roomService.CreateRoomAsync(request);
             return CreatedAtAction(nameof(GetRoomById), new { id = created.RoomId }, created);
         }
 
         [HttpPut("{id}")]
-        public async Task<ActionResult> Update(int id,CreateRoomRequest request)
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult> Update(int id, CreateRoomRequest request)
         {
             if (id <= 0)
                 return BadRequest("Invalid Room ID");
-            var updated=await _roomService.UpdateRoomAsync(id, request);
-            return Ok(updated);
+
+            if (request == null)
+                return BadRequest("Request is null");
+
+            var updated = await _roomService.UpdateRoomAsync(id, request);
+            if (updated == null)
+                return NotFound();
+
+            return Ok(updated); // или NoContent() если не возвращаешь ничего
         }
 
-        [HttpDelete("{id}")]
+        [HttpDelete("{id:int}")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
         public async Task<ActionResult> Delete(int id)
         {
             await _roomService.DeleteRoomAsync(id);
