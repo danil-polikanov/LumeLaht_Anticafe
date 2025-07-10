@@ -1,10 +1,14 @@
 import React from 'react';
 import styles from './Logo.module.css';
+import { NavLink } from 'react-router-dom';
 const Logo = () => {
     return (
-        <div className="d-flex">
-            <img className={styles.logo} src="/logo.jpg"></img>
-        </div>
+        <NavLink className="d-flex" to={'/'}>
+            <img
+                className={styles.logo}
+                src="/Test_Logo-removebg-preview.png"
+            ></img>
+        </NavLink>
     );
 };
 

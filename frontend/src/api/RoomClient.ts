@@ -13,7 +13,7 @@ const API_URL = 'https://localhost:7001/api'; // заменить на реал�
 export const RoomClient = {
     getAllRooms: async (): Promise<RoomResponse[]> => {
         try {
-            const response = await axios.get<RoomResponse[]>(API_URL);
+            const response = await axios.get<RoomResponse[]>(API_URL + '/room');
             return response.data;
         } catch (error) {
             handleError(error);

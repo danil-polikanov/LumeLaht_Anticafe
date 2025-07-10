@@ -1,0 +1,12 @@
+.Layout_menu {
+    background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
+        url('/public/Test_LumeLaht_Image.jpg') center/cover;
+    text-align: center;
+    min-height: 100vh;
+    color: white;
+}
+.Layout_menu::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+}

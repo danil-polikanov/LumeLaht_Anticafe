@@ -59,7 +59,7 @@ namespace LumaCove_RoomApi.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult> Update(int id, CreateRoomRequest request)
         {
-            if (id <= 0)
+            if (id ==null)
                 return BadRequest("Invalid Room ID");
 
             if (request == null)

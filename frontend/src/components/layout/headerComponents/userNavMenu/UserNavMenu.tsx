@@ -1,15 +1,19 @@
 import React from 'react';
-
+import styles from './UserNavMenu.module.css';
 const UserNavMenu = () => {
     return (
-        <div>
-            <button type="button" className="btn btn-primary">
-                Login
-            </button>
-            <button type="button" className="btn btn-primary mx-3">
-                Sign in
-            </button>
-        </div>
+        <ul className="d-flex flex-row gap-3 my-auto list-unstyled">
+            <li className={styles.navItem}>
+                <button type="button" className={`${styles.userButtons}`}>
+                    Login
+                </button>
+            </li>
+            <li className={styles.navItem}>
+                <button type="button" className={`${styles.userButtons}`}>
+                    Sign in
+                </button>
+            </li>
+        </ul>
     );
 };
 
