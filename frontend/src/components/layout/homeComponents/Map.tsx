@@ -5,7 +5,6 @@ const Map = () => {
         <div
             style={{
                 width: '100%',
-                marginBottom: '20px',
             }}
         >
             <iframe

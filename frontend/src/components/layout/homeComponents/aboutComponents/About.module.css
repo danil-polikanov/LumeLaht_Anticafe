@@ -30,14 +30,12 @@
 
 .contextContainer {
     flex: 1;
-    animation: fadeInLeft 1.5s linear forwards;
     opacity: 0;
     transform: translateX(-50px);
 }
 
 .imageContainer {
     flex: 1;
-    animation: fadeInRight 1.5s linear forwards;
     opacity: 0;
     transform: translateX(50px);
     display: flex;
@@ -49,7 +47,12 @@
     border-radius: 20px;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0);
 }
-
+.contextContainer.animate {
+    animation: fadeInLeft 1.5s linear forwards;
+}
+.imageContainer.animate {
+    animation: fadeInRight 1.5s linear forwards;
+}
 /* Animations */
 @keyframes fadeInLeft {
     to {

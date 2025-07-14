@@ -1,9 +1,24 @@
-import React from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import styles from './About.module.css';
 
 const AboutContext = () => {
+    const ref = useRef(null);
+    const [isVisible, setIsVisible] = useState(false);
+
+    useEffect(() => {
+        const observer = new IntersectionObserver(([entry]) => {
+            if (entry.isIntersecting) setIsVisible(true);
+        });
+        if (ref.current) observer.observe(ref.current);
+        return () => observer.disconnect();
+    }, []);
     return (
-        <div className={styles.contextContainer}>
+        <div
+            ref={ref}
+            className={`${styles.contextContainer} ${
+                isVisible ? styles.animate : ''
+            }`}
+        >
             <h2 className="text-center">About</h2>
             <p>
                 <strong>LumeLaht</strong> is a modern anti-cafe in the center of
