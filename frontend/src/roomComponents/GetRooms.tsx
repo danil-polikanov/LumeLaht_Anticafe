@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { RoomClient } from '../api/RoomClient';
-import { RoomResponse } from '../types/RoomResponse';
+import { RoomResponse } from '../types/roomTypes/RoomResponse';
 import './GetRooms.css';
 export default function GetRooms() {
     const [rooms, setRooms] = useState<RoomResponse[]>([]);

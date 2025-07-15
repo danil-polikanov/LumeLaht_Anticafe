@@ -1,12 +1,12 @@
 import axios, { AxiosError } from 'axios';
-import { RoomResponse } from '../types/RoomResponse';
+import { RoomResponse } from '../types/roomTypes/RoomResponse';
 import type {
     AxiosInstance,
     AxiosRequestConfig,
     AxiosResponse,
     CancelToken,
 } from 'axios';
-import { CreateRoomRequest } from '../types/CreateRoomRequest';
+import { CreateRoomRequest } from '../types/roomTypes/CreateRoomRequest';
 
 const API_URL = 'https://localhost:7001/api'; // заменить на реальный
 
