@@ -49,7 +49,7 @@ const RoomFilters: React.FC = () => {
                 <div className="d-flex justify-content-between align-items-center">
                     <h5 className="mb-0">
                         <i className="fas fa-filter me-2"></i>
-                        Фильтры
+                        Filters
                     </h5>
                     <button
                         className="btn btn-sm btn-outline-light"
@@ -71,13 +71,13 @@ const RoomFilters: React.FC = () => {
                         <div className="col-md-6">
                             <label htmlFor="search" className="form-label">
                                 <i className="fas fa-search me-1"></i>
-                                Поиск
+                                Search
                             </label>
                             <input
                                 type="text"
                                 id="search"
                                 className="form-control"
-                                placeholder="Поиск по названию или описанию..."
+                                placeholder="Search by name or description..."
                                 value={filters.search}
                                 onChange={(e) =>
                                     handleFilterChange('search', e.target.value)
@@ -89,13 +89,13 @@ const RoomFilters: React.FC = () => {
                         <div className="col-md-3">
                             <label htmlFor="city" className="form-label">
                                 <i className="fas fa-map-marker-alt me-1"></i>
-                                Город
+                                City
                             </label>
                             <input
                                 type="text"
                                 id="city"
                                 className="form-control"
-                                placeholder="Город"
+                                placeholder="City"
                                 value={filters.city}
                                 onChange={(e) =>
                                     handleFilterChange('city', e.target.value)
@@ -107,13 +107,13 @@ const RoomFilters: React.FC = () => {
                         <div className="col-md-3">
                             <label htmlFor="region" className="form-label">
                                 <i className="fas fa-globe me-1"></i>
-                                Регион
+                                Region
                             </label>
                             <input
                                 type="text"
                                 id="region"
                                 className="form-control"
-                                placeholder="Регион"
+                                placeholder="Region"
                                 value={filters.region}
                                 onChange={(e) =>
                                     handleFilterChange('region', e.target.value)
@@ -124,8 +124,8 @@ const RoomFilters: React.FC = () => {
                         {/* Цена от */}
                         <div className="col-md-3">
                             <label htmlFor="minPrice" className="form-label">
-                                <i className="fas fa-ruble-sign me-1"></i>
-                                Цена от
+                                <i className="fas fa-euro-sign me-1"></i>
+                                Price from
                             </label>
                             <input
                                 type="number"
@@ -146,8 +146,8 @@ const RoomFilters: React.FC = () => {
                         {/* Цена до */}
                         <div className="col-md-3">
                             <label htmlFor="maxPrice" className="form-label">
-                                <i className="fas fa-ruble-sign me-1"></i>
-                                Цена до
+                                <i className="fas fa-euro-sign me-1"></i>
+                                Price to
                             </label>
                             <input
                                 type="number"
@@ -169,7 +169,7 @@ const RoomFilters: React.FC = () => {
                         <div className="col-md-3">
                             <label className="form-label">
                                 <i className="fas fa-toggle-on me-1"></i>
-                                Статус
+                                Status
                             </label>
                             <div className="form-check">
                                 <input
@@ -188,7 +188,7 @@ const RoomFilters: React.FC = () => {
                                     className="form-check-label"
                                     htmlFor="isActive"
                                 >
-                                    Только активные
+                                    Active only
                                 </label>
                             </div>
                         </div>
@@ -201,7 +201,7 @@ const RoomFilters: React.FC = () => {
                                 onClick={clearFilters}
                             >
                                 <i className="fas fa-times me-1"></i>
-                                Очистить
+                                Clear
                             </button>
                         </div>
                     </div>
@@ -210,7 +210,7 @@ const RoomFilters: React.FC = () => {
                     <div className="mt-4">
                         <label className="form-label">
                             <i className="fas fa-running me-1"></i>
-                            Виды активности
+                            List Activities
                         </label>
                         <div className="row">
                             {availableActivities.map((activity) => (
@@ -255,35 +255,35 @@ const RoomFilters: React.FC = () => {
                             <div className="alert alert-info d-flex align-items-center">
                                 <i className="fas fa-info-circle me-2"></i>
                                 <span>
-                                    Активные фильтры:{' '}
+                                    Current filters:{' '}
                                     {filters.search && (
                                         <span className="badge bg-primary me-1">
-                                            Поиск
+                                            Search
                                         </span>
                                     )}
                                     {filters.city && (
                                         <span className="badge bg-primary me-1">
-                                            Город
+                                            City
                                         </span>
                                     )}
                                     {filters.region && (
                                         <span className="badge bg-primary me-1">
-                                            Регион
+                                            Region
                                         </span>
                                     )}
                                     {filters.minPrice > 0 && (
                                         <span className="badge bg-primary me-1">
-                                            Мин. цена
+                                            Min. price
                                         </span>
                                     )}
                                     {filters.maxPrice < 10000 && (
                                         <span className="badge bg-primary me-1">
-                                            Макс. цена
+                                            Max. Price
                                         </span>
                                     )}
                                     {filters.activities.length > 0 && (
                                         <span className="badge bg-primary me-1">
-                                            Активности (
+                                            Activities (
                                             {filters.activities.length})
                                         </span>
                                     )}

@@ -61,7 +61,7 @@ const RoomCard: React.FC<RoomCardProps> = ({ room, onRoomClick }) => {
                 >
                     <div className="text-center text-muted">
                         <i className="fas fa-image fa-3x mb-2"></i>
-                        <div>Фото комнаты</div>
+                        <div>Room photo</div>
                     </div>
                 </div>
 
@@ -72,7 +72,7 @@ const RoomCard: React.FC<RoomCardProps> = ({ room, onRoomClick }) => {
                             className="card-title mb-0"
                             style={{ cursor: 'pointer' }}
                         >
-                            {room.name || 'Без названия'}
+                            {room.name || 'Untitled'}
                         </h5>
                         {getStatusBadge(room.isActive)}
                     </div>
@@ -83,7 +83,7 @@ const RoomCard: React.FC<RoomCardProps> = ({ room, onRoomClick }) => {
                             ? room.description.length > 100
                                 ? `${room.description.substring(0, 100)}...`
                                 : room.description
-                            : 'Описание не указано'}
+                            : 'Untitled Description'}
                     </p>
 
                     {/* Адрес */}
@@ -104,7 +104,7 @@ const RoomCard: React.FC<RoomCardProps> = ({ room, onRoomClick }) => {
                     {room.activity && room.activity.length > 0 && (
                         <div className="mb-3">
                             <div className="small text-muted mb-1">
-                                Доступные активности:
+                                Available activities:
                             </div>
                             <div>
                                 {getActivityBadges(room.activity)}
@@ -131,7 +131,7 @@ const RoomCard: React.FC<RoomCardProps> = ({ room, onRoomClick }) => {
                                 }}
                             >
                                 <i className="fas fa-eye me-1"></i>
-                                Подробнее
+                                Read More
                             </button>
                         </div>
                     </div>

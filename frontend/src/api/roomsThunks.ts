@@ -3,6 +3,7 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 import axios, { AxiosError } from 'axios';
 import { RoomResponse } from '../types/roomTypes/RoomResponse';
 import { CreateRoomRequest } from '../types/roomTypes/CreateRoomRequest';
+import { rejects } from 'assert';
 
 const API_URL = 'https://localhost:7001/api/room'; // базовый путь
 

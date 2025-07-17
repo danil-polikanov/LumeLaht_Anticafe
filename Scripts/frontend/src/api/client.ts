@@ -9,52 +9,59 @@
 // ReSharper disable InconsistentNaming
 
 import axios, { AxiosError } from 'axios';
-import type { AxiosInstance, AxiosRequestConfig, AxiosResponse, CancelToken } from 'axios';
+import type {
+    AxiosInstance,
+    AxiosRequestConfig,
+    AxiosResponse,
+    CancelToken,
+} from 'axios';
 
 export class Client {
     protected instance: AxiosInstance;
     protected baseUrl: string;
-    protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
+    protected jsonParseReviver: ((key: string, value: any) => any) | undefined =
+        undefined;
 
     constructor(baseUrl?: string, instance?: AxiosInstance) {
-
         this.instance = instance || axios.create();
 
-        this.baseUrl = baseUrl ?? "";
-
+        this.baseUrl = baseUrl ?? '';
     }
 
     /**
      * @return OK
      */
-    roomAll( cancelToken?: CancelToken): Promise<RoomResponse[]> {
-        let url_ = this.baseUrl + "/api/Room";
-        url_ = url_.replace(/[?&]$/, "");
+    roomAll(cancelToken?: CancelToken): Promise<RoomResponse[]> {
+        let url_ = this.baseUrl + '/api/Room';
+        url_ = url_.replace(/[?&]$/, '');
 
         let options_: AxiosRequestConfig = {
-            method: "GET",
+            method: 'GET',
             url: url_,
             headers: {
-                "Accept": "text/plain"
+                Accept: 'text/plain',
             },
-            cancelToken
+            cancelToken,
         };
 
-        return this.instance.request(options_).catch((_error: any) => {
-            if (isAxiosError(_error) && _error.response) {
-                return _error.response;
-            } else {
-                throw _error;
-            }
-        }).then((_response: AxiosResponse) => {
-            return this.processRoomAll(_response);
-        });
+        return this.instance
+            .request(options_)
+            .catch((_error: any) => {
+                if (isAxiosError(_error) && _error.response) {
+                    return _error.response;
+                } else {
+                    throw _error;
+                }
+            })
+            .then((_response: AxiosResponse) => {
+                return this.processRoomAll(_response);
+            });
     }
 
     protected processRoomAll(response: AxiosResponse): Promise<RoomResponse[]> {
         const status = response.status;
         let _headers: any = {};
-        if (response.headers && typeof response.headers === "object") {
+        if (response.headers && typeof response.headers === 'object') {
             for (const k in response.headers) {
                 if (response.headers.hasOwnProperty(k)) {
                     _headers[k] = response.headers[k];
@@ -64,52 +71,62 @@ export class Client {
         if (status === 200) {
             const _responseText = response.data;
             let result200: any = null;
-            let resultData200  = _responseText;
+            let resultData200 = _responseText;
             result200 = JSON.parse(resultData200);
             return Promise.resolve<RoomResponse[]>(result200);
-
         } else if (status !== 200 && status !== 204) {
             const _responseText = response.data;
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            return throwException(
+                'An unexpected server error occurred.',
+                status,
+                _responseText,
+                _headers
+            );
         }
         return Promise.resolve<RoomResponse[]>(null as any);
     }
 
     /**
-     * @param body (optional) 
+     * @param body (optional)
      * @return Created
      */
-    roomPOST(body: CreateRoomRequest | undefined, cancelToken?: CancelToken): Promise<void> {
-        let url_ = this.baseUrl + "/api/Room";
-        url_ = url_.replace(/[?&]$/, "");
+    roomPOST(
+        body: CreateRoomRequest | undefined,
+        cancelToken?: CancelToken
+    ): Promise<void> {
+        let url_ = this.baseUrl + '/api/Room';
+        url_ = url_.replace(/[?&]$/, '');
 
         const content_ = JSON.stringify(body);
 
         let options_: AxiosRequestConfig = {
             data: content_,
-            method: "POST",
+            method: 'POST',
             url: url_,
             headers: {
-                "Content-Type": "application/json",
+                'Content-Type': 'application/json',
             },
-            cancelToken
+            cancelToken,
         };
 
-        return this.instance.request(options_).catch((_error: any) => {
-            if (isAxiosError(_error) && _error.response) {
-                return _error.response;
-            } else {
-                throw _error;
-            }
-        }).then((_response: AxiosResponse) => {
-            return this.processRoomPOST(_response);
-        });
+        return this.instance
+            .request(options_)
+            .catch((_error: any) => {
+                if (isAxiosError(_error) && _error.response) {
+                    return _error.response;
+                } else {
+                    throw _error;
+                }
+            })
+            .then((_response: AxiosResponse) => {
+                return this.processRoomPOST(_response);
+            });
     }
 
     protected processRoomPOST(response: AxiosResponse): Promise<void> {
         const status = response.status;
         let _headers: any = {};
-        if (response.headers && typeof response.headers === "object") {
+        if (response.headers && typeof response.headers === 'object') {
             for (const k in response.headers) {
                 if (response.headers.hasOwnProperty(k)) {
                     _headers[k] = response.headers[k];
@@ -119,10 +136,14 @@ export class Client {
         if (status === 201) {
             const _responseText = response.data;
             return Promise.resolve<void>(null as any);
-
         } else if (status !== 200 && status !== 204) {
             const _responseText = response.data;
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            return throwException(
+                'An unexpected server error occurred.',
+                status,
+                _responseText,
+                _headers
+            );
         }
         return Promise.resolve<void>(null as any);
     }
@@ -131,35 +152,37 @@ export class Client {
      * @return OK
      */
     roomGET(id: number, cancelToken?: CancelToken): Promise<void> {
-        let url_ = this.baseUrl + "/api/Room/{id}";
+        let url_ = this.baseUrl + '/api/Room/{id}';
         if (id === undefined || id === null)
             throw new Error("The parameter 'id' must be defined.");
-        url_ = url_.replace("{id}", encodeURIComponent("" + id));
-        url_ = url_.replace(/[?&]$/, "");
+        url_ = url_.replace('{id}', encodeURIComponent('' + id));
+        url_ = url_.replace(/[?&]$/, '');
 
         let options_: AxiosRequestConfig = {
-            method: "GET",
+            method: 'GET',
             url: url_,
-            headers: {
-            },
-            cancelToken
+            headers: {},
+            cancelToken,
         };
 
-        return this.instance.request(options_).catch((_error: any) => {
-            if (isAxiosError(_error) && _error.response) {
-                return _error.response;
-            } else {
-                throw _error;
-            }
-        }).then((_response: AxiosResponse) => {
-            return this.processRoomGET(_response);
-        });
+        return this.instance
+            .request(options_)
+            .catch((_error: any) => {
+                if (isAxiosError(_error) && _error.response) {
+                    return _error.response;
+                } else {
+                    throw _error;
+                }
+            })
+            .then((_response: AxiosResponse) => {
+                return this.processRoomGET(_response);
+            });
     }
 
     protected processRoomGET(response: AxiosResponse): Promise<void> {
         const status = response.status;
         let _headers: any = {};
-        if (response.headers && typeof response.headers === "object") {
+        if (response.headers && typeof response.headers === 'object') {
             for (const k in response.headers) {
                 if (response.headers.hasOwnProperty(k)) {
                     _headers[k] = response.headers[k];
@@ -169,59 +192,75 @@ export class Client {
         if (status === 200) {
             const _responseText = response.data;
             return Promise.resolve<void>(null as any);
-
         } else if (status === 404) {
             const _responseText = response.data;
             let result404: any = null;
-            let resultData404  = _responseText;
+            let resultData404 = _responseText;
             result404 = JSON.parse(resultData404);
-            return throwException("Not Found", status, _responseText, _headers, result404);
-
+            return throwException(
+                'Not Found',
+                status,
+                _responseText,
+                _headers,
+                result404
+            );
         } else if (status !== 200 && status !== 204) {
             const _responseText = response.data;
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            return throwException(
+                'An unexpected server error occurred.',
+                status,
+                _responseText,
+                _headers
+            );
         }
         return Promise.resolve<void>(null as any);
     }
 
     /**
-     * @param body (optional) 
+     * @param body (optional)
      * @return OK
      */
-    roomPUT(id: number, body: CreateRoomRequest | undefined, cancelToken?: CancelToken): Promise<void> {
-        let url_ = this.baseUrl + "/api/Room/{id}";
+    roomPUT(
+        id: number,
+        body: CreateRoomRequest | undefined,
+        cancelToken?: CancelToken
+    ): Promise<void> {
+        let url_ = this.baseUrl + '/api/Room/{id}';
         if (id === undefined || id === null)
             throw new Error("The parameter 'id' must be defined.");
-        url_ = url_.replace("{id}", encodeURIComponent("" + id));
-        url_ = url_.replace(/[?&]$/, "");
+        url_ = url_.replace('{id}', encodeURIComponent('' + id));
+        url_ = url_.replace(/[?&]$/, '');
 
         const content_ = JSON.stringify(body);
 
         let options_: AxiosRequestConfig = {
             data: content_,
-            method: "PUT",
+            method: 'PUT',
             url: url_,
             headers: {
-                "Content-Type": "application/json",
+                'Content-Type': 'application/json',
             },
-            cancelToken
+            cancelToken,
         };
 
-        return this.instance.request(options_).catch((_error: any) => {
-            if (isAxiosError(_error) && _error.response) {
-                return _error.response;
-            } else {
-                throw _error;
-            }
-        }).then((_response: AxiosResponse) => {
-            return this.processRoomPUT(_response);
-        });
+        return this.instance
+            .request(options_)
+            .catch((_error: any) => {
+                if (isAxiosError(_error) && _error.response) {
+                    return _error.response;
+                } else {
+                    throw _error;
+                }
+            })
+            .then((_response: AxiosResponse) => {
+                return this.processRoomPUT(_response);
+            });
     }
 
     protected processRoomPUT(response: AxiosResponse): Promise<void> {
         const status = response.status;
         let _headers: any = {};
-        if (response.headers && typeof response.headers === "object") {
+        if (response.headers && typeof response.headers === 'object') {
             for (const k in response.headers) {
                 if (response.headers.hasOwnProperty(k)) {
                     _headers[k] = response.headers[k];
@@ -231,24 +270,38 @@ export class Client {
         if (status === 200) {
             const _responseText = response.data;
             return Promise.resolve<void>(null as any);
-
         } else if (status === 400) {
             const _responseText = response.data;
             let result400: any = null;
-            let resultData400  = _responseText;
+            let resultData400 = _responseText;
             result400 = JSON.parse(resultData400);
-            return throwException("Bad Request", status, _responseText, _headers, result400);
-
+            return throwException(
+                'Bad Request',
+                status,
+                _responseText,
+                _headers,
+                result400
+            );
         } else if (status === 404) {
             const _responseText = response.data;
             let result404: any = null;
-            let resultData404  = _responseText;
+            let resultData404 = _responseText;
             result404 = JSON.parse(resultData404);
-            return throwException("Not Found", status, _responseText, _headers, result404);
-
+            return throwException(
+                'Not Found',
+                status,
+                _responseText,
+                _headers,
+                result404
+            );
         } else if (status !== 200 && status !== 204) {
             const _responseText = response.data;
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            return throwException(
+                'An unexpected server error occurred.',
+                status,
+                _responseText,
+                _headers
+            );
         }
         return Promise.resolve<void>(null as any);
     }
@@ -257,35 +310,37 @@ export class Client {
      * @return No Content
      */
     roomDELETE(id: number, cancelToken?: CancelToken): Promise<void> {
-        let url_ = this.baseUrl + "/api/Room/{id}";
+        let url_ = this.baseUrl + '/api/Room/{id}';
         if (id === undefined || id === null)
             throw new Error("The parameter 'id' must be defined.");
-        url_ = url_.replace("{id}", encodeURIComponent("" + id));
-        url_ = url_.replace(/[?&]$/, "");
+        url_ = url_.replace('{id}', encodeURIComponent('' + id));
+        url_ = url_.replace(/[?&]$/, '');
 
         let options_: AxiosRequestConfig = {
-            method: "DELETE",
+            method: 'DELETE',
             url: url_,
-            headers: {
-            },
-            cancelToken
+            headers: {},
+            cancelToken,
         };
 
-        return this.instance.request(options_).catch((_error: any) => {
-            if (isAxiosError(_error) && _error.response) {
-                return _error.response;
-            } else {
-                throw _error;
-            }
-        }).then((_response: AxiosResponse) => {
-            return this.processRoomDELETE(_response);
-        });
+        return this.instance
+            .request(options_)
+            .catch((_error: any) => {
+                if (isAxiosError(_error) && _error.response) {
+                    return _error.response;
+                } else {
+                    throw _error;
+                }
+            })
+            .then((_response: AxiosResponse) => {
+                return this.processRoomDELETE(_response);
+            });
     }
 
     protected processRoomDELETE(response: AxiosResponse): Promise<void> {
         const status = response.status;
         let _headers: any = {};
-        if (response.headers && typeof response.headers === "object") {
+        if (response.headers && typeof response.headers === 'object') {
             for (const k in response.headers) {
                 if (response.headers.hasOwnProperty(k)) {
                     _headers[k] = response.headers[k];
@@ -295,10 +350,14 @@ export class Client {
         if (status === 204) {
             const _responseText = response.data;
             return Promise.resolve<void>(null as any);
-
         } else if (status !== 200 && status !== 204) {
             const _responseText = response.data;
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            return throwException(
+                'An unexpected server error occurred.',
+                status,
+                _responseText,
+                _headers
+            );
         }
         return Promise.resolve<void>(null as any);
     }
@@ -354,10 +413,16 @@ export class SwaggerException extends Error {
     override message: string;
     status: number;
     response: string;
-    headers: { [key: string]: any; };
+    headers: { [key: string]: any };
     result: any;
 
-    constructor(message: string, status: number, response: string, headers: { [key: string]: any; }, result: any) {
+    constructor(
+        message: string,
+        status: number,
+        response: string,
+        headers: { [key: string]: any },
+        result: any
+    ) {
         super();
 
         this.message = message;
@@ -374,11 +439,15 @@ export class SwaggerException extends Error {
     }
 }
 
-function throwException(message: string, status: number, response: string, headers: { [key: string]: any; }, result?: any): any {
-    if (result !== null && result !== undefined)
-        throw result;
-    else
-        throw new SwaggerException(message, status, response, headers, null);
+function throwException(
+    message: string,
+    status: number,
+    response: string,
+    headers: { [key: string]: any },
+    result?: any
+): any {
+    if (result !== null && result !== undefined) throw result;
+    else throw new SwaggerException(message, status, response, headers, null);
 }
 
 function isAxiosError(obj: any): obj is AxiosError {

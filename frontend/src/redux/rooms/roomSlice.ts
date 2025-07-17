@@ -29,7 +29,7 @@ const initialState: RoomsState = {
     },
     pagination: {
         page: 1,
-        limit: 6,
+        limit: 3,
         total: 0,
         totalPages: 0,
     },
@@ -56,6 +56,12 @@ const roomsSlice = createSlice({
             state.pagination.limit = action.payload;
             state.pagination.page = 1;
             applyFiltersAndSorting(state);
+        },
+        setSelectedRoom: (
+            state,
+            action: PayloadAction<RoomsState['selectedRoom']>
+        ) => {
+            state.selectedRoom = action.payload;
         },
         clearSelectedRoom: (state) => {
             state.selectedRoom = null;
@@ -91,6 +97,12 @@ const roomsSlice = createSlice({
     },
 });
 
-export const { setFilters, setSorting, setPage, setLimit, clearSelectedRoom } =
-    roomsSlice.actions;
+export const {
+    setFilters,
+    setSorting,
+    setPage,
+    setLimit,
+    setSelectedRoom,
+    clearSelectedRoom,
+} = roomsSlice.actions;
 export default roomsSlice.reducer;
