@@ -159,7 +159,7 @@ const RoomSortingAndPagination: React.FC = () => {
                 </div>
             </div>
 
-            {/* Количество элементов на странице */}
+            {/* Количество элементов на странице second varient */}
             {/* <div className="d-flex align-items-center mb-3 mb-lg-0">
                 <span className="me-2 text-muted">Show:</span>
                 <select

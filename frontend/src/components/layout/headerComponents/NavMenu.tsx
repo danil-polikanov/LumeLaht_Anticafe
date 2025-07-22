@@ -1,5 +1,5 @@
 import React from 'react';
-import { NavLink, NavLinkProps } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 import styles from './NavMenu.module.css';
 
 interface NavMenuProps {
@@ -7,17 +7,24 @@ interface NavMenuProps {
 }
 
 const NavMenu: React.FC<NavMenuProps> = ({ isMobile = false }) => {
+    const navigate = useNavigate();
+
     const menuItems = [
         { label: 'Home', href: '/' },
-        { label: 'About', href: '/about' },
+        { label: 'About', href: 'about', scrollTo: true },
         { label: 'Book', href: '/book' },
         { label: 'Rooms', href: '/rooms' },
+        { label: 'Contacts', href: 'contacts', scrollTo: true },
     ];
 
     const getClassName =
         (baseClass: string) =>
         ({ isActive }: { isActive: boolean }): string =>
             `${baseClass} ${isActive ? styles.active : ''}`.trim();
+
+    const handleScrollClick = (section: string) => {
+        navigate(`/?scrollTo=${section}`);
+    };
 
     const renderMenu = (isMobileView: boolean) => (
         <nav className={isMobileView ? styles.mobileNav : styles.desktopNav}>
@@ -26,21 +33,34 @@ const NavMenu: React.FC<NavMenuProps> = ({ isMobile = false }) => {
             >
                 {menuItems.map((item) => (
                     <li
-                        key={item.href}
+                        key={item.label}
                         className={
                             isMobileView ? styles.mobileNavItem : styles.navItem
                         }
                     >
-                        <NavLink
-                            to={item.href}
-                            className={getClassName(
-                                isMobileView
-                                    ? styles.mobileNavLink
-                                    : styles.navLink
-                            )}
-                        >
-                            {item.label}
-                        </NavLink>
+                        {item.scrollTo ? (
+                            <div
+                                onClick={() => handleScrollClick(item.href)}
+                                className={
+                                    isMobileView
+                                        ? styles.mobileNavLink
+                                        : styles.navLink
+                                }
+                            >
+                                {item.label}
+                            </div>
+                        ) : (
+                            <NavLink
+                                to={item.href}
+                                className={getClassName(
+                                    isMobileView
+                                        ? styles.mobileNavLink
+                                        : styles.navLink
+                                )}
+                            >
+                                {item.label}
+                            </NavLink>
+                        )}
                     </li>
                 ))}
             </ul>

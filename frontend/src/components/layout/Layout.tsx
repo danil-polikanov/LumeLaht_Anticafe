@@ -1,10 +1,11 @@
 import React from 'react';
 import Header from './headerComponents/Header';
-import Footer from './Footer';
+import Footer from './headerComponents/contactComponents/Footer';
 import { useLocation } from 'react-router-dom';
 import Home from './homeComponents/Home';
-import Map from './homeComponents/Map';
+import Map from './headerComponents/contactComponents/Map';
 import styles from './Layout.module.css';
+import Contact from './headerComponents/contactComponents/Contact';
 type Props = {
     children: React.ReactNode;
 };
@@ -12,7 +13,6 @@ type Props = {
 export const Layout: React.FC<Props> = ({ children }) => {
     const location = useLocation();
     const isHomePage = location.pathname === '/';
-
     return (
         <div>
             <div className={styles.Layout_menu}>
@@ -20,8 +20,7 @@ export const Layout: React.FC<Props> = ({ children }) => {
                 {isHomePage && <Home />}
             </div>
             <main>{children}</main>
-            {isHomePage && <Map />}
-            <Footer />
+            <Contact></Contact>
         </div>
     );
 };

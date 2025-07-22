@@ -12,21 +12,24 @@
 }
 
 .userButtons:hover {
-    color: #007bff;
+    transform: translateY(-2px);
+    color: white;
 }
 
 .userButtons::after {
     content: '';
     position: absolute;
     bottom: 3px;
-    left: 20%;
-    width: 60%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 0;
     height: 2px;
-    background-color: #007bff;
+    background-color: white;
     opacity: 0;
-    transition: opacity 0.3s ease;
+    transition: all 0.3s ease;
 }
 
 .userButtons:hover::after {
     opacity: 1;
+    width: 60%;
 }
