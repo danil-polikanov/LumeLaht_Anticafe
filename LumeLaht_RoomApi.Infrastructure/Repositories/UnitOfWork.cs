@@ -28,8 +28,8 @@ namespace LumeLaht_RoomApi.Infrastructure.Repositories
             Activities = activities;
         }
 
-        public Task<int> SaveChangesAsync(CancellationToken cancellationToken = default) =>
-            _context.SaveChangesAsync(cancellationToken);
+        public async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default) =>
+            await _context.SaveChangesAsync(cancellationToken);
     }
 
 }

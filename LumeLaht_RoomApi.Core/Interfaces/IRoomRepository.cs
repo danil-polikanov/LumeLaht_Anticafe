@@ -9,10 +9,10 @@ namespace LumeLaht_RoomApi.Core_.Interfaces
 {
     public interface IRoomRepository
     {
-        Task<IEnumerable<Room>> GetAllAsync();
-        Task<Room> GetByIdAsync(int id);
-        Task AddAsync(Room room);
-        Task UpdateAsync(Room room);
-        Task DeleteAsync(Room room);
+        Task<IEnumerable<Room>> GetAllAsync(CancellationToken cancellationToken);
+        Task<Room> GetByIdAsync(Guid id, CancellationToken cancellationToken);
+        Task AddAsync(Room room,CancellationToken cancellationToken);
+        Task UpdateAsync(Room room, CancellationToken cancellationToken);
+        Task DeleteAsync(Room room, CancellationToken cancellationToken);
     }
 }

@@ -9,7 +9,7 @@ namespace LumeLaht_RoomApi.Core_.Interfaces
 {
     public interface IRepository<TEntity> where TEntity : class
     {
-        Task<TEntity?> GetByIdAsync(int id);
-        Task<bool> ExistsAsync(Expression<Func<TEntity, bool>> predicate);
+        Task<TEntity?> GetByIdAsync(Guid id, CancellationToken cancellationToken);
+        Task<bool> ExistsAsync(Expression<Func<TEntity, bool>> predicate,CancellationToken cancellationToken);
     }
 }

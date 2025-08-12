@@ -10,10 +10,11 @@ namespace LumeLaht_RoomApi.Core_.Interfaces
 {
     public interface IRoomService
     {
-        Task<List<RoomResponse>> GetAllRoomsAsync();
-        Task<RoomResponse> GetRoomByIdAsync(int id);
-        Task<RoomResponse> UpdateRoomAsync(int id, CreateRoomRequest request);
-        Task<RoomResponse> CreateRoomAsync(CreateRoomRequest request);
-        Task<bool> DeleteRoomAsync(int id);
+        Task<List<RoomResponse>> GetAllRoomsAsync(CancellationToken cancellationToken);
+        Task<RoomResponse> GetRoomByIdAsync(Guid id, CancellationToken cancellationToken);
+        Task<RoomResponse> UpdateRoomAsync(Guid id, CreateRoomRequest request, CancellationToken cancellationToken);
+        Task<RoomResponse> CreateRoomAsync(CreateRoomRequest request, CancellationToken cancellationToken);
+        Task<bool> DeleteRoomAsync(Guid id, CancellationToken cancellationToken);
+        Task<RoomFilterDto> GetFiltersRoooms(CancellationToken cancellationToken);
     }
 }

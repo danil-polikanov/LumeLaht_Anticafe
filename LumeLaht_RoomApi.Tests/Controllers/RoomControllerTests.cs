@@ -14,6 +14,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using Xunit;
 
@@ -25,6 +26,7 @@ namespace LumeLaht_RoomApi.Tests.Controllers
         private readonly Mock<ILogger<RoomController>> _loggerMock;
         private readonly IMapper _mapper;
         private readonly RoomController _controller;
+
         public RoomControllerTests()
         {
             _roomServiceMock = new Mock<IRoomService>();
@@ -38,54 +40,68 @@ namespace LumeLaht_RoomApi.Tests.Controllers
 
             _controller = new RoomController(_mapper, _roomServiceMock.Object, _loggerMock.Object);
         }
-        //GetRoomById
+
         [Fact]
         public async Task GetById_ShouldReturnNotFound_WhenRoomIsNull()
         {
+            _roomServiceMock
+                .Setup(s => s.GetRoomByIdAsync(It.IsAny<Guid>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync((RoomResponse)null);
 
-            _roomServiceMock.Setup(s => s.GetRoomByIdAsync(It.IsAny<int>())).ReturnsAsync((RoomResponse)null);
-
-            var result = await _controller.GetRoomById(1);
+            var result = await _controller.GetRoomById(Guid.NewGuid(), CancellationToken.None);
 
             Assert.IsType<NotFoundResult>(result);
         }
+
         [Fact]
         public async Task GetById_ShouldReturnFirstRoom_WhenRoomIsFirst()
         {
-            var room = new RoomResponse { RoomId = 1, Name = "Room 1" };
-            _roomServiceMock.Setup(s => s.GetRoomByIdAsync(It.IsAny<int>())).ReturnsAsync(room);
+            var room = new RoomResponse { RoomId = Guid.NewGuid(), Name = "Room 1" };
+            _roomServiceMock
+                .Setup(s => s.GetRoomByIdAsync(It.IsAny<Guid>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync(room);
 
-            var result = await _controller.GetRoomById(1);
+            var result = await _controller.GetRoomById(room.RoomId, CancellationToken.None);
 
-            Assert.IsType <OkObjectResult>(result);
+            var okResult = Assert.IsType<OkObjectResult>(result);
+            var returnedRoom = Assert.IsType<RoomResponse>(okResult.Value);
+            Assert.Equal("Room 1", returnedRoom.Name);
         }
-        //GetAllRooms
+
         [Fact]
         public async Task GetRooms_ShouldReturnRooms_WhenRoomExist()
         {
             var rooms = new List<RoomResponse>
-            {
-                 new RoomResponse { RoomId = 1, Name = "Room" },
-                 new RoomResponse { RoomId = 2, Name = "Room 2" }
-            };
-            _roomServiceMock.Setup(s => s.GetAllRoomsAsync()).ReturnsAsync(rooms);
+        {
+            new RoomResponse { RoomId = Guid.NewGuid(), Name = "Room" },
+            new RoomResponse { RoomId = Guid.NewGuid(), Name = "Room 2" }
+        };
 
-            var result = await _controller.GetAll();
+            _roomServiceMock
+                .Setup(s => s.GetAllRoomsAsync(It.IsAny<CancellationToken>()))
+                .ReturnsAsync(rooms);
+
+            var result = await _controller.GetAll(CancellationToken.None);
             var okResult = Assert.IsType<OkObjectResult>(result.Result);
             var returnValue = Assert.IsAssignableFrom<IEnumerable<RoomResponse>>(okResult.Value);
             Assert.Equal(2, returnValue.Count());
         }
-        //CreateRoom
+
         [Fact]
         public async Task CreateRoom_ShouldCreateRoom_WhenRoomCreated()
         {
-            var request = new CreateRoomRequest { Name = "Room", AddressId = 1 };
-            var response = new RoomResponse { RoomId = 1, Name = "Room" };
-            _roomServiceMock.Setup(s => s.CreateRoomAsync(It.IsAny<CreateRoomRequest>())).ReturnsAsync(response);
+            var request = new CreateRoomRequest { Name = "Room", AddressId = Guid.NewGuid() };
+            var response = new RoomResponse { RoomId = Guid.NewGuid(), Name = "Room" };
 
-            var result = await _controller.Create(request);
-            
-            Assert.IsType<CreatedAtActionResult>(result);
+            _roomServiceMock
+                .Setup(s => s.CreateRoomAsync(It.IsAny<CreateRoomRequest>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync(response);
+
+            var result = await _controller.Create(request, CancellationToken.None);
+
+            var createdResult = Assert.IsType<CreatedAtActionResult>(result);
+            var createdRoom = Assert.IsType<RoomResponse>(createdResult.Value);
+            Assert.Equal("Room", createdRoom.Name);
         }
     }
 }

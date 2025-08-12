@@ -90,9 +90,9 @@ const RoomDetailOverlay: React.FC<{
 
                             <div className="mb-3">
                                 <h6 className="text-muted">Стоимость</h6>
-                                <div className="d-flex align-items-center">
+                                <div className="d-flex align-items-center justify-content-center">
                                     <span className="h4 text-success mb-0">
-                                        {room.pricePerHour} ₽
+                                        {room.pricePerHour} €
                                     </span>
                                     <span className="text-muted ms-2">
                                         / час

@@ -45,7 +45,7 @@ const RoomFilters: React.FC = () => {
 
     return (
         <div className={`card mb-4 shadow-sm`}>
-            <div className="card-header bg-primary text-white">
+            <div className="card-header bg-primary bg-gradient text-white">
                 <div className="d-flex justify-content-between align-items-center">
                     <h5 className="mb-0">
                         <i className="fas fa-filter me-2"></i>

@@ -32,12 +32,13 @@ const Footer = () => {
             {/* Декоративная волна */}
             <div className={styles.wave}>
                 <svg viewBox="0 0 1200 120" preserveAspectRatio="none">
-                    <path d="M985.66,92.83C906.67,72,823.78,31,743.84,14.19c-82.26-17.34-168.06-16.33-250.45.39C422.74,32.83,327.17,63.5,248.15,92.83C144.17,130.59,65.28,161.3,0,192.71V0H1200V95.8C1132.19,118.92,1055.71,111.31,985.66,92.83Z"></path>
+                    <path d="M0,60 C200,20 400,40 600,30 C800,20 1000,40 1200,60 L1200,0 L0,0 Z"></path>
                 </svg>
             </div>
 
             <div className="container py-5">
                 <div className="row g-4">
+                    <h2>Contacts</h2>
                     {/* Адрес */}
                     <div className="col-lg-3 col-md-6">
                         <div className={`${styles.section} h-100`}>

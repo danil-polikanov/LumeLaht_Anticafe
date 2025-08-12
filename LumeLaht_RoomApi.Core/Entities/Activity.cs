@@ -5,7 +5,7 @@ namespace LumeLaht_RoomApi.Core_.Entities
     public class Activity
     {
         [Required]
-        public int ActivityId { get; set; }
+        public Guid ActivityId { get; set; }
         [Required]
         [MaxLength(100)]
         public string Name { get; set; }

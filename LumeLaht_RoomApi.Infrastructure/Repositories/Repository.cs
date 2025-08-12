@@ -21,11 +21,11 @@ namespace LumeLaht_RoomApi.Infrastructure.Repositories
             _dbSet = _context.Set<TEntity>();
         }
 
-        public Task<TEntity?> GetByIdAsync(int id) =>
-            _dbSet.FindAsync(id).AsTask();
+        public async Task<TEntity?> GetByIdAsync(Guid id,CancellationToken cancellationToken) =>
+            await _dbSet.FindAsync(id,cancellationToken).AsTask();
 
-        public Task<bool> ExistsAsync(Expression<Func<TEntity, bool>> predicate) =>
-            _dbSet.AnyAsync(predicate);
+        public async Task<bool> ExistsAsync(Expression<Func<TEntity, bool>> predicate,CancellationToken cancellationToken) =>
+           await _dbSet.AnyAsync(predicate, cancellationToken);
 
     }
 }

@@ -6,7 +6,7 @@ namespace LumeLaht_RoomApi.Core_.Entities
     public class Address
     {
         [Required]
-        public int AddressId { get; set; }
+        public Guid AddressId { get; set; }
         [Required]
         [MaxLength(100)]
         public string AddressName { get; set; }

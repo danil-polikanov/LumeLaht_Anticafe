@@ -19,4 +19,8 @@
     <ProjectReference Include="..\LumeLaht_RoomApi.Core\LumeLaht_RoomApi.Core.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Migrations\" />
+  </ItemGroup>
+
 </Project>
