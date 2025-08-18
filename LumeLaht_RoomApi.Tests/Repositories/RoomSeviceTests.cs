@@ -124,7 +124,7 @@ namespace LumeLaht_RoomApi.Tests.Repositories
 
             _roomRepositoryMock
                 .Setup(r => r.AddAsync(It.IsAny<Room>(), It.IsAny<CancellationToken>()))
-                .Callback<Room>(room => capturedRoom = room) // ✅ Удалена лишняя запятая
+                .Callback<Room, CancellationToken>((room, _) => capturedRoom = room)
                 .Returns(Task.CompletedTask);
 
             // Act

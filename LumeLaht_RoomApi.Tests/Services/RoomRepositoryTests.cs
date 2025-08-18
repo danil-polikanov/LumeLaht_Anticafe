@@ -40,6 +40,7 @@ namespace LumeLaht_RoomApi.Tests.Services
                     Name = "Test",
                     Description = "A",
                     AddressId = Address1Id,
+                    Status="Available",
                     RoomActivity = new List<RoomActivity>
                     {
                         new RoomActivity { ActivityId =activity.ActivityId }
@@ -51,6 +52,7 @@ namespace LumeLaht_RoomApi.Tests.Services
                     Name = "Test 2",
                     Description = "B",
                     AddressId = Address2Id,
+                       Status="Available",
                     RoomActivity = new List<RoomActivity>
                     {
                         new RoomActivity { ActivityId = activity.ActivityId }
@@ -62,6 +64,7 @@ namespace LumeLaht_RoomApi.Tests.Services
                     Name = "Test 3",
                     Description = "C",
                     AddressId =Address3Id,
+                       Status="Available",
                     RoomActivity = new List<RoomActivity>
                     {
                         new RoomActivity { ActivityId = activity.ActivityId }
