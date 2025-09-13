@@ -3,7 +3,7 @@ import { RoomResponse } from '../types/roomTypes/RoomResponse';
 import styles from './RoomList.module.css';
 interface RoomCardProps {
     room: RoomResponse;
-    onRoomClick: (roomId: number) => void;
+    onRoomClick: (roomId: string) => void;
 }
 
 const RoomCard: React.FC<RoomCardProps> = ({ room, onRoomClick }) => {
@@ -14,15 +14,15 @@ const RoomCard: React.FC<RoomCardProps> = ({ room, onRoomClick }) => {
     };
 
     const formatPrice = (price: number | undefined) => {
-        if (!price) return 'Цена не указана';
+        if (!price) return 'Price not specified';
         return `${price.toLocaleString('de-DE')} €/час`;
     };
 
-    const getStatusBadge = (isActive: boolean | undefined) => {
-        if (isActive === undefined) return null;
+    const getStatusBadge = (status: string | undefined) => {
+        if (status === undefined) return null;
         return (
-            <span className={`badge ${isActive ? 'bg-success' : 'bg-danger'}`}>
-                {isActive ? 'Активна' : 'Неактивна'}
+            <span className={`badge ${status ? 'bg-success' : 'bg-danger'}`}>
+                {status ? 'Active' : 'Close'}
             </span>
         );
     };
@@ -33,7 +33,7 @@ const RoomCard: React.FC<RoomCardProps> = ({ room, onRoomClick }) => {
         if (address.city) parts.push(address.city);
         if (address.region) parts.push(address.region);
         if (address.addressName) parts.push(address.addressName);
-        return parts.join(', ') || 'Адрес не указан';
+        return parts.join(', ') || 'Address not specified';
     };
 
     const getActivityBadges = (activities: any[] | undefined) => {
@@ -74,7 +74,7 @@ const RoomCard: React.FC<RoomCardProps> = ({ room, onRoomClick }) => {
                         >
                             {room.name || 'Untitled'}
                         </h5>
-                        {getStatusBadge(room.isActive)}
+                        {getStatusBadge(room.status)}
                     </div>
 
                     {/* Описание */}

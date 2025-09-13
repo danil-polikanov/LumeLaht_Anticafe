@@ -4,7 +4,7 @@ import AboutContext from './AboutContext';
 import AboutImage from './AboutImage';
 const About = () => {
     return (
-        <section id="about" className={styles.aboutSection}>
+        <section id="about-section" className={styles.aboutSection}>
             <div className={styles.aboutContent}>
                 <AboutContext />
                 <AboutImage />

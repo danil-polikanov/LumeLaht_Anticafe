@@ -27,7 +27,7 @@ const RoomsList: React.FC = () => {
         dispatch(fetchRooms());
     }, [dispatch]);
 
-    const handleRoomClick = (roomId: number) => {
+    const handleRoomClick = (roomId: string) => {
         dispatch(fetchRoomById(roomId));
         // Здесь можно добавить навигацию к детальной странице комнаты
         // например, с помощью React Router

@@ -1,5 +1,5 @@
 export interface AddressResponse {
-    addressId?: number;
+    addressId?: string;
     addressName?: string | undefined;
     city?: string | undefined;
     region?: string | undefined;

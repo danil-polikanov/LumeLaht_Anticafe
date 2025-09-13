@@ -12,9 +12,9 @@ const RoomFilters: React.FC = () => {
         dispatch(setFilters({ [filterKey]: value }));
     };
 
-    const handleActivityToggle = (activityId: number) => {
+    const handleActivityToggle = (activityId: string) => {
         const newActivities = filters.activities.includes(activityId)
-            ? filters.activities.filter((id) => id !== activityId)
+            ? filters.activities.filter((name) => name !== activityId)
             : [...filters.activities, activityId];
 
         dispatch(setFilters({ activities: newActivities }));
@@ -29,18 +29,18 @@ const RoomFilters: React.FC = () => {
                 minPrice: 0,
                 maxPrice: 10000,
                 activities: [],
-                isActive: true,
+                status: true,
             })
         );
     };
 
     // Примерные активности для фильтрации
     const availableActivities = [
-        { id: 1, name: 'Футбол' },
-        { id: 2, name: 'Теннис' },
-        { id: 3, name: 'Баскетбол' },
-        { id: 4, name: 'Волейбол' },
-        { id: 5, name: 'Бадминтон' },
+        { id: 1, name: 'Monopolia' },
+        { id: 2, name: 'Uno' },
+        { id: 3, name: 'Billiards' },
+        { id: 4, name: 'Bowling' },
+        { id: 5, name: 'Scrabble' },
     ];
 
     return (
@@ -193,7 +193,7 @@ const RoomFilters: React.FC = () => {
                                         type="checkbox"
                                         id="isActive"
                                         role="switch"
-                                        checked={filters.isActive}
+                                        checked={filters.status}
                                         onChange={(e) =>
                                             handleFilterChange(
                                                 'isActive',
@@ -241,11 +241,11 @@ const RoomFilters: React.FC = () => {
                                                 type="checkbox"
                                                 id={`activity-${activity.id}`}
                                                 checked={filters.activities.includes(
-                                                    activity.id
+                                                    activity.name
                                                 )}
                                                 onChange={() =>
                                                     handleActivityToggle(
-                                                        activity.id
+                                                        activity.name
                                                     )
                                                 }
                                             />

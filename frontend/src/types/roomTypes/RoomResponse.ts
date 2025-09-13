@@ -1,12 +1,14 @@
 import { AddressResponse } from './AddressResponse';
 import { ActivityResponse } from './ActivityResponse';
+import { RoomImages } from './RoomImages';
 
 export interface RoomResponse {
-    roomId?: number;
+    roomId?: string;
     name?: string | undefined;
     description?: string | undefined;
     pricePerHour?: number;
-    isActive?: boolean;
+    status?: string;
     address?: AddressResponse;
     activity?: ActivityResponse[] | undefined;
+    roomImages?: RoomImages[] | undefined;
 }

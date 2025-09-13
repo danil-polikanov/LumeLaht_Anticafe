@@ -4,7 +4,11 @@ import Logo from './Logo';
 import NavMenu from './NavMenu';
 import UserNavMenu from './userNavMenu/UserNavMenu';
 import AnimatedBurger from './AnimatedBurger';
+import Welcome from './welcomeComponents/Welcome';
+import { useLocation } from 'react-router-dom';
 const Header: React.FC = () => {
+    const location = useLocation();
+    const isHomePage = ['/', '/about', '/contacts'].includes(location.pathname);
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const toggleMenu = () => {
         setIsMenuOpen(!isMenuOpen);
@@ -32,34 +36,37 @@ const Header: React.FC = () => {
             document.removeEventListener('mousedown', handleClickOutside);
     }, [isMenuOpen]);
     return (
-        <header
-            className={`container d-flex gap-4 w-100 align-items-center flex-row ${styles.header}`}
-        >
-            <div className={styles.left}>
-                <Logo />
-            </div>
-            <div className={`d-lg-none ${styles.burgerContainer}`}>
-                <AnimatedBurger isOpen={isMenuOpen} onClick={toggleMenu} />
-            </div>
-            <div className={`d-none d-lg-flex ${styles.center}`}>
-                <NavMenu />
-            </div>
+        <div>
+            <header
+                className={`container d-flex gap-4 w-100 align-items-center flex-row ${styles.header}`}
+            >
+                <div className={styles.left}>
+                    <Logo />
+                </div>
+                <div className={`d-lg-none ${styles.burgerContainer}`}>
+                    <AnimatedBurger isOpen={isMenuOpen} onClick={toggleMenu} />
+                </div>
+                <div className={`d-none d-lg-flex ${styles.center}`}>
+                    <NavMenu />
+                </div>
 
-            <div className={`d-none d-lg-flex ${styles.right}`}>
-                <UserNavMenu />
-            </div>
-            {/* Mobile */}
-            {isMenuOpen && (
-                <div className={`d-lg-none ${styles.mobileMenu}`}>
-                    <div className={styles.mobileMenuContent}>
-                        <NavMenu isMobile={true} />
-                        <div className={styles.mobileUserMenu}>
-                            <UserNavMenu />
+                <div className={`d-none d-lg-flex ${styles.right}`}>
+                    <UserNavMenu />
+                </div>
+                {/* Mobile */}
+                {isMenuOpen && (
+                    <div className={`d-lg-none ${styles.mobileMenu}`}>
+                        <div className={styles.mobileMenuContent}>
+                            <NavMenu isMobile={true} />
+                            <div className={styles.mobileUserMenu}>
+                                <UserNavMenu />
+                            </div>
                         </div>
                     </div>
-                </div>
-            )}
-        </header>
+                )}
+            </header>
+            {isHomePage && <Welcome />}
+        </div>
     );
 };
 

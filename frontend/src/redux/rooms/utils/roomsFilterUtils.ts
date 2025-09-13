@@ -46,15 +46,15 @@ export const applyFiltersAndSorting = (state: RoomsState) => {
 
     if (state.filters.activities.length > 0) {
         filtered = filtered.filter((room) =>
-            room.activity?.some((activity) =>
-                state.filters.activities.includes(activity.activityId || 0)
+            room.activity?.some(
+                (activity) =>
+                    activity.activityId !== undefined &&
+                    state.filters.activities.includes(activity.activityId)
             )
         );
     }
 
-    filtered = filtered.filter(
-        (room) => room.isActive === state.filters.isActive
-    );
+    filtered = filtered.filter((room) => room.status === 'Active');
 
     filtered.sort((a, b) => {
         let aValue: any;

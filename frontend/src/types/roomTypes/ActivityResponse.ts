@@ -1,5 +1,5 @@
 export interface ActivityResponse {
-    activityId?: number;
+    activityId?: string;
     name?: string | undefined;
     description?: string | undefined;
 }

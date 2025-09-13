@@ -15,6 +15,7 @@ export const fetchRooms = createAsyncThunk<
 >('rooms/fetchRooms', async (_, { rejectWithValue }) => {
     try {
         const response = await axios.get<RoomResponse[]>(`${API_URL}`);
+        console.log(response.data);
         return response.data;
     } catch (error) {
         return rejectWithValue(getErrorMessage(error));
@@ -24,7 +25,7 @@ export const fetchRooms = createAsyncThunk<
 // 2️⃣ Получить комнату по id
 export const fetchRoomById = createAsyncThunk<
     RoomResponse,
-    number,
+    string,
     { rejectValue: string }
 >('rooms/fetchRoomById', async (roomId, { rejectWithValue }) => {
     try {
@@ -52,7 +53,7 @@ export const createRoom = createAsyncThunk<
 // 4️⃣ Обновить комнату
 export const updateRoom = createAsyncThunk<
     RoomResponse,
-    { id: number; data: CreateRoomRequest },
+    { id: string; data: CreateRoomRequest },
     { rejectValue: string }
 >('rooms/updateRoom', async ({ id, data }, { rejectWithValue }) => {
     try {
@@ -69,7 +70,7 @@ export const updateRoom = createAsyncThunk<
 // 5️⃣ Удалить комнату
 export const deleteRoom = createAsyncThunk<
     void,
-    number,
+    string,
     { rejectValue: string }
 >('rooms/deleteRoom', async (roomId, { rejectWithValue }) => {
     try {

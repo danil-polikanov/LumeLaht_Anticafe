@@ -38,7 +38,8 @@ const Footer = () => {
 
             <div className="container py-5">
                 <div className="row g-4">
-                    <h2>Contacts</h2>
+                    <h2></h2>
+
                     {/* Адрес */}
                     <div className="col-lg-3 col-md-6">
                         <div className={`${styles.section} h-100`}>
@@ -50,17 +51,21 @@ const Footer = () => {
                                 >
                                     <FaAddressBook size={24} />
                                 </div>
-                                <h3 className={styles.sectionTitle}>Адрес</h3>
+                                <h3 className={styles.sectionTitle}>Adress</h3>
                             </div>
                             <div className={styles.content}>
-                                <p className={`${styles.text} mb-2`}>
-                                    <i className="fas fa-map-marker-alt me-2"></i>
-                                    Pikk tn 36, Old Tallinn
-                                </p>
-                                <p className={`${styles.text} mb-0`}>
-                                    <i className="fas fa-city me-2"></i>
-                                    City Center, Tallin
-                                </p>
+                                <div className="d-flex align-items-center mb-2">
+                                    <i
+                                        className={`fas fa-map-marker-alt me-2 ${styles.icon}`}
+                                    ></i>
+                                    <span>Pikk tn 36, Old Tallinn</span>
+                                </div>
+                                <div className="d-flex align-items-center">
+                                    <i
+                                        className={`fas fa-city me-2 ${styles.icon}`}
+                                    ></i>
+                                    <span>City Center, Tallin</span>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -77,23 +82,27 @@ const Footer = () => {
                                     <BsPhone size={24} />
                                 </div>
                                 <h3 className={styles.sectionTitle}>
-                                    Контакты
+                                    Communication
                                 </h3>
                             </div>
                             <div className={styles.content}>
                                 <a
                                     href="tel:+54153215323245"
-                                    className={`${styles.contactLink} d-block mb-2`}
+                                    className="d-flex align-items-center mb-2 text-white text-decoration-none"
                                 >
-                                    <i className="fas fa-phone me-2"></i>
-                                    +54153215323245
+                                    <i
+                                        className={`fas fa-phone me-2 ${styles.icon}`}
+                                    ></i>
+                                    <span>+54153215323245</span>
                                 </a>
                                 <a
                                     href="mailto:Info@gmail.com"
-                                    className={`${styles.contactLink} d-block`}
+                                    className="d-flex align-items-center text-white text-decoration-none"
                                 >
-                                    <i className="fas fa-envelope me-2"></i>
-                                    Info@gmail.com
+                                    <i
+                                        className={`fas fa-envelope me-2 ${styles.icon}`}
+                                    ></i>
+                                    <span>Info@gmail.com</span>
                                 </a>
                             </div>
                         </div>
@@ -111,14 +120,14 @@ const Footer = () => {
                                     <LiaClockSolid size={24} />
                                 </div>
                                 <h3 className={styles.sectionTitle}>
-                                    Время работы
+                                    Working hours
                                 </h3>
                             </div>
                             <div className={styles.content}>
                                 <div
                                     className={`${styles.timeSlot} d-flex justify-content-between mb-2`}
                                 >
-                                    <span>Пн-Сб:</span>
+                                    <span>Mon-Sat:</span>
                                     <span className={styles.timeValue}>
                                         11:00 - 23:00
                                     </span>
@@ -126,7 +135,7 @@ const Footer = () => {
                                 <div
                                     className={`${styles.timeSlot} d-flex justify-content-between`}
                                 >
-                                    <span>Воскресенье:</span>
+                                    <span>Sunday:</span>
                                     <span className={styles.timeValue}>
                                         11:00 - 21:00
                                     </span>
@@ -147,7 +156,7 @@ const Footer = () => {
                                     <BsSearchHeart size={24} />
                                 </div>
                                 <h3 className={styles.sectionTitle}>
-                                    Следите за нами
+                                    Follow us
                                 </h3>
                             </div>
                             <div className={styles.content}>
@@ -183,7 +192,9 @@ const Footer = () => {
                         <div className="col-md-6">
                             <div className="d-flex align-items-center">
                                 <div className={styles.heartIcon}>
-                                    <i className="fas fa-heart"></i>
+                                    <i
+                                        className={`fas fa-heart ${styles.icon}`}
+                                    ></i>
                                 </div>
                                 <span className={styles.footerText}>
                                     Made with love
@@ -192,7 +203,7 @@ const Footer = () => {
                         </div>
                         <div className="col-md-6 text-md-end mt-3 mt-md-0">
                             <span className={styles.copyright}>
-                                © 2025 Все права защищены
+                                © 2025 All rights reserved
                             </span>
                         </div>
                     </div>

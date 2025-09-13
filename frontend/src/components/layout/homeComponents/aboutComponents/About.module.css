@@ -2,7 +2,7 @@
     background: linear-gradient(135deg, #f8f9fa, #e9ecef);
     min-height: 100vh;
 }
-.about {
+.about-section {
     display: flex;
     justify-content: space-between;
     align-items: center;

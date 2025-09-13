@@ -104,19 +104,17 @@ const RoomDetailOverlay: React.FC<{
                                 <h6 className="text-muted">Статус</h6>
                                 <span
                                     className={`badge ${
-                                        room.isActive
-                                            ? 'bg-success'
-                                            : 'bg-danger'
+                                        room.status ? 'bg-success' : 'bg-danger'
                                     }`}
                                 >
                                     <i
                                         className={`fas ${
-                                            room.isActive
+                                            room.status
                                                 ? 'fa-check'
                                                 : 'fa-times'
                                         } me-1`}
                                     ></i>
-                                    {room.isActive ? 'Активно' : 'Неактивно'}
+                                    {room.status ? 'Active' : 'Inactive'}
                                 </span>
                             </div>
                         </div>

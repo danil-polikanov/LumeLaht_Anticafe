@@ -10,6 +10,7 @@ namespace LumeLaht_RoomApi.Application.Dto
         public string Status { get; set; }
         public AddressResponse Address { get; set; }
         public List<ActivityResponse> Activity { get; set; }
+        public List<RoomImage> Images { get; set; }
 
     }
 }

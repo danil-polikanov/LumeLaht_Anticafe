@@ -4,7 +4,7 @@ import Footer from './Footer';
 import { useLocation } from 'react-router-dom';
 const Contact = () => {
     const location = useLocation();
-    const isHomePage = location.pathname === '/';
+    const isHomePage = ['/', '/about', '/contacts'].includes(location.pathname);
     return (
         <section id="contacts">
             {isHomePage && <Map />}

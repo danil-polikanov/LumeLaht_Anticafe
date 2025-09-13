@@ -21,7 +21,7 @@ const initialState: RoomsState = {
         minPrice: 0,
         maxPrice: 10000,
         activities: [],
-        isActive: true,
+        status: true,
     },
     sorting: {
         field: 'name',
@@ -80,7 +80,7 @@ const roomsSlice = createSlice({
             })
             .addCase(fetchRooms.rejected, (state, action) => {
                 state.loading = false;
-                state.error = action.payload ?? 'Ошибка';
+                state.error = action.payload ?? 'Error';
             })
             .addCase(fetchRoomById.pending, (state) => {
                 state.loading = true;
@@ -92,7 +92,7 @@ const roomsSlice = createSlice({
             })
             .addCase(fetchRoomById.rejected, (state, action) => {
                 state.loading = false;
-                state.error = action.payload ?? 'Ошибка';
+                state.error = action.payload ?? 'Error';
             });
     },
 });

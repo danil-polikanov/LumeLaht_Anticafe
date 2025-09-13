@@ -16,5 +16,6 @@ namespace LumeLaht_RoomApi.Application.Dto
         public Guid AddressId { get; set; }
         public AddressResponse Address { get; set; }
         public List<ActivityResponse> Activities { get; set; }
+        public List<RoomImage> Images { get; set; }
     }
 }

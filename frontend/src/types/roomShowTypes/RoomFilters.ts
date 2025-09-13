@@ -5,8 +5,8 @@ export interface RoomFilters {
     region: string;
     minPrice: number;
     maxPrice: number;
-    activities: number[];
-    isActive: boolean;
+    activities: string[];
+    status: boolean;
 }
 
 export interface RoomsPagination {
