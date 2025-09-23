@@ -1,9 +1,11 @@
 ﻿using AutoMapper;
 using Azure.Core;
 using LumeLaht_RoomApi.Application.Dto;
+using LumeLaht_RoomApi.Application.IServices;
 using LumeLaht_RoomApi.Core_.Entities;
 using LumeLaht_RoomApi.Core_.Interfaces;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace LumaCove_RoomApi.Controllers
 {
@@ -12,13 +14,15 @@ namespace LumaCove_RoomApi.Controllers
     public class RoomController : ControllerBase
     {
         private readonly IRoomService _roomService;
+        private readonly IActivityService _activityService;
         private readonly ILogger<RoomController> _logger;
         private readonly IMapper _mapper;
 
-        public RoomController(IMapper mapper, IRoomService roomService, ILogger<RoomController> logger)
+        public RoomController(IMapper mapper, IRoomService roomService,IActivityService activityService, ILogger<RoomController> logger)
         {
             _mapper = mapper;
             _roomService = roomService;
+            _activityService = activityService;
             _logger = logger;
         }
 
@@ -112,6 +116,13 @@ namespace LumaCove_RoomApi.Controllers
             //};
             return null;
         }
-        
+        [HttpGet("activities")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> GetActivities(CancellationToken cancellationToken)
+        {
+            var result = await _activityService.GetAllActivitiesAsync(cancellationToken);
+            return Ok(result);
+        }
     }
 }

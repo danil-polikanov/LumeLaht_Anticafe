@@ -15,6 +15,7 @@ namespace LumeLaht_RoomApi.Core_.Interfaces
         Task<RoomResponse> UpdateRoomAsync(Guid id, CreateRoomRequest request, CancellationToken cancellationToken);
         Task<RoomResponse> CreateRoomAsync(CreateRoomRequest request, CancellationToken cancellationToken);
         Task<bool> DeleteRoomAsync(Guid id, CancellationToken cancellationToken);
-        Task<RoomFilterDto> GetFiltersRoooms(CancellationToken cancellationToken);
+        Task<PagedResult<Room>> GetFilteredRoomsAsync(RoomFilterDto parameters);
+
     }
 }

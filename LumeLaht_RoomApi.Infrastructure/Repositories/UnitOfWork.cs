@@ -11,25 +11,31 @@ namespace LumeLaht_RoomApi.Infrastructure.Repositories
 {
     public class UnitOfWork : IUnitOfWork
     {
-        public IRoomRepository Rooms { get; }
-        public IRepository<Address> Address { get; }
-        public IRepository<Activity> Activities { get; }
-
         private readonly AppDbContext _context;
+
+        public IRoomRepository Rooms { get; }
+        public IRepository<Address> Addresses { get; }
+        public IRepository<Activity> Activities { get; }
 
         public UnitOfWork(AppDbContext context,
                           IRoomRepository rooms,
-                          IRepository<Address> address,
+                          IRepository<Address> addresses,
                           IRepository<Activity> activities)
         {
             _context = context;
             Rooms = rooms;
-            Address = address;
+            Addresses = addresses;
             Activities = activities;
         }
 
         public async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default) =>
             await _context.SaveChangesAsync(cancellationToken);
+
+        public void Dispose()
+        {
+            _context.Dispose();
+        }
     }
+
 
 }

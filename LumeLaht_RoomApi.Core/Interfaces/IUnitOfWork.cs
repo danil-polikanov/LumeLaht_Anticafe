@@ -10,9 +10,10 @@ namespace LumeLaht_RoomApi.Core_.Interfaces
     public interface IUnitOfWork
     {
         IRoomRepository Rooms { get; }
-        IRepository<Address> Address { get;}
+        IRepository<Address> Addresses { get;}
         IRepository<Activity> Activities { get;}
 
         Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
+        void Dispose();
     }
 }

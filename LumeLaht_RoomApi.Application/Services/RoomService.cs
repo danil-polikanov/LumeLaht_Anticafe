@@ -38,7 +38,7 @@ namespace LumeLaht_RoomApi.Application.Services
         public async Task<RoomResponse> CreateRoomAsync(CreateRoomRequest request, CancellationToken cancellationToken)
         {
             // 1. Does address exists
-            if (!await _uow.Address.ExistsAsync(a => a.AddressId == request.AddressId, cancellationToken))
+            if (!await _uow.Addresses.ExistsAsync(a => a.AddressId == request.AddressId, cancellationToken))
                 throw new ValidationException($"Address with ID {request.AddressId} does not exist.");
 
             // 2.Do activities exist
@@ -54,7 +54,7 @@ namespace LumeLaht_RoomApi.Application.Services
             var room = _mapper.Map<Room>(request);
             if (request.Address != null && request.Activities.Any())
             {
-                var roomsAddress = _uow.Address.GetByIdAsync(request.AddressId, cancellationToken);
+                var roomsAddress = _uow.Addresses.GetByIdAsync(request.AddressId, cancellationToken);
                 room.RoomActivity = request.Activities.Select(a => new RoomActivity
                 {
                     Activity = _mapper.Map<Activity>(a), 
@@ -79,26 +79,8 @@ namespace LumeLaht_RoomApi.Application.Services
             await _uow.Rooms.DeleteAsync(room, cancellationToken);
             return true;
         }
-        public async Task<RoomFilterDto> GetFiltersRoooms(CancellationToken cancellationToken)
+        public async Task<PagedResult<Room>> GetFilteredRoomsAsync(RoomFilterDto parameters)
         {
-            //var rooms = await _context.Rooms
-            //.Include(r => r.Address)
-            //.Include(r => r.RoomActivity)
-            //.ToListAsync();
-
-            //var cities = rooms
-            //    .Select(r => r.Address.City)
-            //    .Distinct()
-            //    .ToList();
-
-            //var activities = rooms
-            //    .SelectMany(r => r.RoomActivity.Select(a => a.Name))
-            //    .Distinct()
-            //    .ToList();
-
-            //var prices = rooms.Select(r => r.PricePerHour);
-            //double minPrice = prices.Min();
-            //double maxPrice = prices.Max();
             return null;
         }
     }

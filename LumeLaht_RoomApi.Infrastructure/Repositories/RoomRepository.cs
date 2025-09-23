@@ -19,7 +19,6 @@ namespace LumeLaht_RoomApi.Infrastructure.Repositories
         {
             _context = context;
         }
-
         public async Task<IEnumerable<Room>> GetAllAsync(CancellationToken cancellationToken)
         {
             return await _context.Rooms.Include(ad=>ad.Address).Include(ra=>ra.RoomActivity).ThenInclude(aa=>aa.Activity).ToListAsync(cancellationToken);
