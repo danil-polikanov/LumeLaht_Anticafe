@@ -1,10 +1,24 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {
+    setFilters,
+    resetFilters,
+    setSorting,
+    setPage,
+    setLimit,
+    setSelectedRoom,
+    clearSelectedRoom,
+    clearError,
+} from '../redux/rooms/roomSlice';
+import { fetchRoomsByFilters, fetchActivities } from '../api/roomsThunks';
+import {
     selectRooms,
-    selectSelectedRoom,
+    selectActivities,
     selectLoading,
     selectError,
+    selectFilters,
+    selectSorting,
+    selectPagination,
 } from '../redux/rooms/roomsSelectors';
 import { fetchRooms, fetchRoomById } from '../api/roomsThunks';
 import RoomFilters from './RoomFilters';
@@ -14,18 +28,31 @@ import { AppDispatch } from '../redux/store';
 import AdditionalInfo from './AdditionalInfo';
 import PaginationComponent from './PaginationComponent';
 import RoomDetailOverlay from './RoomDetailOverlay';
-import { setSelectedRoom } from '../redux/rooms/roomSlice';
+import { useAppDispatch, useAppSelector } from '../redux/hooks';
 const RoomsList: React.FC = () => {
-    const dispatch = useDispatch<AppDispatch>();
-    const rooms = useSelector(selectRooms);
-    const selectedRoomDetail = useSelector(selectSelectedRoom);
-
+    const dispatch = useAppDispatch();
+    const rooms = useAppSelector(selectRooms);
+    const activities = useAppSelector(selectActivities);
+    const filters = useAppSelector(selectFilters);
+    const sorting = useAppSelector(selectSorting);
+    const pagination = useAppSelector(selectPagination);
     const loading = useSelector(selectLoading);
     const error = useSelector(selectError);
 
+    // Загрузка активностей при монтировании
     useEffect(() => {
-        dispatch(fetchRooms());
+        dispatch(fetchActivities());
     }, [dispatch]);
+
+    useEffect(() => {
+        dispatch(fetchRoomsByFilters());
+    }, [
+        dispatch,
+        filters,
+        sorting,
+        pagination.currentPage,
+        pagination.pageSize,
+    ]);
 
     const handleRoomClick = (roomId: string) => {
         dispatch(fetchRoomById(roomId));
@@ -33,9 +60,7 @@ const RoomsList: React.FC = () => {
         // например, с помощью React Router
         console.log('Navigate to room detail:', roomId);
     };
-    const handleCloseDetail = () => {
-        dispatch(setSelectedRoom(null));
-    };
+    const handleCloseDetail = () => {};
 
     if (loading && rooms.length === 0) {
         return (

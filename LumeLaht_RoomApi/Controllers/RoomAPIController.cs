@@ -30,6 +30,10 @@ namespace LumaCove_RoomApi.Controllers
         public async Task<ActionResult<IEnumerable<RoomResponse>>> GetAll(CancellationToken cancellationToken)
         {
             var rooms = await _roomService.GetAllRoomsAsync(cancellationToken);
+            if (rooms == null)
+            {
+                return NotFound();
+            }
             return Ok(rooms);
         }
 
@@ -63,7 +67,7 @@ namespace LumaCove_RoomApi.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult> Update(Guid id, CreateRoomRequest request, CancellationToken cancellationToken)
         {
-            if (id ==null)
+            if (id ==Guid.Empty)
                 return BadRequest("Invalid Room ID");
 
             if (request == null)
@@ -83,38 +87,17 @@ namespace LumaCove_RoomApi.Controllers
             await _roomService.DeleteRoomAsync(id, cancellationToken);
             return NoContent();
         }
-        [HttpGet("filters")]
+        [HttpPost("filters")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<RoomFilterDto> GetRoomFilterOptionsAsync(CancellationToken cancellationToken)
+        public async Task<ActionResult<RoomFilterDto>> GetRoomFilterOptionsAsync([FromBody]RoomFilterDto roomFilterDto,CancellationToken cancellationToken)
         {
-            //var rooms = await _context.Rooms
-            //    .Include(r => r.Address)
-            //    .Include(r => r.RoomActivity)
-            //    .ToListAsync();
-
-            //var cities = rooms
-            //    .Select(r => r.Address.City)
-            //    .Distinct()
-            //    .ToList();
-
-            //var activities = rooms
-            //    .SelectMany(r => r.RoomActivity.Select(a => a.Name))
-            //    .Distinct()
-            //    .ToList();
-
-            //var prices = rooms.Select(r => r.PricePerHour);
-            //double minPrice = prices.Min();
-            //double maxPrice = prices.Max();
-
-            //return new RoomFiltersDto
-            //{
-            //    Cities = cities,
-            //    Activities = activities,
-            //    MinPrice = minPrice,
-            //    MaxPrice = maxPrice
-            //};
-            return null;
+            var result = await _roomService.GetFilteredRoomsAsync(roomFilterDto, cancellationToken);
+            if(result == null)
+            {
+                return BadRequest("Invalid Filters");
+            }
+            return Ok(result);
         }
         [HttpGet("activities")]
         [ProducesResponseType(StatusCodes.Status200OK)]

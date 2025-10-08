@@ -2,8 +2,13 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import axios, { AxiosError } from 'axios';
 import { RoomResponse } from '../types/roomTypes/RoomResponse';
+import { ActivityResponse } from '../types/roomTypes/ActivityResponse';
 import { CreateRoomRequest } from '../types/roomTypes/CreateRoomRequest';
-import { rejects } from 'assert';
+import {
+    PagedRoomsResponse,
+    RoomFilters,
+} from '../types/roomShowTypes/RoomFilters';
+import { RoomsState } from '../redux/rooms/RoomsState';
 
 const API_URL = 'https://localhost:7001/api/room'; // базовый путь
 
@@ -79,7 +84,48 @@ export const deleteRoom = createAsyncThunk<
         return rejectWithValue(getErrorMessage(error));
     }
 });
+//  6️⃣ Вывести все активности
+export const fetchActivities = createAsyncThunk<
+    ActivityResponse[],
+    void,
+    { rejectValue: string }
+>('rooms/fetchActivities', async (_, { rejectWithValue }) => {
+    try {
+        debugger;
+        const response = await axios.get<ActivityResponse[]>(
+            `${API_URL}/activities `
+        );
+        console.log(response.data);
+        return response.data;
+    } catch (error) {
+        return rejectWithValue(getErrorMessage(error));
+    }
+});
+//  7️⃣ Вывести комнаты по фильтрам
+export const fetchRoomsByFilters = createAsyncThunk<
+    PagedRoomsResponse,
+    void,
+    { state: { rooms: RoomsState }; rejectValue: string }
+>('rooms/fetchRoomsByFilters', async (_, { getState, rejectWithValue }) => {
+    try {
+        const { filters, sorting, pagination } = getState().rooms;
+        const params = {
+            roomOptionDTO: filters,
+            sortOptions: sorting,
+            page: pagination.currentPage,
+            pageSize: pagination.pageSize,
+        };
+        const response = await axios.post<PagedRoomsResponse>(
+            `${API_URL}/filters`,
+            params
+        );
 
+        console.log(response.data);
+        return response.data;
+    } catch (error) {
+        return rejectWithValue(getErrorMessage(error));
+    }
+});
 //  Addition func for error handler
 function getErrorMessage(error: unknown): string {
     if (axios.isAxiosError(error)) {

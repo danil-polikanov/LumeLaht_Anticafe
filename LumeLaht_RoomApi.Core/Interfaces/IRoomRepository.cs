@@ -1,4 +1,5 @@
 ﻿using LumeLaht_RoomApi.Core_.Entities;
+using LumeLaht_RoomApi.Core_.Entities.Filters;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,12 +8,10 @@ using System.Threading.Tasks;
 
 namespace LumeLaht_RoomApi.Core_.Interfaces
 {
-    public interface IRoomRepository
+    public interface IRoomRepository : IRepository<Room>
     {
-        Task<IEnumerable<Room>> GetAllAsync(CancellationToken cancellationToken);
-        Task<Room> GetByIdAsync(Guid id, CancellationToken cancellationToken);
-        Task AddAsync(Room room,CancellationToken cancellationToken);
-        Task UpdateAsync(Room room, CancellationToken cancellationToken);
-        Task DeleteAsync(Room room, CancellationToken cancellationToken);
+        Task<PagedResult<Room>> GetFilteredRoomsAsync(
+            FilterOptions filterOptions,
+            CancellationToken cancellationToken);
     }
 }

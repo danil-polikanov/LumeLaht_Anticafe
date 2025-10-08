@@ -44,17 +44,7 @@ export const applyFiltersAndSorting = (state: RoomsState) => {
         );
     }
 
-    if (state.filters.activities.length > 0) {
-        filtered = filtered.filter((room) =>
-            room.activity?.some(
-                (activity) =>
-                    activity.activityId !== undefined &&
-                    state.filters.activities.includes(activity.activityId)
-            )
-        );
-    }
-
-    filtered = filtered.filter((room) => room.status === 'Active');
+    filtered = filtered.filter((room) => room.status === 'Available');
 
     filtered.sort((a, b) => {
         let aValue: any;
@@ -90,12 +80,13 @@ export const applyFiltersAndSorting = (state: RoomsState) => {
             : 0;
     });
 
-    state.pagination.total = filtered.length;
+    state.pagination.totalItems = filtered.length;
     state.pagination.totalPages = Math.ceil(
-        filtered.length / state.pagination.limit
+        filtered.length / state.pagination.pageSize
     );
 
-    const startIndex = (state.pagination.page - 1) * state.pagination.limit;
-    const endIndex = startIndex + state.pagination.limit;
-    state.filteredRooms = filtered.slice(startIndex, endIndex);
+    const startIndex =
+        (state.pagination.currentPage - 1) * state.pagination.totalPages;
+    const endIndex = startIndex + state.pagination.totalPages;
+    //state.filteredRooms = filtered.slice(startIndex, endIndex);
 };

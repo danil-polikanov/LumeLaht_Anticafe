@@ -5,13 +5,19 @@ import {
     RoomSorting,
 } from '../../types/roomShowTypes/RoomFilters';
 import { RoomsState } from './RoomsState';
-import { fetchRooms, fetchRoomById } from '../../api/roomsThunks';
+import {
+    fetchRooms,
+    fetchRoomById,
+    fetchRoomsByFilters,
+    fetchActivities,
+} from '../../api/roomsThunks';
 import { applyFiltersAndSorting } from './utils/roomsFilterUtils';
+import { RoomResponse } from '../../types/roomTypes/RoomResponse';
 
 const initialState: RoomsState = {
     rooms: [],
-    filteredRooms: [],
     selectedRoom: null,
+    activities: [],
     loading: false,
     error: null,
     filters: {
@@ -21,16 +27,16 @@ const initialState: RoomsState = {
         minPrice: 0,
         maxPrice: 10000,
         activities: [],
-        status: true,
+        status: '',
     },
     sorting: {
         field: 'name',
         direction: 'asc',
     },
     pagination: {
-        page: 1,
-        limit: 3,
-        total: 0,
+        currentPage: 1,
+        pageSize: 3,
+        totalItems: 0,
         totalPages: 0,
     },
 };
@@ -41,47 +47,54 @@ const roomsSlice = createSlice({
     reducers: {
         setFilters: (state, action: PayloadAction<Partial<RoomFilters>>) => {
             state.filters = { ...state.filters, ...action.payload };
-            state.pagination.page = 1;
-            applyFiltersAndSorting(state);
+            state.pagination.currentPage = 1;
+        },
+        resetFilters: (state) => {
+            state.filters = initialState.filters;
+            state.pagination.currentPage = 1;
         },
         setSorting: (state, action: PayloadAction<RoomSorting>) => {
             state.sorting = action.payload;
-            applyFiltersAndSorting(state);
         },
         setPage: (state, action: PayloadAction<number>) => {
-            state.pagination.page = action.payload;
-            applyFiltersAndSorting(state);
+            state.pagination.currentPage = action.payload;
         },
         setLimit: (state, action: PayloadAction<number>) => {
-            state.pagination.limit = action.payload;
-            state.pagination.page = 1;
-            applyFiltersAndSorting(state);
+            state.pagination.totalPages = action.payload;
+            state.pagination.currentPage = 1;
         },
-        setSelectedRoom: (
-            state,
-            action: PayloadAction<RoomsState['selectedRoom']>
-        ) => {
+        setSelectedRoom: (state, action: PayloadAction<RoomResponse>) => {
             state.selectedRoom = action.payload;
         },
         clearSelectedRoom: (state) => {
             state.selectedRoom = null;
         },
+        clearError: (state) => {
+            state.error = null;
+        },
     },
     extraReducers: (builder) => {
         builder
-            .addCase(fetchRooms.pending, (state) => {
+            // 1️⃣ Вывести все комнаты
+            .addCase(fetchRoomsByFilters.pending, (state) => {
                 state.loading = true;
                 state.error = null;
             })
-            .addCase(fetchRooms.fulfilled, (state, action) => {
+            .addCase(fetchRoomsByFilters.fulfilled, (state, action) => {
                 state.loading = false;
-                state.rooms = action.payload;
-                applyFiltersAndSorting(state);
+                state.rooms = action.payload.items;
+                state.pagination = {
+                    pageSize: action.payload.pageSize,
+                    currentPage: action.payload.currentPage,
+                    totalItems: action.payload.totalItems,
+                    totalPages: action.payload.totalPages,
+                };
             })
-            .addCase(fetchRooms.rejected, (state, action) => {
+            .addCase(fetchRoomsByFilters.rejected, (state, action) => {
                 state.loading = false;
                 state.error = action.payload ?? 'Error';
             })
+            // 2️⃣ Вывести комнату по ID
             .addCase(fetchRoomById.pending, (state) => {
                 state.loading = true;
                 state.error = null;
@@ -94,15 +107,31 @@ const roomsSlice = createSlice({
                 state.loading = false;
                 state.error = action.payload ?? 'Error';
             });
+        //3️⃣ Вывести активности
+        builder
+            .addCase(fetchActivities.pending, (state) => {
+                state.loading = true;
+                state.error = null;
+            })
+            .addCase(fetchActivities.fulfilled, (state, action) => {
+                state.loading = false;
+                state.activities = action.payload;
+            })
+            .addCase(fetchActivities.rejected, (state, action) => {
+                state.loading = false;
+                state.error = action.payload ?? 'Error';
+            });
     },
 });
 
 export const {
     setFilters,
+    resetFilters,
     setSorting,
     setPage,
     setLimit,
     setSelectedRoom,
     clearSelectedRoom,
+    clearError,
 } = roomsSlice.actions;
 export default roomsSlice.reducer;

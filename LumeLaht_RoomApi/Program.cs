@@ -1,4 +1,5 @@
 using LumaCove_RoomApi;
+using LumeLaht_RoomApi.Application.IServices;
 using LumeLaht_RoomApi.Application.Services;
 using LumeLaht_RoomApi.Core_.Interfaces;
 using LumeLaht_RoomApi.Extensions;
@@ -37,6 +38,7 @@ namespace LumeLaht_RoomApi
             builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
             builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
             builder.Services.AddScoped<IRoomService, RoomService>();
+            builder.Services.AddScoped<IActivityService, ActivityService>();
             builder.Services.AddDbContext<AppDbContext>(option =>
             {
                 option.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));

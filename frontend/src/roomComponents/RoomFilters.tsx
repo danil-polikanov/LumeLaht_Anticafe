@@ -29,7 +29,7 @@ const RoomFilters: React.FC = () => {
                 minPrice: 0,
                 maxPrice: 10000,
                 activities: [],
-                status: true,
+                status: '',
             })
         );
     };
@@ -181,8 +181,7 @@ const RoomFilters: React.FC = () => {
                                 />
                             </div>
 
-                            {/* Статус активности */}
-                            <div className="col-md-3">
+                            {/* Статус активности                  <div className="col-md-3">
                                 <label className="form-label">
                                     <i className="fas fa-toggle-on me-1"></i>
                                     Status
@@ -208,7 +207,7 @@ const RoomFilters: React.FC = () => {
                                         Active only
                                     </label>
                                 </div>
-                            </div>
+                            </div>*/}
 
                             {/* Кнопка очистки */}
                             <div className="col-md-3 d-flex align-items-end">

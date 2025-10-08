@@ -1,5 +1,6 @@
 ﻿using LumeLaht_RoomApi.Application.Dto;
 using LumeLaht_RoomApi.Core_.Entities;
+using LumeLaht_RoomApi.Core_.Entities.Filters;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,7 +16,7 @@ namespace LumeLaht_RoomApi.Core_.Interfaces
         Task<RoomResponse> UpdateRoomAsync(Guid id, CreateRoomRequest request, CancellationToken cancellationToken);
         Task<RoomResponse> CreateRoomAsync(CreateRoomRequest request, CancellationToken cancellationToken);
         Task<bool> DeleteRoomAsync(Guid id, CancellationToken cancellationToken);
-        Task<PagedResult<Room>> GetFilteredRoomsAsync(RoomFilterDto parameters);
+        Task<PagedResult<RoomResponse>> GetFilteredRoomsAsync(RoomFilterDto filter, CancellationToken cancellationToken);
 
     }
 }

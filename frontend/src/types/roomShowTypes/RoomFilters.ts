@@ -1,3 +1,6 @@
+import { ActivityResponse } from '../roomTypes/ActivityResponse';
+import { RoomResponse } from '../roomTypes/RoomResponse';
+
 // Filter room
 export interface RoomFilters {
     search: string;
@@ -6,16 +9,23 @@ export interface RoomFilters {
     minPrice: number;
     maxPrice: number;
     activities: string[];
-    status: boolean;
+    status: string;
 }
 
 export interface RoomsPagination {
-    page: number;
-    limit: number;
-    total: number;
+    currentPage: number;
+    pageSize: number;
+    totalItems: number;
     totalPages: number;
 }
 export interface RoomSorting {
     field: 'name' | 'pricePerHour' | 'city';
     direction: 'asc' | 'desc';
+}
+export interface PagedRoomsResponse {
+    items: RoomResponse[];
+    totalItems: number;
+    currentPage: number;
+    pageSize: number;
+    totalPages: number;
 }

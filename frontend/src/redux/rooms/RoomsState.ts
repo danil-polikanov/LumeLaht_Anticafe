@@ -4,11 +4,12 @@ import {
     RoomSorting,
     RoomsPagination,
 } from '../../types/roomShowTypes/RoomFilters';
+import { ActivityResponse } from '../../types/roomTypes/ActivityResponse';
 
 export interface RoomsState {
     rooms: RoomResponse[];
-    filteredRooms: RoomResponse[];
     selectedRoom: RoomResponse | null;
+    activities: ActivityResponse[];
     loading: boolean;
     error: string | null;
     filters: RoomFilters;

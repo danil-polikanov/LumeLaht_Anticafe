@@ -34,7 +34,7 @@ const RoomSortingAndPagination: React.FC = () => {
     const generatePaginationItems = () => {
         const items = [];
         const maxVisiblePages = 5;
-        const currentPage = pagination.page;
+        const currentPage = pagination.currentPage;
         const totalPages = pagination.totalPages;
 
         // Первая страница

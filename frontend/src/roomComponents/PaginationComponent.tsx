@@ -13,7 +13,7 @@ export const PaginationComponent: React.FC = () => {
 
     const generatePaginationItems = () => {
         const items = [];
-        const currentPage = pagination.page;
+        const currentPage = pagination.currentPage;
         const totalPages = pagination.totalPages;
 
         // Предыдущая страница

@@ -12,23 +12,48 @@ using System.Threading.Tasks;
 
 namespace LumeLaht_RoomApi.Infrastructure.Repositories
 {
-    public class Repository<TEntity> : IRepository<TEntity> where TEntity : class
+    public class Repository<T> : IRepository<T> where T : class
     {
         protected readonly AppDbContext _context;
-        protected readonly DbSet<TEntity> _dbSet;
+        protected readonly DbSet<T> _dbSet;
 
         public Repository(AppDbContext context)
         {
             _context = context;
-            _dbSet = _context.Set<TEntity>();      
+            _dbSet = context.Set<T>();
         }
-        public IQueryable<TEntity> GetQueryable() => _dbSet.AsQueryable();
-        public async Task<List<TEntity>> GetAllAsync(CancellationToken cancellationToken) =>
-            await _dbSet.ToListAsync(cancellationToken);
-        public async Task<TEntity?> GetByIdAsync(Guid id,CancellationToken cancellationToken) =>
-            await _dbSet.FindAsync(id,cancellationToken).AsTask();
+        public virtual async Task<List<T>> GetAllAsync(CancellationToken cancellationToken)
+            => await _dbSet.ToListAsync(cancellationToken);
 
-        public async Task<bool> ExistsAsync(Expression<Func<TEntity, bool>> predicate,CancellationToken cancellationToken) =>
-           await _dbSet.AnyAsync(predicate, cancellationToken);
+        public virtual async Task<T?> GetByIdAsync(Guid id, CancellationToken cancellationToken)
+        {
+            // If all have Ids
+            return await _dbSet.FindAsync(new object[] { id }, cancellationToken);
+        }
+
+        public virtual async Task<T> AddAsync(T entity, CancellationToken cancellationToken)
+        {
+            if (entity == null)
+                throw new ArgumentNullException(nameof(entity));
+            await _dbSet.AddAsync(entity, cancellationToken);
+            await _context.SaveChangesAsync(cancellationToken);
+            return entity; 
+        }
+        public virtual async Task UpdateAsync(T entity, CancellationToken cancellationToken)
+        {
+            if (entity == null)
+                throw new ArgumentNullException(nameof(entity));
+            _dbSet.Update(entity);
+            await _context.SaveChangesAsync(cancellationToken);
+        }
+        public virtual async Task DeleteAsync(Guid id, CancellationToken cancellationToken)
+        {
+            var entity = await GetByIdAsync(id, cancellationToken);
+            if (entity != null)
+            {
+                _dbSet.Remove(entity);
+                await _context.SaveChangesAsync(cancellationToken);
+            }
+        }
     }
 }

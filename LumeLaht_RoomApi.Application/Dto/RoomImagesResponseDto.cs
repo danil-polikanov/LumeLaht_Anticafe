@@ -12,7 +12,6 @@ namespace LumeLaht_RoomApi.Application.Dto
     {
         public Guid ImageId { get; set; }
         public string Url { get; set; }
-
         public bool IsMain { get; set; }
         public Guid RoomId { get; set; }
     }

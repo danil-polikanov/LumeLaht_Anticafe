@@ -4,11 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace LumeLaht_RoomApi.Application.Dto
+namespace LumeLaht_RoomApi.Core_.Entities.Filters
 {
-    public class PagedResult<T>
+    public class PagginationOptions
     {
-        public List<T> Items { get; set; }
         public int TotalItems { get; set; }
         public int PageSize { get; set; }
         public int CurrentPage { get; set; }

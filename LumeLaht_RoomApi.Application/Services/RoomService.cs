@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using LumeLaht_RoomApi.Application.Dto;
 using LumeLaht_RoomApi.Core_.Entities;
+using LumeLaht_RoomApi.Core_.Entities.Filters;
 using LumeLaht_RoomApi.Core_.Interfaces;
 using Microsoft.Extensions.Logging;
 using System;
@@ -38,29 +39,26 @@ namespace LumeLaht_RoomApi.Application.Services
         public async Task<RoomResponse> CreateRoomAsync(CreateRoomRequest request, CancellationToken cancellationToken)
         {
             // 1. Does address exists
-            if (!await _uow.Addresses.ExistsAsync(a => a.AddressId == request.AddressId, cancellationToken))
-                throw new ValidationException($"Address with ID {request.AddressId} does not exist.");
+            var address = await _uow.Addresses.GetByIdAsync(request.AddressId, cancellationToken)
+                ?? throw new ValidationException($"Address with ID {request.AddressId} does not exist.");
 
             // 2.Do activities exist
             if (request.Activities != null && request.Activities.Any())
             {
-                foreach (var activity in request.Activities) {
-                    if (!await _uow.Activities.ExistsAsync(a => a.Name == request.Name, cancellationToken))
-                    {
-                        throw new ValidationException($"Activities not found for IDs: {string.Join(", ", request.Name)}");
-                    }
+                foreach (var activity in request.Activities)
+                {
+                    var existing = await _uow.Activities.GetByIdAsync(activity.ActivityId, cancellationToken)
+                        ?? throw new ValidationException($"Activity with ID {activity.ActivityId} does not exist.");
                 }
             }
             var room = _mapper.Map<Room>(request);
-            if (request.Address != null && request.Activities.Any())
+#pragma warning disable CS8601 // Возможно, назначение-ссылка, допускающее значение NULL.
+            room.RoomActivity = request.Activities?.Select(a => new RoomActivity
             {
-                var roomsAddress = _uow.Addresses.GetByIdAsync(request.AddressId, cancellationToken);
-                room.RoomActivity = request.Activities.Select(a => new RoomActivity
-                {
-                    Activity = _mapper.Map<Activity>(a), 
-                    Room = room
-                }).ToList();
-            }
+                Activity = _mapper.Map<Activity>(a),
+                Room = room
+            }).ToList();
+#pragma warning restore CS8601 // Возможно, назначение-ссылка, допускающее значение NULL.
 
             await _uow.Rooms.AddAsync(room, cancellationToken); 
             return _mapper.Map<RoomResponse>(room);
@@ -76,12 +74,27 @@ namespace LumeLaht_RoomApi.Application.Services
         {
             var room = await _uow.Rooms.GetByIdAsync(id, cancellationToken);
             if (room == null) return false;
-            await _uow.Rooms.DeleteAsync(room, cancellationToken);
+            await _uow.Rooms.DeleteAsync(room.RoomId, cancellationToken);
             return true;
         }
-        public async Task<PagedResult<Room>> GetFilteredRoomsAsync(RoomFilterDto parameters)
+        public async Task<PagedResult<RoomResponse>> GetFilteredRoomsAsync(
+           RoomFilterDto filter,
+           CancellationToken cancellationToken)
         {
-            return null;
+            var filterOptions = filter.ToFilterOptions();
+            var result = await _uow.Rooms.GetFilteredRoomsAsync(filterOptions, cancellationToken);
+
+            return new PagedResult<RoomResponse>
+            {
+                Items = _mapper.Map<List<RoomResponse>>(result.Items),
+                paggination = new PagginationOptions
+                {
+                    CurrentPage = result.paggination.CurrentPage,
+                    PageSize = result.paggination.PageSize,
+                    TotalItems = result.paggination.TotalItems,
+
+                }
+            };
         }
     }
 
