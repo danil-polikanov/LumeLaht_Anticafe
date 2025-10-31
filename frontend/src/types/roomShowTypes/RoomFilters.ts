@@ -8,7 +8,7 @@ export interface RoomFilters {
     region: string;
     minPrice: number;
     maxPrice: number;
-    activities: string[];
+    activitiesIds: string[];
     status: string;
 }
 
@@ -24,8 +24,5 @@ export interface RoomSorting {
 }
 export interface PagedRoomsResponse {
     items: RoomResponse[];
-    totalItems: number;
-    currentPage: number;
-    pageSize: number;
-    totalPages: number;
+    pagination: RoomsPagination;
 }

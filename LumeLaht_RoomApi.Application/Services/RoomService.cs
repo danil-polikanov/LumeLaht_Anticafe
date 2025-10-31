@@ -87,11 +87,11 @@ namespace LumeLaht_RoomApi.Application.Services
             return new PagedResult<RoomResponse>
             {
                 Items = _mapper.Map<List<RoomResponse>>(result.Items),
-                paggination = new PagginationOptions
+                pagination = new PaginationOptions
                 {
-                    CurrentPage = result.paggination.CurrentPage,
-                    PageSize = result.paggination.PageSize,
-                    TotalItems = result.paggination.TotalItems,
+                    CurrentPage = result.pagination.CurrentPage,
+                    PageSize = result.pagination.PageSize,
+                    TotalItems = result.pagination.TotalItems,
 
                 }
             };

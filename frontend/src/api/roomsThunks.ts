@@ -84,48 +84,80 @@ export const deleteRoom = createAsyncThunk<
         return rejectWithValue(getErrorMessage(error));
     }
 });
-//  6️⃣ Вывести все активности
+// ========== THROTTLE ДЛЯ ЗАПРОСОВ ==========
+let lastFetchTime = 0;
+let pendingFetch: Promise<PagedRoomsResponse> | null = null;
+const FETCH_THROTTLE = 300; // мс
+
+// 6️⃣ Вывести все активности
 export const fetchActivities = createAsyncThunk<
     ActivityResponse[],
     void,
     { rejectValue: string }
 >('rooms/fetchActivities', async (_, { rejectWithValue }) => {
     try {
-        debugger;
         const response = await axios.get<ActivityResponse[]>(
-            `${API_URL}/activities `
+            `${API_URL}/activities`
         );
-        console.log(response.data);
+        console.log('Activities loaded:', response.data);
         return response.data;
     } catch (error) {
         return rejectWithValue(getErrorMessage(error));
     }
 });
-//  7️⃣ Вывести комнаты по фильтрам
+
+// 7️⃣ Вывести комнаты по фильтрам (с правильным throttle)
 export const fetchRoomsByFilters = createAsyncThunk<
     PagedRoomsResponse,
     void,
     { state: { rooms: RoomsState }; rejectValue: string }
 >('rooms/fetchRoomsByFilters', async (_, { getState, rejectWithValue }) => {
+    const now = Date.now();
+
+    // ✅ ИСПРАВЛЕНИЕ: Если есть pending запрос, возвращаем его
+    if (now - lastFetchTime < FETCH_THROTTLE && pendingFetch) {
+        console.log('🔄 Throttled: reusing pending request');
+        return pendingFetch;
+    }
+
+    // ✅ Если throttle прошел, но запрос еще не завершен, ждем его
+    if (pendingFetch) {
+        console.log('⏳ Waiting for pending request to complete');
+        return pendingFetch;
+    }
+
     try {
+        lastFetchTime = now;
         const { filters, sorting, pagination } = getState().rooms;
+
         const params = {
             roomOptionDTO: filters,
             sortOptions: sorting,
             page: pagination.currentPage,
             pageSize: pagination.pageSize,
         };
-        const response = await axios.post<PagedRoomsResponse>(
-            `${API_URL}/filters`,
-            params
-        );
 
-        console.log(response.data);
-        return response.data;
+        console.log('📤 Sending request:', JSON.stringify(params, null, 2));
+
+        // Создаем промис и сохраняем его
+        pendingFetch = axios
+            .post<PagedRoomsResponse>(`${API_URL}/filters`, params)
+            .then((response) => {
+                console.log('✅ Response received:', response.data);
+                pendingFetch = null; // Очищаем после завершения
+                return response.data;
+            })
+            .catch((error) => {
+                pendingFetch = null; // Очищаем при ошибке
+                throw error;
+            });
+
+        return await pendingFetch;
     } catch (error) {
         return rejectWithValue(getErrorMessage(error));
     }
 });
+
 //  Addition func for error handler
 function getErrorMessage(error: unknown): string {
     if (axios.isAxiosError(error)) {

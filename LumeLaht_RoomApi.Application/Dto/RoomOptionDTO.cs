@@ -14,6 +14,6 @@ namespace LumeLaht_RoomApi.Application.Dto
         public string Region { get; set; }
         public double? MinPrice { get; set; }
         public double? MaxPrice { get; set; }
-        public List<Guid>? ActivityIds { get; set; }
+        public List<Guid>? ActivitiesIds { get; set; }
     }
 }

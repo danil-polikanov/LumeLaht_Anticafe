@@ -26,7 +26,7 @@ const initialState: RoomsState = {
         region: '',
         minPrice: 0,
         maxPrice: 10000,
-        activities: [],
+        activitiesIds: [],
         status: '',
     },
     sorting: {
@@ -83,12 +83,7 @@ const roomsSlice = createSlice({
             .addCase(fetchRoomsByFilters.fulfilled, (state, action) => {
                 state.loading = false;
                 state.rooms = action.payload.items;
-                state.pagination = {
-                    pageSize: action.payload.pageSize,
-                    currentPage: action.payload.currentPage,
-                    totalItems: action.payload.totalItems,
-                    totalPages: action.payload.totalPages,
-                };
+                state.pagination = action.payload.pagination;
             })
             .addCase(fetchRoomsByFilters.rejected, (state, action) => {
                 state.loading = false;

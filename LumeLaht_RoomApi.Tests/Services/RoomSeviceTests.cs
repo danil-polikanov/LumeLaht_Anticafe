@@ -406,7 +406,7 @@ namespace LumeLaht_RoomApi.Tests.Services
             var pagedResult = new PagedResult<Room>
             {
                 Items = rooms,
-                paggination = new PagginationOptions
+                pagination = new PaginationOptions
                 {
                     CurrentPage = 1,
                     PageSize = 10,
@@ -436,9 +436,9 @@ namespace LumeLaht_RoomApi.Tests.Services
             // Assert
             Assert.NotNull(result);
             Assert.Equal(2, result.Items.Count);
-            Assert.Equal(1, result.paggination.CurrentPage);
-            Assert.Equal(10, result.paggination.PageSize);
-            Assert.Equal(2, result.paggination.TotalItems);
+            Assert.Equal(1, result.pagination.CurrentPage);
+            Assert.Equal(10, result.pagination.PageSize);
+            Assert.Equal(2, result.pagination.TotalItems);
         }
 
         #endregion

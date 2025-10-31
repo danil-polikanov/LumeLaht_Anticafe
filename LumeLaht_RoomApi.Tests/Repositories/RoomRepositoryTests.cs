@@ -115,7 +115,7 @@ namespace LumeLaht_RoomApi.Tests.Repositories
             {
                 Page = 1,
                 PageSize = 3,
-                SortOptions = new SortOptions { SortBy = "name", SortOrder = "asc" }
+                SortOptions = new SortOptions { Field = "name", Direction = "asc" }
             };
 
             // Act
@@ -123,7 +123,7 @@ namespace LumeLaht_RoomApi.Tests.Repositories
             // Assert
             Assert.NotNull(result);
             Assert.Equal(2, result.Items.Count);
-            Assert.Equal(2, result.paggination.TotalItems);
+            Assert.Equal(2, result.pagination.TotalItems);
         }
         [Fact]
         public async Task GetFilteredRoomsAsync_ShouldFilterBySearch()
@@ -274,7 +274,7 @@ namespace LumeLaht_RoomApi.Tests.Repositories
             {
                 Page = 1,
                 PageSize = 10,
-                SortOptions = new SortOptions { SortBy = sortBy, SortOrder = sortOrder }
+                SortOptions = new SortOptions { Field = sortBy, Direction = sortOrder }
             };
 
             // Act
@@ -296,7 +296,7 @@ namespace LumeLaht_RoomApi.Tests.Repositories
             {
                 Page = 1,
                 PageSize = 1,
-                SortOptions = new SortOptions { SortBy = "name", SortOrder = "asc" }
+                SortOptions = new SortOptions { Field = "name", Direction = "asc" }
             };
 
             // Act
@@ -304,9 +304,9 @@ namespace LumeLaht_RoomApi.Tests.Repositories
 
             // Assert
             Assert.Single(result.Items);
-            Assert.Equal(2, result.paggination.TotalItems);
-            Assert.Equal(1, result.paggination.CurrentPage);
-            Assert.Equal(1, result.paggination.PageSize);
+            Assert.Equal(2, result.pagination.TotalItems);
+            Assert.Equal(1, result.pagination.CurrentPage);
+            Assert.Equal(1, result.pagination.PageSize);
         }
 
         [Fact]
@@ -327,7 +327,7 @@ namespace LumeLaht_RoomApi.Tests.Repositories
                     { "Status", "Available" },
                     { "MinPrice", 500.0 }
                 },
-                SortOptions = new SortOptions { SortBy = "price", SortOrder = "asc" }
+                SortOptions = new SortOptions { Field = "price", Direction = "asc" }
             };
 
             // Act

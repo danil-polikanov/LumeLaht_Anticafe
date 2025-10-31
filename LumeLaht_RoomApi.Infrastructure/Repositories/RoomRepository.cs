@@ -2,6 +2,7 @@
 using LumeLaht_RoomApi.Core_.Entities.Filters;
 using LumeLaht_RoomApi.Core_.Interfaces;
 using LumeLaht_RoomApi.Infrastructure.Data;
+using LumeLaht_RoomApi.Infrastructure.Repositories.Extensions;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -35,52 +36,21 @@ namespace LumeLaht_RoomApi.Infrastructure.Repositories
         }
 
         public async Task<PagedResult<Room>> GetFilteredRoomsAsync(
-             FilterOptions filterOptions,
-             CancellationToken cancellationToken)
+            FilterOptions filterOptions,
+            CancellationToken cancellationToken)
         {
             var query = _dbSet
                 .Include(r => r.Address)
                 .Include(r => r.Images)
                 .Include(r => r.RoomActivity).ThenInclude(ra => ra.Activity)
-                .AsQueryable();
+                .AsQueryable()
+                .ApplySearch(filterOptions.Search)
+                .ApplyStatusFilter(filterOptions)
+                .ApplyAddressFilter(filterOptions)
+                .ApplyPriceFilter(filterOptions)
+                .ApplyActivityFilter(filterOptions)
+                .ApplySorting(filterOptions.SortOptions);
 
-            // Общий поиск
-            if (!string.IsNullOrWhiteSpace(filterOptions.Search))
-                query = query.Where(r => r.Name.Contains(filterOptions.Search) ||
-                                       r.Description.Contains(filterOptions.Search));
-
-            // Специфичные фильтры
-            if (filterOptions.Filters.TryGetValue("Status", out var status) 
-                && status is string statusStr
-                && !string.IsNullOrWhiteSpace(statusStr))
-                query = query.Where(r => r.Status == statusStr);
-            if (filterOptions.Filters.TryGetValue("City", out var city) 
-                && city is string citySrt
-                && !string.IsNullOrWhiteSpace(citySrt))
-                query = query.Where(r => r.Address.City == citySrt);
-            if (filterOptions.Filters.TryGetValue("Region", out var region) 
-                && region is string regionStr
-                && !string.IsNullOrWhiteSpace(regionStr))
-                query = query.Where(r => r.Address.Region == regionStr);
-            if (filterOptions.Filters.TryGetValue("MinPrice", out var minPrice) && minPrice is double minPriceVal)
-                query = query.Where(r => r.PricePerHour >= minPriceVal);
-            if (filterOptions.Filters.TryGetValue("MaxPrice", out var maxPrice) && maxPrice is double maxPriceVal)
-                query = query.Where(r => r.PricePerHour <= maxPriceVal);
-            if (filterOptions.Filters.TryGetValue("ActivityIds", out var activityIds) &&
-                activityIds is List<Guid> activityIdsList && activityIdsList.Any())
-                query = query.Where(r => r.RoomActivity.Any(ra => activityIdsList.Contains(ra.ActivityId)));
-
-            // Сортировка
-            query = filterOptions.SortOptions.SortBy switch
-            {
-                "price" => filterOptions.SortOptions.SortOrder == "desc"
-                    ? query.OrderByDescending(r => r.PricePerHour)
-                    : query.OrderBy(r => r.PricePerHour),
-                "name" => filterOptions.SortOptions.SortOrder == "desc"
-                    ? query.OrderByDescending(r => r.Name)
-                    : query.OrderBy(r => r.Name),
-                _ => query.OrderBy(r => r.Name)
-            };
             // Пагинация
             var totalItems = await query.CountAsync(cancellationToken);
             var items = await query
@@ -91,12 +61,11 @@ namespace LumeLaht_RoomApi.Infrastructure.Repositories
             return new PagedResult<Room>
             {
                 Items = items,
-                paggination = new PagginationOptions
+                pagination = new PaginationOptions
                 {
                     CurrentPage = filterOptions.Page,
                     PageSize = filterOptions.PageSize,
                     TotalItems = totalItems
-
                 }
             };
         }

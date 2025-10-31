@@ -1,16 +1,15 @@
 import React from 'react';
-import { useDispatch, useSelector } from 'react-redux';
 import { setSorting, setPage, setLimit } from '../redux/rooms/roomSlice';
 import { selectSorting, selectPagination } from '../redux/rooms/roomsSelectors';
+import { useAppDispatch, useAppSelector } from '../redux/hooks';
 // Компонент пагинации (отдельный для переиспользования)
 export const PaginationComponent: React.FC = () => {
-    const dispatch = useDispatch();
-    const pagination = useSelector(selectPagination);
-
+    const dispatch = useAppDispatch();
+    const pagination = useAppSelector(selectPagination);
+    console.log('Pagination:', pagination);
     const handlePageChange = (page: number) => {
         dispatch(setPage(page));
     };
-
     const generatePaginationItems = () => {
         const items = [];
         const currentPage = pagination.currentPage;
@@ -111,7 +110,6 @@ export const PaginationComponent: React.FC = () => {
                 </button>
             </li>
         );
-        console.log('Total pages:', pagination.totalPages);
         return items;
     };
 

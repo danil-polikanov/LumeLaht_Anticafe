@@ -5,6 +5,21 @@ interface RoomCardProps {
     room: RoomResponse;
     onRoomClick: (roomId: string) => void;
 }
+export function getPCloudThumbnailUrl(
+    publicLink: string,
+    size: string = '450x200'
+): string | null {
+    try {
+        const url = new URL(publicLink);
+        const code = url.searchParams.get('code');
+        if (!code) return null;
+        {
+        }
+        return `https://eapi.pcloud.com/getpubthumb?code=${code}&size=${size}&type=auto`;
+    } catch {
+        return null;
+    }
+}
 
 const RoomCard: React.FC<RoomCardProps> = ({ room, onRoomClick }) => {
     const handleCardClick = () => {
@@ -12,10 +27,9 @@ const RoomCard: React.FC<RoomCardProps> = ({ room, onRoomClick }) => {
             onRoomClick(room.roomId);
         }
     };
-
     const formatPrice = (price: number | undefined) => {
         if (!price) return 'Price not specified';
-        return `${price.toLocaleString('de-DE')} €/час`;
+        return `${price.toLocaleString('de-DE')} €/Our`;
     };
 
     const getStatusBadge = (status: string | undefined) => {
@@ -28,7 +42,7 @@ const RoomCard: React.FC<RoomCardProps> = ({ room, onRoomClick }) => {
     };
 
     const formatAddress = (address: any) => {
-        if (!address) return 'Адрес не указан';
+        if (!address) return 'No info';
         const parts = [];
         if (address.city) parts.push(address.city);
         if (address.region) parts.push(address.region);
@@ -60,8 +74,28 @@ const RoomCard: React.FC<RoomCardProps> = ({ room, onRoomClick }) => {
                     style={{ height: '200px', cursor: 'pointer' }}
                 >
                     <div className="text-center text-muted">
-                        <i className="fas fa-image fa-3x mb-2"></i>
-                        <div>Room photo</div>
+                        {room.images && room.images.length > 0 ? (
+                            (() => {
+                                const mainImage = room.images.find(
+                                    (r) => r.isMain
+                                );
+                                const imageUrl = mainImage?.url
+                                    ? getPCloudThumbnailUrl(mainImage.url) ??
+                                      mainImage.url
+                                    : undefined;
+                                return imageUrl ? (
+                                    <img
+                                        src={imageUrl}
+                                        className={styles.room_image}
+                                        alt="Room photo"
+                                    />
+                                ) : (
+                                    <div>Изображение недоступно</div>
+                                );
+                            })()
+                        ) : (
+                            <div>Нет изображений</div>
+                        )}
                     </div>
                 </div>
 

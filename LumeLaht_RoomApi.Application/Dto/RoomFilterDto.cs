@@ -13,7 +13,7 @@ namespace LumeLaht_RoomApi.Application.Dto
         public RoomOptionDTO roomOptionDTO {  get; set; }
         public SortOptions SortOptions { get; set; }
         public int Page { get; set; } = 1;
-        public int PageSize { get; set; } = 6;
+        public int PageSize { get; set; } =3;
         // Конвертируем в универсальный FilterOptions
         public FilterOptions ToFilterOptions()
         {
@@ -30,7 +30,7 @@ namespace LumeLaht_RoomApi.Application.Dto
                     { "Region",roomOptionDTO.Region},
                     { "MinPrice", roomOptionDTO.MinPrice },
                     { "MaxPrice", roomOptionDTO.MaxPrice },
-                    { "ActivityIds", roomOptionDTO.ActivityIds }
+                    { "ActivitiesIds", roomOptionDTO.ActivitiesIds }
                 }
             };
         }

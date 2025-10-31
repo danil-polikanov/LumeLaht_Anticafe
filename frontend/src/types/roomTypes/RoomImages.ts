@@ -1,6 +1,6 @@
 export interface RoomImages {
     imageId: string;
     url: string;
-    IsMain: boolean;
+    isMain: boolean;
     roomId: string;
 }

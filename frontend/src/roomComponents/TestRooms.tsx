@@ -79,7 +79,7 @@ const TestRooms: React.FC = () => {
 
     // Обработчик изменения активностей
     const handleActivityToggle = (activityId: string) => {
-        const currentActivities = [...filters.activities];
+        const currentActivities = [...filters.activitiesIds];
         const index = currentActivities.indexOf(activityId);
 
         if (index > -1) {
@@ -88,7 +88,7 @@ const TestRooms: React.FC = () => {
             currentActivities.push(activityId);
         }
 
-        dispatch(setFilters({ activities: currentActivities }));
+        dispatch(setFilters({ activitiesIds: currentActivities }));
     };
 
     // Обработчик изменения сортировки
@@ -183,7 +183,7 @@ const TestRooms: React.FC = () => {
                                     type="checkbox"
                                     checked={
                                         activity.activityId !== undefined &&
-                                        filters.activities.includes(
+                                        filters.activitiesIds.includes(
                                             String(activity.activityId)
                                         )
                                     }

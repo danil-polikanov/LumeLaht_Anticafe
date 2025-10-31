@@ -41,7 +41,7 @@ namespace LumeLaht_RoomApi
             builder.Services.AddScoped<IActivityService, ActivityService>();
             builder.Services.AddDbContext<AppDbContext>(option =>
             {
-                option.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
+                option.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")).LogTo(Console.WriteLine, LogLevel.Information);
             });
             builder.Services.AddControllers();
             builder.Services.AddEndpointsApiExplorer();

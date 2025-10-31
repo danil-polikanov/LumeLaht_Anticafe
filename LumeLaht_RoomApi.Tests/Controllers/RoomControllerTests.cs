@@ -516,7 +516,7 @@ namespace LumeLaht_RoomApi.Tests.Controllers
                     new RoomResponse { RoomId = Room1Id, Name = "Room 1", PricePerHour = 100 },
                     new RoomResponse { RoomId = Room2Id, Name = "Room 2", PricePerHour = 150 }
                 },
-                paggination = new PagginationOptions
+                pagination = new PaginationOptions
                 {
                     CurrentPage = 1,
                     PageSize = 10,
@@ -535,7 +535,7 @@ namespace LumeLaht_RoomApi.Tests.Controllers
             var okResult = Assert.IsType<OkObjectResult>(result.Result);
             var returnedResult = Assert.IsType<PagedResult<RoomResponse>>(okResult.Value);
             Assert.Equal(2, returnedResult.Items.Count);
-            Assert.Equal(1, returnedResult.paggination.CurrentPage);
+            Assert.Equal(1, returnedResult.pagination.CurrentPage);
         }
 
         [Fact]
@@ -549,7 +549,7 @@ namespace LumeLaht_RoomApi.Tests.Controllers
                 .ReturnsAsync(new PagedResult<RoomResponse>
                 {
                     Items = new List<RoomResponse>(),
-                    paggination = new PagginationOptions()
+                    pagination = new PaginationOptions()
                 });
 
             // Act
@@ -569,7 +569,7 @@ namespace LumeLaht_RoomApi.Tests.Controllers
             var emptyResult = new PagedResult<RoomResponse>
             {
                 Items = new List<RoomResponse>(),
-                paggination = new PagginationOptions
+                pagination = new PaginationOptions
                 {
                     CurrentPage = 1,
                     PageSize = 10,

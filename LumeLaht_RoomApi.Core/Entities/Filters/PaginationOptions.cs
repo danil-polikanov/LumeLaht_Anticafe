@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace LumeLaht_RoomApi.Core_.Entities.Filters
 {
-    public class PagginationOptions
+    public class PaginationOptions
     {
         public int TotalItems { get; set; }
         public int PageSize { get; set; }

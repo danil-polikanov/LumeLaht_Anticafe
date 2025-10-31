@@ -10,5 +10,5 @@ export interface RoomResponse {
     status?: string;
     address?: AddressResponse;
     activity?: ActivityResponse[] | undefined;
-    roomImages?: RoomImages[] | undefined;
+    images?: RoomImages[] | undefined;
 }

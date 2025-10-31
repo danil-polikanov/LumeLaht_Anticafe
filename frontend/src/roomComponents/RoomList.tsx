@@ -14,6 +14,7 @@ import { fetchRoomsByFilters, fetchActivities } from '../api/roomsThunks';
 import {
     selectRooms,
     selectActivities,
+    selectSelectedRoom,
     selectLoading,
     selectError,
     selectFilters,
@@ -32,18 +33,17 @@ import { useAppDispatch, useAppSelector } from '../redux/hooks';
 const RoomsList: React.FC = () => {
     const dispatch = useAppDispatch();
     const rooms = useAppSelector(selectRooms);
-    const activities = useAppSelector(selectActivities);
     const filters = useAppSelector(selectFilters);
     const sorting = useAppSelector(selectSorting);
     const pagination = useAppSelector(selectPagination);
     const loading = useSelector(selectLoading);
     const error = useSelector(selectError);
-
+    const selectedRoomDetail = useAppSelector(selectSelectedRoom);
     // Загрузка активностей при монтировании
     useEffect(() => {
         dispatch(fetchActivities());
     }, [dispatch]);
-
+    //console.log('Filters in List: 1', filters, sorting, pagination, rooms);
     useEffect(() => {
         dispatch(fetchRoomsByFilters());
     }, [
@@ -53,14 +53,15 @@ const RoomsList: React.FC = () => {
         pagination.currentPage,
         pagination.pageSize,
     ]);
-
     const handleRoomClick = (roomId: string) => {
         dispatch(fetchRoomById(roomId));
         // Здесь можно добавить навигацию к детальной странице комнаты
         // например, с помощью React Router
         console.log('Navigate to room detail:', roomId);
     };
-    const handleCloseDetail = () => {};
+    const handleCloseDetail = () => {
+        dispatch(clearSelectedRoom());
+    };
 
     if (loading && rooms.length === 0) {
         return (

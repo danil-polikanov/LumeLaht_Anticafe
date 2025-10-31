@@ -3,8 +3,9 @@ import { useDispatch, useSelector } from 'react-redux';
 import { setSorting, setPage, setLimit } from '../redux/rooms/roomSlice';
 import { selectSorting, selectPagination } from '../redux/rooms/roomsSelectors';
 import PaginationComponent from './PaginationComponent';
+import { useAppDispatch } from '../redux/hooks';
 const RoomSortingAndPagination: React.FC = () => {
-    const dispatch = useDispatch();
+    const dispatch = useAppDispatch();
     const sorting = useSelector(selectSorting);
     const pagination = useSelector(selectPagination);
 
@@ -15,11 +16,6 @@ const RoomSortingAndPagination: React.FC = () => {
                 : 'asc';
         dispatch(setSorting({ field, direction: newDirection }));
     };
-
-    const handleLimitChange = (limit: number) => {
-        dispatch(setLimit(limit));
-    };
-
     const handlePageChange = (page: number) => {
         dispatch(setPage(page));
     };

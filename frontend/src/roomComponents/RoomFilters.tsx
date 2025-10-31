@@ -1,47 +1,62 @@
 import React, { useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { setFilters } from '../redux/rooms/roomSlice';
-import { selectFilters } from '../redux/rooms/roomsSelectors';
+import { useAppDispatch, useAppSelector } from '../redux/hooks';
+import { resetFilters, setFilters } from '../redux/rooms/roomSlice';
+import { selectFilters, selectActivities } from '../redux/rooms/roomsSelectors';
 import styles from './RoomList.module.css';
+import { useDebouncedFilter } from './UseDebouncedFilter';
+
 const RoomFilters: React.FC = () => {
-    const dispatch = useDispatch();
-    const filters = useSelector(selectFilters);
+    const dispatch = useAppDispatch();
+    const filters = useAppSelector(selectFilters);
+    const activities = useAppSelector(selectActivities);
     const [isCollapsed, setIsCollapsed] = useState(false);
 
+    // Debounce hook для всех текстовых полей
+    const debouncedSetFilter = useDebouncedFilter(500);
+
+    // ========== ЛОКАЛЬНЫЕ СОСТОЯНИЯ ДЛЯ ВСЕХ ТЕКСТОВЫХ ПОЛЕЙ ==========
+    const [localSearch, setLocalSearch] = useState(filters.search);
+    const [localCity, setLocalCity] = useState(filters.city);
+    const [localRegion, setLocalRegion] = useState(filters.region);
+
+    // ========== ОБРАБОТЧИКИ ДЛЯ ТЕКСТОВЫХ ПОЛЕЙ С DEBOUNCE ==========
+    const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const value = e.target.value;
+        setLocalSearch(value); // Мгновенно обновляем локальное состояние
+        debouncedSetFilter('search', value); // Отправляем в Redux с задержкой
+    };
+
+    const handleCityChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const value = e.target.value;
+        setLocalCity(value);
+        debouncedSetFilter('city', value);
+    };
+
+    const handleRegionChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const value = e.target.value;
+        setLocalRegion(value);
+        debouncedSetFilter('region', value);
+    };
+
+    // ========== ОБРАБОТЧИКИ ДЛЯ ОСТАЛЬНЫХ ПОЛЕЙ (БЕЗ DEBOUNCE) ==========
+    // Числовые поля (цена) - сразу отправляем в Redux, т.к. изменений меньше
     const handleFilterChange = (filterKey: string, value: any) => {
         dispatch(setFilters({ [filterKey]: value }));
     };
 
+    // Активности - чекбоксы, сразу отправляем в Redux
     const handleActivityToggle = (activityId: string) => {
-        const newActivities = filters.activities.includes(activityId)
-            ? filters.activities.filter((name) => name !== activityId)
-            : [...filters.activities, activityId];
+        const newActivities = filters.activitiesIds.includes(activityId)
+            ? filters.activitiesIds.filter((id) => id !== activityId)
+            : [...filters.activitiesIds, activityId];
 
-        dispatch(setFilters({ activities: newActivities }));
+        dispatch(setFilters({ activitiesIds: newActivities }));
     };
 
+    // Очистка фильтров
     const clearFilters = () => {
-        dispatch(
-            setFilters({
-                search: '',
-                city: '',
-                region: '',
-                minPrice: 0,
-                maxPrice: 10000,
-                activities: [],
-                status: '',
-            })
-        );
+        dispatch(resetFilters());
     };
-
-    // Примерные активности для фильтрации
-    const availableActivities = [
-        { id: 1, name: 'Monopolia' },
-        { id: 2, name: 'Uno' },
-        { id: 3, name: 'Billiards' },
-        { id: 4, name: 'Bowling' },
-        { id: 5, name: 'Scrabble' },
-    ];
 
     return (
         <div className={`card mb-4 shadow-sm`}>
@@ -65,10 +80,10 @@ const RoomFilters: React.FC = () => {
             </div>
 
             <div className={styles.collapse_filter_rooms}>
-                <div className={`collapse  ${!isCollapsed ? 'show' : ''}`}>
+                <div className={`collapse ${!isCollapsed ? 'show' : ''}`}>
                     <div className="card-body">
                         <div className="row g-3">
-                            {/* Поиск */}
+                            {/* ========== ПОИСК С DEBOUNCE ========== */}
                             <div className="col-md-6">
                                 <label htmlFor="search" className="form-label">
                                     <i className="fas fa-search me-1"></i>
@@ -79,17 +94,19 @@ const RoomFilters: React.FC = () => {
                                     id="search"
                                     className="form-control"
                                     placeholder="Search by name or description..."
-                                    value={filters.search}
-                                    onChange={(e) =>
-                                        handleFilterChange(
-                                            'search',
-                                            e.target.value
-                                        )
-                                    }
+                                    value={localSearch}
+                                    onChange={handleSearchChange}
                                 />
+                                {/* Индикатор debounce */}
+                                {localSearch !== filters.search && (
+                                    <small className="text-muted d-block mt-1">
+                                        <i className="fas fa-hourglass-half me-1"></i>
+                                        Applying filter...
+                                    </small>
+                                )}
                             </div>
 
-                            {/* Город */}
+                            {/* ========== ГОРОД С DEBOUNCE ========== */}
                             <div className="col-md-3">
                                 <label htmlFor="city" className="form-label">
                                     <i className="fas fa-map-marker-alt me-1"></i>
@@ -100,17 +117,19 @@ const RoomFilters: React.FC = () => {
                                     id="city"
                                     className="form-control"
                                     placeholder="City"
-                                    value={filters.city}
-                                    onChange={(e) =>
-                                        handleFilterChange(
-                                            'city',
-                                            e.target.value
-                                        )
-                                    }
+                                    value={localCity}
+                                    onChange={handleCityChange}
                                 />
+                                {/* Индикатор debounce */}
+                                {localCity !== filters.city && (
+                                    <small className="text-muted d-block mt-1">
+                                        <i className="fas fa-hourglass-half me-1"></i>
+                                        Applying filter...
+                                    </small>
+                                )}
                             </div>
 
-                            {/* Регион */}
+                            {/* ========== РЕГИОН С DEBOUNCE ========== */}
                             <div className="col-md-3">
                                 <label htmlFor="region" className="form-label">
                                     <i className="fas fa-globe me-1"></i>
@@ -121,17 +140,19 @@ const RoomFilters: React.FC = () => {
                                     id="region"
                                     className="form-control"
                                     placeholder="Region"
-                                    value={filters.region}
-                                    onChange={(e) =>
-                                        handleFilterChange(
-                                            'region',
-                                            e.target.value
-                                        )
-                                    }
+                                    value={localRegion}
+                                    onChange={handleRegionChange}
                                 />
+                                {/* Индикатор debounce */}
+                                {localRegion !== filters.region && (
+                                    <small className="text-muted d-block mt-1">
+                                        <i className="fas fa-hourglass-half me-1"></i>
+                                        Applying filter...
+                                    </small>
+                                )}
                             </div>
 
-                            {/* Цена от */}
+                            {/* ========== ЦЕНА (БЕЗ DEBOUNCE) ========== */}
                             <div className="col-md-3">
                                 <label
                                     htmlFor="minPrice"
@@ -145,18 +166,23 @@ const RoomFilters: React.FC = () => {
                                     id="minPrice"
                                     className="form-control"
                                     min="0"
-                                    placeholder="0"
-                                    value={filters.minPrice}
+                                    placeholder="From"
+                                    value={
+                                        filters.minPrice === 0
+                                            ? ''
+                                            : filters.minPrice
+                                    }
                                     onChange={(e) =>
                                         handleFilterChange(
                                             'minPrice',
-                                            Number(e.target.value)
+                                            e.target.value === ''
+                                                ? 0
+                                                : Number(e.target.value)
                                         )
                                     }
                                 />
                             </div>
 
-                            {/* Цена до */}
                             <div className="col-md-3">
                                 <label
                                     htmlFor="maxPrice"
@@ -170,12 +196,19 @@ const RoomFilters: React.FC = () => {
                                     id="maxPrice"
                                     className="form-control"
                                     min="0"
-                                    placeholder="10000"
-                                    value={filters.maxPrice}
+                                    placeholder="To"
+                                    value={
+                                        filters.maxPrice === 10000 ||
+                                        filters.maxPrice === 0
+                                            ? ''
+                                            : filters.maxPrice
+                                    }
                                     onChange={(e) =>
                                         handleFilterChange(
                                             'maxPrice',
-                                            Number(e.target.value)
+                                            e.target.value === ''
+                                                ? 0
+                                                : Number(e.target.value)
                                         )
                                     }
                                 />
@@ -229,28 +262,29 @@ const RoomFilters: React.FC = () => {
                                 List Activities
                             </label>
                             <div className="row">
-                                {availableActivities.map((activity) => (
+                                {activities.map((activity) => (
                                     <div
-                                        key={activity.id}
+                                        key={activity.activityId}
                                         className="col-md-3 col-sm-6"
                                     >
                                         <div className="form-check">
                                             <input
                                                 className="form-check-input"
                                                 type="checkbox"
-                                                id={`activity-${activity.id}`}
-                                                checked={filters.activities.includes(
-                                                    activity.name
+                                                id={`activity-${activity.activityId}`}
+                                                checked={filters.activitiesIds.includes(
+                                                    activity.activityId ?? ''
                                                 )}
                                                 onChange={() =>
                                                     handleActivityToggle(
-                                                        activity.name
+                                                        activity.activityId ??
+                                                            ''
                                                     )
                                                 }
                                             />
                                             <label
                                                 className="form-check-label"
-                                                htmlFor={`activity-${activity.id}`}
+                                                htmlFor={`activity-${activity.activityId}`}
                                             >
                                                 {activity.name}
                                             </label>
@@ -266,7 +300,7 @@ const RoomFilters: React.FC = () => {
                             filters.region ||
                             filters.minPrice > 0 ||
                             filters.maxPrice < 10000 ||
-                            filters.activities.length > 0) && (
+                            filters.activitiesIds.length > 0) && (
                             <div className="mt-3">
                                 <div className="alert alert-info d-flex align-items-center">
                                     <i className="fas fa-info-circle me-2"></i>
@@ -297,10 +331,10 @@ const RoomFilters: React.FC = () => {
                                                 Max. Price
                                             </span>
                                         )}
-                                        {filters.activities.length > 0 && (
+                                        {filters.activitiesIds.length > 0 && (
                                             <span className="badge bg-primary me-1">
                                                 Activities (
-                                                {filters.activities.length})
+                                                {filters.activitiesIds.length})
                                             </span>
                                         )}
                                     </span>

@@ -17,3 +17,25 @@
     max-height: 999px; /* достаточно большое значение, которое точно вмещает контент */
     opacity: 1;
 }
+/* Remove spinner arrows in Chrome, Safari, Edge */
+input[type='number']::-webkit-inner-spin-button,
+input[type='number']::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+/* Remove spinner arrows in Firefox */
+input[type='number'] {
+    -moz-appearance: textfield;
+}
+
+/* Standard appearance property for broader compatibility */
+input[type='number'] {
+    appearance: textfield;
+}
+img.room_image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
