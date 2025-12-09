@@ -1,5 +1,6 @@
 {
     "compilerOptions": {
+        "baseUrl": ".",
         "target": "es5",
         "lib": ["dom", "dom.iterable", "esnext"],
         "allowJs": true,
@@ -10,6 +11,14 @@
         "forceConsistentCasingInFileNames": true,
         "noFallthroughCasesInSwitch": true,
         "module": "esnext",
+        "paths": {
+            "@/app/*": ["src/app/*"],
+            "@/pages/*": ["src/pages/*"],
+            "@/widgets/*": ["src/widgets/*"],
+            "@/features/*": ["src/features/*"],
+            "@/entities/*": ["src/entities/*"],
+            "@/shared/*": ["src/shared/*"]
+        },
         "moduleResolution": "node",
         "resolveJsonModule": true,
         "isolatedModules": true,

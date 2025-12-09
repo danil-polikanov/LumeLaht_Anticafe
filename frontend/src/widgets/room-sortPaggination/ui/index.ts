@@ -1,0 +1,1 @@
+export { RoomSortingAndPagination } from './RoomSortPaggination';
