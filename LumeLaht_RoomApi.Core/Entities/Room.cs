@@ -12,8 +12,8 @@ namespace LumeLaht_RoomApi.Core_.Entities
         [MaxLength(500)]
         public string Description { get; set; }
         [Required]
-        [Range(0, double.MaxValue)]
-        public double PricePerHour { get; set; }
+        [Range(0,9999999)]
+        public decimal PricePerHour { get; set; }
         public string Status { get; set; }
         public Guid AddressId { get; set; }
         public Address Address { get; set; }

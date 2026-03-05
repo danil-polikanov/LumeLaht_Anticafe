@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace LumeLaht_RoomApi.Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class Added_guid_data : Migration
+    public partial class BaseCreatedMigration : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -50,8 +50,8 @@ namespace LumeLaht_RoomApi.Infrastructure.Migrations
                     RoomId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     Description = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: false),
-                    PricePerHour = table.Column<double>(type: "float", nullable: false),
-                    IsActive = table.Column<bool>(type: "bit", nullable: false),
+                    PricePerHour = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    Status = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     AddressId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
                 constraints: table =>
@@ -143,15 +143,15 @@ namespace LumeLaht_RoomApi.Infrastructure.Migrations
 
             migrationBuilder.InsertData(
                 table: "Rooms",
-                columns: new[] { "RoomId", "AddressId", "Description", "IsActive", "Name", "PricePerHour" },
+                columns: new[] { "RoomId", "AddressId", "Description", "Name", "PricePerHour", "Status" },
                 values: new object[,]
                 {
-                    { new Guid("46000001-0000-0000-0000-000000000000"), new Guid("42000001-0000-0000-0000-000000000000"), "Description A", true, "Room A", 25.5 },
-                    { new Guid("46000002-0000-0000-0000-000000000000"), new Guid("42000002-0000-0000-0000-000000000000"), "Description B", true, "Room B", 30.0 },
-                    { new Guid("46000003-0000-0000-0000-000000000000"), new Guid("42000003-0000-0000-0000-000000000000"), "Description C", true, "Room C", 35.0 },
-                    { new Guid("46000004-0000-0000-0000-000000000000"), new Guid("42000004-0000-0000-0000-000000000000"), "Description D", true, "Room D", 40.0 },
-                    { new Guid("46000005-0000-0000-0000-000000000000"), new Guid("42000005-0000-0000-0000-000000000000"), "Description E", true, "Room E", 45.0 },
-                    { new Guid("46000006-0000-0000-0000-000000000000"), new Guid("42000006-0000-0000-0000-000000000000"), "Description F", true, "Room F", 50.0 }
+                    { new Guid("46000001-0000-0000-0000-000000000000"), new Guid("42000001-0000-0000-0000-000000000000"), "Description A", "Room A", 25.5m, "Available" },
+                    { new Guid("46000002-0000-0000-0000-000000000000"), new Guid("42000002-0000-0000-0000-000000000000"), "Description B", "Room B", 30m, "Available" },
+                    { new Guid("46000003-0000-0000-0000-000000000000"), new Guid("42000003-0000-0000-0000-000000000000"), "Description C", "Room C", 35m, "Available" },
+                    { new Guid("46000004-0000-0000-0000-000000000000"), new Guid("42000004-0000-0000-0000-000000000000"), "Description D", "Room D", 40m, "Maintenance" },
+                    { new Guid("46000005-0000-0000-0000-000000000000"), new Guid("42000005-0000-0000-0000-000000000000"), "Description E", "Room E", 45m, "Available" },
+                    { new Guid("46000006-0000-0000-0000-000000000000"), new Guid("42000006-0000-0000-0000-000000000000"), "Description F", "Room F", 50m, "Available" }
                 });
 
             migrationBuilder.InsertData(
@@ -159,24 +159,24 @@ namespace LumeLaht_RoomApi.Infrastructure.Migrations
                 columns: new[] { "ImageId", "IsMain", "RoomId", "Url" },
                 values: new object[,]
                 {
-                    { new Guid("44000001-0000-0000-0000-000000000000"), true, new Guid("46000001-0000-0000-0000-000000000000"), "https://e.pcloud.link/publink/show?code=XZXn4EZ447cJGzE4mjGFUEd7fHezhKfrzEy" },
-                    { new Guid("44000002-0000-0000-0000-000000000000"), true, new Guid("46000002-0000-0000-0000-000000000000"), "https://e.pcloud.link/publink/show?code=XZK94EZnlvkoFPgUJhicWK2l9kunhbdFlJy" },
-                    { new Guid("44000003-0000-0000-0000-000000000000"), true, new Guid("46000003-0000-0000-0000-000000000000"), "https://e.pcloud.link/publink/show?code=XZl94EZcxrwzhmidM7XHfoOqgqtKhGsFzty" },
-                    { new Guid("44000004-0000-0000-0000-000000000000"), true, new Guid("46000004-0000-0000-0000-000000000000"), "https://e.pcloud.link/publink/show?code=XZt94EZpHrcKFd0pM4wX1YBvPw7cbgIgUJk" },
-                    { new Guid("44000005-0000-0000-0000-000000000000"), true, new Guid("46000005-0000-0000-0000-000000000000"), "https://e.pcloud.link/publink/show?code=XZ694EZx8NoXjBFg5phHhKrzqVhmXagQNhy" },
-                    { new Guid("44000006-0000-0000-0000-000000000000"), true, new Guid("46000006-0000-0000-0000-000000000000"), "https://e.pcloud.link/publink/show?code=XZE94EZPoL8U9CtrbzjvKxPqXuQx869cc0k" },
-                    { new Guid("44000007-0000-0000-0000-000000000000"), false, new Guid("46000001-0000-0000-0000-000000000000"), "https://e.pcloud.link/publink/show?code=XZO94EZauKLzus1OdLUsUg6iOqxdVOTJJAy" },
-                    { new Guid("44000008-0000-0000-0000-000000000000"), false, new Guid("46000001-0000-0000-0000-000000000000"), "https://e.pcloud.link/publink/show?code=XZt94EZpHrcKFd0pM4wX1YBvPw7cbgIgUJk" },
-                    { new Guid("44000009-0000-0000-0000-000000000000"), false, new Guid("46000002-0000-0000-0000-000000000000"), "https://e.pcloud.link/publink/show?code=XZO94EZauKLzus1OdLUsUg6iOqxdVOTJJAy" },
-                    { new Guid("44000010-0000-0000-0000-000000000000"), false, new Guid("46000002-0000-0000-0000-000000000000"), "https://e.pcloud.link/publink/show?code=XZt94EZpHrcKFd0pM4wX1YBvPw7cbgIgUJk" },
-                    { new Guid("44000011-0000-0000-0000-000000000000"), false, new Guid("46000003-0000-0000-0000-000000000000"), "https://e.pcloud.link/publink/show?code=XZO94EZauKLzus1OdLUsUg6iOqxdVOTJJAy" },
-                    { new Guid("44000012-0000-0000-0000-000000000000"), false, new Guid("46000003-0000-0000-0000-000000000000"), "https://e.pcloud.link/publink/show?code=XZt94EZpHrcKFd0pM4wX1YBvPw7cbgIgUJk" },
-                    { new Guid("44000013-0000-0000-0000-000000000000"), false, new Guid("46000004-0000-0000-0000-000000000000"), "https://e.pcloud.link/publink/show?code=XZO94EZauKLzus1OdLUsUg6iOqxdVOTJJAy" },
-                    { new Guid("44000014-0000-0000-0000-000000000000"), false, new Guid("46000004-0000-0000-0000-000000000000"), "https://e.pcloud.link/publink/show?code=XZt94EZpHrcKFd0pM4wX1YBvPw7cbgIgUJk" },
-                    { new Guid("44000015-0000-0000-0000-000000000000"), false, new Guid("46000005-0000-0000-0000-000000000000"), "https://e.pcloud.link/publink/show?code=XZO94EZauKLzus1OdLUsUg6iOqxdVOTJJAy" },
-                    { new Guid("44000016-0000-0000-0000-000000000000"), false, new Guid("46000005-0000-0000-0000-000000000000"), "https://e.pcloud.link/publink/show?code=XZt94EZpHrcKFd0pM4wX1YBvPw7cbgIgUJk" },
-                    { new Guid("44000017-0000-0000-0000-000000000000"), false, new Guid("46000006-0000-0000-0000-000000000000"), "https://e.pcloud.link/publink/show?code=XZO94EZauKLzus1OdLUsUg6iOqxdVOTJJAy" },
-                    { new Guid("44000018-0000-0000-0000-000000000000"), false, new Guid("46000006-0000-0000-0000-000000000000"), "https://e.pcloud.link/publink/show?code=XZt94EZpHrcKFd0pM4wX1YBvPw7cbgIgUJk" }
+                    { new Guid("44000001-0000-0000-0000-000000000000"), true, new Guid("46000001-0000-0000-0000-000000000000"), "https://edef6.pcloud.com/DLZWFU6B6ZErvSOj7ZOjDfZZyHl10kZNVZZQYVZZn7M7ZzRZN4ZXLZaRIc8C2DvgjCj7EOMDkcnu0LrCFy/chairs-2181980_1920.jpg" },
+                    { new Guid("44000002-0000-0000-0000-000000000000"), true, new Guid("46000002-0000-0000-0000-000000000000"), "https://edef10.pcloud.com/cfZGzI1DZt6wfOj7ZOjDfZZTHl10kZNVZZQYVZZvRpCZwHZPZc7ZEHZoZQFZZx7Zp7Z7LZTVZe7ZWLZ4kZJ0xXJLg2QHRU1NeDLwgBCFGb5AY7/inter-er-restorana.jpg" },
+                    { new Guid("44000003-0000-0000-0000-000000000000"), true, new Guid("46000003-0000-0000-0000-000000000000"), "https://edef10.pcloud.com/cfZv1PIsZzxwfOj7ZOjDfZZwzl10kZNVZZQYVZZExBtZRXZ0RZcLZD7Zk5ZU7ZS7Z0zZL7ZTkZDVZ2Z3kZKFZSMQ4xFQQzF495zWLLGbSyHWUq2WV/inter-er-vystrel-iz-kafe-so-stul-ami-vozle-bara-s-derevannymi-stolami.jpg" },
+                    { new Guid("44000004-0000-0000-0000-000000000000"), true, new Guid("46000004-0000-0000-0000-000000000000"), "https://edef10.pcloud.com/DLZUTPOB6ZSgifOj7ZOjDfZZJRl10kZNVZZQYVZZvwBZCRZNRZT8ZeLyDsVPx5FhSJdO3T1lkfY2PaiwX/photo-1497366811353-6870744d04b2.jpg" },
+                    { new Guid("44000005-0000-0000-0000-000000000000"), true, new Guid("46000005-0000-0000-0000-000000000000"), "https://edef8.pcloud.com/DLZu0sOB6Zq6wfOj7ZOjDfZZPRl10kZNVZZQYVZZhOE7ZdLZi5ZE8Z7I5tNY0r9qVPGtCmfXBDPmca9Osk/vintage-aesthetic-7131604_1920.jpg" },
+                    { new Guid("44000006-0000-0000-0000-000000000000"), true, new Guid("46000006-0000-0000-0000-000000000000"), "https://edef4.pcloud.com/DLZzMPOB6ZjMifOj7ZOjDfZZrRl10kZNVZZQYVZZTUmZzJZg8ZA4Z2Ko1Jk2Ac8hX3jSG8WtmwkFK20v7/photo-1497366216548-37526070297c.jpg" },
+                    { new Guid("44000007-0000-0000-0000-000000000000"), false, new Guid("46000001-0000-0000-0000-000000000000"), "https://edef11.pcloud.com/DLZTTPOB6Z2gifOj7ZOjDfZZSLl10kZNVZZQYVZZ0DjZzzZH4Z44ZxUM7yrRl9X4uS0QPdocoem0EWnik/photo-1497366754035-f200968a6e72.jpg" },
+                    { new Guid("44000008-0000-0000-0000-000000000000"), false, new Guid("46000001-0000-0000-0000-000000000000"), "https://edef10.pcloud.com/DLZUTPOB6ZSgifOj7ZOjDfZZz4l10kZNVZZQYVZZvwBZCRZT8ZNRZuWuQtIxC4JyR37GkGAycnjp68Gfy/photo-1497366811353-6870744d04b2.jpg" },
+                    { new Guid("44000009-0000-0000-0000-000000000000"), false, new Guid("46000002-0000-0000-0000-000000000000"), "https://edef11.pcloud.com/DLZTTPOB6Z2gifOj7ZOjDfZZLsl10kZNVZZQYVZZ0DjZH4ZzzZ44ZqmYhXTdU6l5cOmHyJpPBe0tIXs7k/photo-1497366754035-f200968a6e72.jpg" },
+                    { new Guid("44000010-0000-0000-0000-000000000000"), false, new Guid("46000002-0000-0000-0000-000000000000"), "https://edef10.pcloud.com/DLZUTPOB6ZSgifOj7ZOjDfZZisl10kZNVZZQYVZZvwBZCRZT8ZNRZVIJlV2Lv1qQDm8LQHxofDBv02GDX/photo-1497366811353-6870744d04b2.jpg" },
+                    { new Guid("44000011-0000-0000-0000-000000000000"), false, new Guid("46000003-0000-0000-0000-000000000000"), "https://edef11.pcloud.com/DLZTTPOB6Z2gifOj7ZOjDfZZqDl10kZNVZZQYVZZ0DjZ44ZH4ZzzZEkzylnQCisBKyhTJUaMP6jxozogX/photo-1497366754035-f200968a6e72.jpg" },
+                    { new Guid("44000012-0000-0000-0000-000000000000"), false, new Guid("46000003-0000-0000-0000-000000000000"), "https://edef10.pcloud.com/DLZUTPOB6ZSgifOj7ZOjDfZZH1l10kZNVZZQYVZZvwBZCRZNRZT8Zbc0hNNc8KdjJFtTJ3hyUwp3xeAbX/photo-1497366811353-6870744d04b2.jpg" },
+                    { new Guid("44000013-0000-0000-0000-000000000000"), false, new Guid("46000004-0000-0000-0000-000000000000"), "https://edef11.pcloud.com/DLZTTPOB6Z2gifOj7ZOjDfZZC1l10kZNVZZQYVZZ0DjZH4Z44ZzzZ4df3TUten8yDWnGx26XlCmeS10yk/photo-1497366754035-f200968a6e72.jpg" },
+                    { new Guid("44000014-0000-0000-0000-000000000000"), false, new Guid("46000004-0000-0000-0000-000000000000"), "https://edef10.pcloud.com/DLZUTPOB6ZSgifOj7ZOjDfZZH1l10kZNVZZQYVZZvwBZCRZNRZT8Zbc0hNNc8KdjJFtTJ3hyUwp3xeAbX/photo-1497366811353-6870744d04b2.jpg" },
+                    { new Guid("44000015-0000-0000-0000-000000000000"), false, new Guid("46000005-0000-0000-0000-000000000000"), "https://edef11.pcloud.com/DLZTTPOB6Z2gifOj7ZOjDfZZC1l10kZNVZZQYVZZ0DjZH4Z44ZzzZ4df3TUten8yDWnGx26XlCmeS10yk/photo-1497366754035-f200968a6e72.jpg" },
+                    { new Guid("44000016-0000-0000-0000-000000000000"), false, new Guid("46000005-0000-0000-0000-000000000000"), "https://edef10.pcloud.com/DLZUTPOB6ZSgifOj7ZOjDfZZH1l10kZNVZZQYVZZvwBZCRZNRZT8Zbc0hNNc8KdjJFtTJ3hyUwp3xeAbX/photo-1497366811353-6870744d04b2.jpg" },
+                    { new Guid("44000017-0000-0000-0000-000000000000"), false, new Guid("46000006-0000-0000-0000-000000000000"), "https://edef11.pcloud.com/DLZTTPOB6Z2gifOj7ZOjDfZZC1l10kZNVZZQYVZZ0DjZH4Z44ZzzZ4df3TUten8yDWnGx26XlCmeS10yk/photo-1497366754035-f200968a6e72.jpg" },
+                    { new Guid("44000018-0000-0000-0000-000000000000"), false, new Guid("46000006-0000-0000-0000-000000000000"), "https://edef10.pcloud.com/DLZUTPOB6ZSgifOj7ZOjDfZZH1l10kZNVZZQYVZZvwBZCRZNRZT8Zbc0hNNc8KdjJFtTJ3hyUwp3xeAbX/photo-1497366811353-6870744d04b2.jpg" }
                 });
 
             migrationBuilder.InsertData(

@@ -56,7 +56,10 @@
     "devDependencies": {
         "@tailwindcss/cli": "^4.1.11",
         "@types/react-scroll": "^1.8.10",
+        "autoprefixer": "^10.4.22",
         "customize-cra": "^1.0.0",
-        "react-app-rewired": "^2.2.1"
+        "postcss": "^8.5.6",
+        "react-app-rewired": "^2.2.1",
+        "tailwindcss": "^3.4.19"
     }
 }

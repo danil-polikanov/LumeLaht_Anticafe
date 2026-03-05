@@ -1,4 +1,5 @@
 import React, { useState, useMemo } from 'react';
+import styles from './TestList.module.css';
 import {
     Search,
     Filter,
@@ -12,7 +13,7 @@ import {
     X,
 } from 'lucide-react';
 
-// Ð¢Ð¸Ð¿Ñ‹ Ð´Ð°Ð½Ð½Ñ‹Ñ… Ð¸Ð· Ð²Ð°ÑˆÐµÐ³Ð¾ API
+// Types for data from your API
 interface ActivityResponse {
     activityId?: number;
     name?: string;
@@ -212,7 +213,7 @@ export const TestList = () => {
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
     const roomsPerPage = 6;
 
-    // ÐŸÐ¾Ð»ÑƒÑ‡Ð°ÐµÐ¼ ÑƒÐ½Ð¸ÐºÐ°Ð»ÑŒÐ½Ñ‹Ðµ Ð³Ð¾Ñ€Ð¾Ð´Ð° Ð¸ Ð°ÐºÑ‚Ð¸Ð²Ð½Ð¾ÑÑ‚Ð¸ Ð´Ð»Ñ Ñ„Ð¸Ð»ÑŒÑ‚Ñ€Ð¾Ð²
+    // Получаем уникальные города и активности для фильтров
     const cities = Array.from(
         new Set(rooms.map((room) => room.address?.city).filter(Boolean))
     );
@@ -224,7 +225,7 @@ export const TestList = () => {
         )
     );
 
-    // Ð¤Ð¸Ð»ÑŒÑ‚Ñ€Ð°Ñ†Ð¸Ñ Ð¸ ÑÐ¾Ñ€Ñ‚Ð¸Ñ€Ð¾Ð²ÐºÐ°
+    // Фильтрация и сортировка
     const filteredAndSortedRooms = useMemo(() => {
         let filtered = rooms.filter((room) => {
             const matchesSearch =
@@ -257,7 +258,7 @@ export const TestList = () => {
             );
         });
 
-        // Ð¡Ð¾Ñ€Ñ‚Ð¸Ñ€Ð¾Ð²ÐºÐ°
+        // Сортировка
         filtered.sort((a, b) => {
             switch (sortBy) {
                 case 'name':
@@ -282,14 +283,14 @@ export const TestList = () => {
         sortBy,
     ]);
 
-    // ÐŸÐ°Ð³Ð¸Ð½Ð°Ñ†Ð¸Ñ
+    // Пагинация
     const totalPages = Math.ceil(filteredAndSortedRooms.length / roomsPerPage);
     const currentRooms = filteredAndSortedRooms.slice(
         (currentPage - 1) * roomsPerPage,
         currentPage * roomsPerPage
     );
 
-    // ÐœÐ¾ÐºÐ¾Ð²Ñ‹Ðµ Ð¸Ð·Ð¾Ð±Ñ€Ð°Ð¶ÐµÐ½Ð¸Ñ Ð´Ð»Ñ ÑÐ»Ð°Ð¹Ð´ÐµÑ€Ð°
+    // Моковые изображения для слайдера
     const mockImages = [
         'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=800&h=600&fit=crop',
         'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=800&h=600&fit=crop&sat=-100',
@@ -318,10 +319,10 @@ export const TestList = () => {
                                 className="flex items-center text-gray-600 hover:text-gray-900 transition-colors"
                             >
                                 <ChevronLeft className="h-5 w-5 mr-2" />
-                                ÐÐ°Ð·Ð°Ð´ Ðº ÑÐ¿Ð¸ÑÐºÑƒ
+                                Назад к списку
                             </button>
                             <h1 className="text-xl font-semibold text-gray-900">
-                                Ð”ÐµÑ‚Ð°Ð»Ð¸ ÐºÐ¾Ð¼Ð½Ð°Ñ‚Ñ‹
+                                Детали комнаты
                             </h1>
                             <div className="w-20" />
                         </div>
@@ -335,9 +336,7 @@ export const TestList = () => {
                         <div className="relative h-96 bg-gray-200">
                             <img
                                 src={mockImages[currentImageIndex]}
-                                alt={`${
-                                    selectedRoom.name
-                                } - Ð¸Ð·Ð¾Ð±Ñ€Ð°Ð¶ÐµÐ½Ð¸Ðµ ${
+                                alt={`${selectedRoom.name} - изображение ${
                                     currentImageIndex + 1
                                 }`}
                                 className="w-full h-full object-cover"
@@ -384,8 +383,7 @@ export const TestList = () => {
 
                                     <div className="mb-6">
                                         <h3 className="text-lg font-semibold text-gray-900 mb-3">
-                                            Ð”Ð¾ÑÑ‚ÑƒÐ¿Ð½Ñ‹Ðµ
-                                            Ð°ÐºÑ‚Ð¸Ð²Ð½Ð¾ÑÑ‚Ð¸
+                                            Доступные активности
                                         </h3>
                                         <div className="flex flex-wrap gap-2">
                                             {selectedRoom.activity?.map(
@@ -404,7 +402,7 @@ export const TestList = () => {
                                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                         <div>
                                             <h3 className="text-lg font-semibold text-gray-900 mb-3">
-                                                ÐÐ´Ñ€ÐµÑ
+                                                Адрес
                                             </h3>
                                             <div className="space-y-2 text-gray-600">
                                                 <div className="flex items-center">
@@ -445,7 +443,7 @@ export const TestList = () => {
 
                                         <div>
                                             <h3 className="text-lg font-semibold text-gray-900 mb-3">
-                                                ÐšÐ¾Ð½Ñ‚Ð°ÐºÑ‚Ñ‹
+                                                Контакты
                                             </h3>
                                             <div className="text-gray-600">
                                                 <div className="flex items-center">
@@ -466,20 +464,20 @@ export const TestList = () => {
                                     <div className="bg-gray-50 rounded-xl p-6 sticky top-8">
                                         <div className="text-center mb-6">
                                             <div className="text-3xl font-bold text-gray-900 mb-2">
-                                                {selectedRoom.pricePerHour}â‚¬
+                                                {selectedRoom.pricePerHour}€
                                             </div>
                                             <div className="text-gray-600">
-                                                Ð·Ð° Ñ‡Ð°Ñ
+                                                за час
                                             </div>
                                         </div>
 
                                         <button className="w-full bg-blue-600 text-white py-3 px-4 rounded-lg font-medium hover:bg-blue-700 transition-colors mb-4">
-                                            Ð—Ð°Ð±Ñ€Ð¾Ð½Ð¸Ñ€Ð¾Ð²Ð°Ñ‚ÑŒ
+                                            Забронировать
                                         </button>
 
                                         <div className="space-y-3 text-sm text-gray-600">
                                             <div className="flex items-center justify-between">
-                                                <span>Ð¡Ñ‚Ð°Ñ‚ÑƒÑ:</span>
+                                                <span>Статус:</span>
                                                 <span
                                                     className={`font-medium ${
                                                         selectedRoom.isActive
@@ -488,12 +486,12 @@ export const TestList = () => {
                                                     }`}
                                                 >
                                                     {selectedRoom.isActive
-                                                        ? 'ÐÐºÑ‚Ð¸Ð²Ð½Ð°'
-                                                        : 'ÐÐµÐ°ÐºÑ‚Ð¸Ð²Ð½Ð°'}
+                                                        ? 'Активна'
+                                                        : 'Неактивна'}
                                                 </span>
                                             </div>
                                             <div className="flex items-center justify-between">
-                                                <span>ID ÐºÐ¾Ð¼Ð½Ð°Ñ‚Ñ‹:</span>
+                                                <span>ID комнаты:</span>
                                                 <span className="font-medium">
                                                     #{selectedRoom.roomId}
                                                 </span>
@@ -516,7 +514,7 @@ export const TestList = () => {
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div className="flex items-center justify-between h-16">
                         <h1 className="text-2xl font-bold text-gray-900">
-                            ÐŸÐ¾Ð¸ÑÐº ÐºÐ¾Ð¼Ð½Ð°Ñ‚
+                            Поиск комнат
                         </h1>
                         <div className="flex items-center space-x-4">
                             <button
@@ -555,7 +553,7 @@ export const TestList = () => {
                         <div className="bg-white rounded-xl shadow-sm p-6 sticky top-8">
                             <div className="flex items-center justify-between mb-6">
                                 <h2 className="text-lg font-semibold text-gray-900">
-                                    Ð¤Ð¸Ð»ÑŒÑ‚Ñ€Ñ‹
+                                    Фильтры
                                 </h2>
                                 <button
                                     onClick={() => setShowFilters(false)}
@@ -569,13 +567,13 @@ export const TestList = () => {
                                 {/* Search */}
                                 <div>
                                     <label className="block text-sm font-medium text-gray-700 mb-2">
-                                        ÐŸÐ¾Ð¸ÑÐº
+                                        Поиск
                                     </label>
                                     <div className="relative">
                                         <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
                                         <input
                                             type="text"
-                                            placeholder="ÐÐ°Ð·Ð²Ð°Ð½Ð¸Ðµ Ð¸Ð»Ð¸ Ð¾Ð¿Ð¸ÑÐ°Ð½Ð¸Ðµ..."
+                                            placeholder="Название или описание..."
                                             value={searchTerm}
                                             onChange={(e) =>
                                                 setSearchTerm(e.target.value)
@@ -588,7 +586,7 @@ export const TestList = () => {
                                 {/* City Filter */}
                                 <div>
                                     <label className="block text-sm font-medium text-gray-700 mb-2">
-                                        Ð“Ð¾Ñ€Ð¾Ð´
+                                        Город
                                     </label>
                                     <select
                                         value={selectedCity}
@@ -597,9 +595,7 @@ export const TestList = () => {
                                         }
                                         className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                                     >
-                                        <option value="">
-                                            Ð’ÑÐµ Ð³Ð¾Ñ€Ð¾Ð´Ð°
-                                        </option>
+                                        <option value="">Все города</option>
                                         {cities.map((city) => (
                                             <option key={city} value={city}>
                                                 {city}
@@ -611,7 +607,7 @@ export const TestList = () => {
                                 {/* Activity Filter */}
                                 <div>
                                     <label className="block text-sm font-medium text-gray-700 mb-2">
-                                        ÐÐºÑ‚Ð¸Ð²Ð½Ð¾ÑÑ‚ÑŒ
+                                        Активность
                                     </label>
                                     <select
                                         value={selectedActivity}
@@ -620,9 +616,7 @@ export const TestList = () => {
                                         }
                                         className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                                     >
-                                        <option value="">
-                                            Ð’ÑÐµ Ð°ÐºÑ‚Ð¸Ð²Ð½Ð¾ÑÑ‚Ð¸
-                                        </option>
+                                        <option value="">Все активности</option>
                                         {activities.map((activity) => (
                                             <option
                                                 key={activity}
@@ -637,12 +631,12 @@ export const TestList = () => {
                                 {/* Price Range */}
                                 <div>
                                     <label className="block text-sm font-medium text-gray-700 mb-2">
-                                        Ð¦ÐµÐ½Ð° Ð·Ð° Ñ‡Ð°Ñ (â‚¬)
+                                        Цена за час (€)
                                     </label>
                                     <div className="grid grid-cols-2 gap-3">
                                         <input
                                             type="number"
-                                            placeholder="ÐžÑ‚"
+                                            placeholder="От"
                                             value={minPrice}
                                             onChange={(e) =>
                                                 setMinPrice(e.target.value)
@@ -651,7 +645,7 @@ export const TestList = () => {
                                         />
                                         <input
                                             type="number"
-                                            placeholder="Ð”Ð¾"
+                                            placeholder="До"
                                             value={maxPrice}
                                             onChange={(e) =>
                                                 setMaxPrice(e.target.value)
@@ -664,7 +658,7 @@ export const TestList = () => {
                                 {/* Sort */}
                                 <div>
                                     <label className="block text-sm font-medium text-gray-700 mb-2">
-                                        Ð¡Ð¾Ñ€Ñ‚Ð¸Ñ€Ð¾Ð²ÐºÐ°
+                                        Сортировка
                                     </label>
                                     <select
                                         value={sortBy}
@@ -674,15 +668,13 @@ export const TestList = () => {
                                         className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                                     >
                                         <option value="name">
-                                            ÐŸÐ¾ Ð½Ð°Ð·Ð²Ð°Ð½Ð¸ÑŽ
+                                            По названию
                                         </option>
                                         <option value="price-low">
-                                            Ð¦ÐµÐ½Ð°: ÑÐ½Ð°Ñ‡Ð°Ð»Ð°
-                                            Ð´ÐµÑˆÐµÐ²Ñ‹Ðµ
+                                            Цена: сначала дешевые
                                         </option>
                                         <option value="price-high">
-                                            Ð¦ÐµÐ½Ð°: ÑÐ½Ð°Ñ‡Ð°Ð»Ð°
-                                            Ð´Ð¾Ñ€Ð¾Ð³Ð¸Ðµ
+                                            Цена: сначала дорогие
                                         </option>
                                     </select>
                                 </div>
@@ -695,8 +687,7 @@ export const TestList = () => {
                         {/* Results Info */}
                         <div className="flex items-center justify-between mb-6">
                             <div className="text-gray-600">
-                                ÐÐ°Ð¹Ð´ÐµÐ½Ð¾ {filteredAndSortedRooms.length}{' '}
-                                ÐºÐ¾Ð¼Ð½Ð°Ñ‚
+                                Найдено {filteredAndSortedRooms.length} комнат
                             </div>
                         </div>
 
@@ -730,10 +721,10 @@ export const TestList = () => {
                                             </h3>
                                             <div className="text-right">
                                                 <div className="text-xl font-bold text-gray-900">
-                                                    {room.pricePerHour}â‚¬
+                                                    {room.pricePerHour}€
                                                 </div>
                                                 <div className="text-sm text-gray-600">
-                                                    Ð·Ð° Ñ‡Ð°Ñ
+                                                    за час
                                                 </div>
                                             </div>
                                         </div>
@@ -767,7 +758,7 @@ export const TestList = () => {
                                                     +
                                                     {(room.activity?.length ||
                                                         0) - 2}{' '}
-                                                    ÐµÑ‰Ðµ
+                                                    еще
                                                 </span>
                                             )}
                                         </div>
@@ -781,11 +772,11 @@ export const TestList = () => {
                                                 }`}
                                             >
                                                 {room.isActive
-                                                    ? 'Ð”Ð¾ÑÑ‚ÑƒÐ¿Ð½Ð°'
-                                                    : 'ÐÐµÐ´Ð¾ÑÑ‚ÑƒÐ¿Ð½Ð°'}
+                                                    ? 'Доступна'
+                                                    : 'Недоступна'}
                                             </span>
                                             <button className="text-blue-600 hover:text-blue-700 text-sm font-medium">
-                                                ÐŸÐ¾Ð´Ñ€Ð¾Ð±Ð½ÐµÐµ â†’
+                                                Подробнее →
                                             </button>
                                         </div>
                                     </div>

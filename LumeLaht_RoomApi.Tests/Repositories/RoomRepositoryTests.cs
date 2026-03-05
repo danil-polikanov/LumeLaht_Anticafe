@@ -216,8 +216,8 @@ namespace LumeLaht_RoomApi.Tests.Repositories
                 SortOptions = new SortOptions(),
                 roomOptionDTO = new RoomOptionDTO
                 {
-                    MinPrice = 500.0,
-                    MaxPrice = 1500.0
+                    MinPrice = 500.0m,
+                    MaxPrice = 1500.0m
                 }
             };
 
@@ -227,7 +227,7 @@ namespace LumeLaht_RoomApi.Tests.Repositories
             var result = await _repository.GetFilteredRoomsAsync(filterOptions, CancellationToken.None);
 
             // Assert
-            Assert.InRange(result.Items[0].PricePerHour, 500.0, 1500.0);
+            Assert.InRange(result.Items[0].PricePerHour, 500.0m, 1500.0m);
         }
 
         [Fact]
@@ -325,7 +325,7 @@ namespace LumeLaht_RoomApi.Tests.Repositories
                 Filters = new Dictionary<string, object>
                 {
                     { "Status", "Available" },
-                    { "MinPrice", 500.0 }
+                    { "MinPrice", 500.0m }
                 },
                 SortOptions = new SortOptions { Field = "price", Direction = "asc" }
             };
@@ -337,7 +337,7 @@ namespace LumeLaht_RoomApi.Tests.Repositories
             Assert.Single(result.Items);
             Assert.Contains("Зал", result.Items[0].Name);
             Assert.Equal("Available", result.Items[0].Status);
-            Assert.True(result.Items[0].PricePerHour >= 500.0);
+            Assert.True(result.Items[0].PricePerHour >= 500.0m);
         }
 
         #endregion

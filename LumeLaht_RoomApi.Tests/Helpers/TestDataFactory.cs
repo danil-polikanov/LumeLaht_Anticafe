@@ -43,7 +43,7 @@ namespace LumeLaht_RoomApi.Tests.Helpers
 
         public static Room CreateRoom(
             string name = "Тестовый зал",
-            double price = 1000,
+            decimal price = 1000,
             string status = "Available",
             Address? address = null,
             string addressId=null,

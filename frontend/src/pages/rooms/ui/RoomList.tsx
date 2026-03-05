@@ -104,10 +104,16 @@ export const RoomList: React.FC = () => {
             <div className="row mb-4">
                 <div className="col-12">
                     <div className="d-flex justify-content-between align-items-center">
-                        <h2 className="mb-0">
+                        <h2 className="mb-0 text-black">
                             <i className="fas fa-building me-2 text-primary"></i>
                             Room catalog
                         </h2>
+                        {/* Сортировка и информация */}
+                        <div className="row mb-0">
+                            <div className="col-12">
+                                <RoomSortingAndPagination />
+                            </div>
+                        </div>
                         <button
                             className="btn btn-success"
                             onClick={() => console.log('Add new room')}
@@ -119,71 +125,71 @@ export const RoomList: React.FC = () => {
                 </div>
             </div>
             {/* Фильтры */}
-            <div className="row mb-4">
-                <div className="col-12">
-                    <RoomFilters />
-                </div>
-            </div>
-            {/* Сортировка и информация */}
-            <div className="row mb-4">
-                <div className="col-12">
-                    <RoomSortingAndPagination />
-                </div>
-            </div>
-            {/* Индикатор загрузки при фильтрации */}
-            {loading && (
-                <div className="row mb-3">
-                    <div className="col-12">
-                        <div className="d-flex justify-content-center">
-                            <div
-                                className="spinner-border spinner-border-sm text-primary me-2"
-                                role="status"
-                            >
-                                <span className="visually-hidden">
-                                    Loading...
-                                </span>
-                            </div>
-                            <span className="text-muted">
-                                Updating results...
-                            </span>
-                        </div>
-                    </div>
-                </div>
-            )}
-            {/* Список комнат */}
             <div className="row">
-                {rooms.length > 0 ? (
-                    rooms.map((room) => (
-                        <RoomCard
-                            key={room.roomId}
-                            room={room}
-                            onRoomClick={handleRoomClick}
-                        />
-                    ))
-                ) : (
-                    <div className="col-12">
-                        <div className="text-center py-5">
-                            <div className="text-muted">
-                                <i className="fas fa-search fa-3x mb-3"></i>
-                                <h4>Rooms can't be found</h4>
-                                <p>
-                                    Try changing the filter settings or clear
-                                    all filters
-                                </p>
-                            </div>
+                <div className="col-3">
+                    <div className="row mb-4">
+                        <div className="col-12">
+                            <RoomFilters />
                         </div>
                     </div>
-                )}
+                    {/* Индикатор загрузки при фильтрации */}
+                    {loading && (
+                        <div className="row mb-3">
+                            <div className="col-12">
+                                <div className="d-flex justify-content-center">
+                                    <div
+                                        className="spinner-border spinner-border-sm text-primary me-2"
+                                        role="status"
+                                    >
+                                        <span className="visually-hidden">
+                                            Loading...
+                                        </span>
+                                    </div>
+                                    <span className="text-muted">
+                                        Updating results...
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    )}
+                </div>
+                {/* Список комнат */}
+                <div className="col-9">
+                    <div className="row">
+                        {rooms.length > 0 ? (
+                            rooms.map((room) => (
+                                <RoomCard
+                                    key={room.roomId}
+                                    room={room}
+                                    onRoomClick={handleRoomClick}
+                                />
+                            ))
+                        ) : (
+                            <div className="col-12">
+                                <div className="text-center py-5">
+                                    <div className="text-muted">
+                                        <i className="fas fa-search fa-3x mb-3"></i>
+                                        <h4>Rooms can't be found</h4>
+                                        <p>
+                                            Try changing the filter settings or
+                                            clear all filters
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        )}
+                    </div>
+                    {/* Детальная информация о комнате */}
+                    {selectedRoomDetail && (
+                        <RoomDetailOverlay
+                            room={selectedRoomDetail || selectedRoomDetail}
+                            onClose={handleCloseDetail}
+                        />
+                    )}
+                    {/* Дополнительная информация <AdditionalInfo></AdditionalInfo> */}
+                    <PaginationComponent></PaginationComponent>
+                </div>
             </div>
-            {/* Детальная информация о комнате */}
-            {selectedRoomDetail && (
-                <RoomDetailOverlay
-                    room={selectedRoomDetail || selectedRoomDetail}
-                    onClose={handleCloseDetail}
-                />
-            )}
-            {/* Дополнительная информация <AdditionalInfo></AdditionalInfo> */}
-            <PaginationComponent></PaginationComponent>
         </div>
     );
 };

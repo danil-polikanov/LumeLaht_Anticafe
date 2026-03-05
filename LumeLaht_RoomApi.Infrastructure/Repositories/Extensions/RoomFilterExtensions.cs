@@ -54,13 +54,13 @@ namespace LumeLaht_RoomApi.Infrastructure.Repositories.Extensions
         public static IQueryable<Room> ApplyPriceFilter(this IQueryable<Room> query, FilterOptions options)
         {
             if (options.Filters.TryGetValue("MinPrice", out var minPrice)
-                && minPrice is double minPriceVal)
+                && minPrice is decimal minPriceVal)
             {
                 query = query.Where(r => r.PricePerHour >= minPriceVal);
             }
 
             if (options.Filters.TryGetValue("MaxPrice", out var maxPrice)
-                && maxPrice is double maxPriceVal)
+                && maxPrice is decimal maxPriceVal)
             {
                 query = query.Where(r => r.PricePerHour <= maxPriceVal);
             }
