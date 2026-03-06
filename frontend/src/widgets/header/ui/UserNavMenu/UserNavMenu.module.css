@@ -1,35 +1,35 @@
 .userButtons {
-    cursor: pointer;
-    padding: 6px 12px;
-    transition: all 0.3s ease;
-    font-weight: 500;
-    position: relative;
-    color: white;
-    background-color: rgb(206, 152, 87);
-    font-weight: 500;
-    border-radius: 50px;
-    white-space: nowrap;
+  cursor: pointer;
+  padding: 6px 12px;
+  transition: all 0.3s ease;
+  font-weight: 500;
+  position: relative;
+  color: white;
+  background-color: rgb(206, 152, 87);
+  font-weight: 500;
+  border-radius: 50px;
+  white-space: nowrap;
 }
 
 .userButtons:hover {
-    transform: translateY(-2px);
-    color: white;
+  transform: translateY(-2px);
+  color: white;
 }
 
 .userButtons::after {
-    content: '';
-    position: absolute;
-    bottom: 3px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 0;
-    height: 2px;
-    background-color: white;
-    opacity: 0;
-    transition: all 0.3s ease;
+  content: '';
+  position: absolute;
+  bottom: 3px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0;
+  height: 2px;
+  background-color: white;
+  opacity: 0;
+  transition: all 0.3s ease;
 }
 
 .userButtons:hover::after {
-    opacity: 1;
-    width: 60%;
+  opacity: 1;
+  width: 60%;
 }

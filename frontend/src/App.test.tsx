@@ -4,5 +4,5 @@ import App from './App';
 import RoomList from '@/pages/rooms/ui/RoomList';
 
 test('renders learn react link', () => {
-    render(<App />);
+  render(<App />);
 });

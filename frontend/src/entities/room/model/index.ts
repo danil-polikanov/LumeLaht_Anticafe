@@ -9,11 +9,11 @@ export * from './roomSelectors';
 
 // Thunks (асинхронные операции)
 export {
-    fetchRooms,
-    fetchRoomById,
-    createRoom,
-    updateRoom,
-    deleteRoom,
-    fetchActivities,
-    fetchRoomsByFilters,
+  fetchRooms,
+  fetchRoomById,
+  createRoom,
+  updateRoom,
+  deleteRoom,
+  fetchActivities,
+  fetchRoomsByFilters,
 } from './roomThunks';

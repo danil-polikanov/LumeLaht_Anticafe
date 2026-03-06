@@ -1,158 +1,158 @@
 /* Header.module.css */
 .header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    z-index: 1000;
-    padding-top: 40px;
-    /* Используем container для адаптивности */
-    max-width: 1200px;
-    margin: 0 auto;
-    /* Добавляем отступы */
-    padding-left: 20px;
-    padding-right: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  padding-top: 40px;
+  /* Используем container для адаптивности */
+  max-width: 1200px;
+  margin: 0 auto;
+  /* Добавляем отступы */
+  padding-left: 20px;
+  padding-right: 20px;
 }
 
 .left,
 .center,
 .right {
-    display: flex;
-    align-items: center;
+  display: flex;
+  align-items: center;
 }
 
 .left {
-    flex: 1; /* Занимает равную часть с .right */
-    min-width: 0;
-    justify-content: flex-start;
+  flex: 1; /* Занимает равную часть с .right */
+  min-width: 0;
+  justify-content: flex-start;
 }
 
 .center {
-    flex: 0 0 auto; /* Не растягивается и не сжимается */
-    justify-content: center;
-    background-color: rgb(206, 152, 87);
+  flex: 0 0 auto; /* Не растягивается и не сжимается */
+  justify-content: center;
+  background-color: rgb(206, 152, 87);
 
-    border-radius: 80px;
-    /* Убираем margin чтобы не влиял на центрирование */
-    padding: 0 20px;
-    /* Минимальная ширина для предотвращения схлопывания */
-    min-width: 280px;
-    /* Максимальная ширина для больших экранов */
-    max-width: 600px;
-    /* Абсолютное позиционирование для идеального центрирования */
-    position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
+  border-radius: 80px;
+  /* Убираем margin чтобы не влиял на центрирование */
+  padding: 0 20px;
+  /* Минимальная ширина для предотвращения схлопывания */
+  min-width: 280px;
+  /* Максимальная ширина для больших экранов */
+  max-width: 600px;
+  /* Абсолютное позиционирование для идеального центрирования */
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
 }
 
 .right {
-    flex: 1; /* Занимает равную часть с .left */
-    justify-content: flex-end;
-    min-width: 0;
-    white-space: nowrap;
+  flex: 1; /* Занимает равную часть с .left */
+  justify-content: flex-end;
+  min-width: 0;
+  white-space: nowrap;
 }
 
 .burgerContainer {
-    position: relative;
-    z-index: 1001;
-    flex: 0 0 auto;
-    margin-left: auto; /* Прижимает к правому краю */
+  position: relative;
+  z-index: 1001;
+  flex: 0 0 auto;
+  margin-left: auto; /* Прижимает к правому краю */
 }
 
 /* Mobile */
 .mobileMenu {
-    position: absolute;
-    top: 100%;
-    left: 0;
-    right: 0;
-    background-color: white;
-    border-radius: 0 0 20px 20px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-    padding: 20px;
-    animation: slideDown 0.3s ease;
-    /* Предотвращаем переполнение */
-    overflow-y: auto;
-    max-height: 80vh;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background-color: white;
+  border-radius: 0 0 20px 20px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  animation: slideDown 0.3s ease;
+  /* Предотвращаем переполнение */
+  overflow-y: auto;
+  max-height: 80vh;
 }
 
 .mobileMenuContent {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
 }
 
 .mobileUserMenu {
-    border-top: 1px solid #eee;
-    padding-top: 20px;
+  border-top: 1px solid #eee;
+  padding-top: 20px;
 }
 
 @keyframes slideDown {
-    from {
-        opacity: 0;
-        transform: translateY(-10px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 /* Дополнительные брейкпоинты для лучшей адаптивности */
 @media (max-width: 1199.98px) {
-    .header {
-        max-width: 100%;
-        padding-left: 10vw;
-        padding-right: 2vw;
-    }
+  .header {
+    max-width: 100%;
+    padding-left: 10vw;
+    padding-right: 2vw;
+  }
 
-    .center {
-        min-width: 200px;
-        padding: 0 15px;
-    }
+  .center {
+    min-width: 200px;
+    padding: 0 15px;
+  }
 }
 
 /* Адаптивность */
 @media (max-width: 991.98px) {
-    .header {
-        padding-left: 5vw;
-        padding-right: 5vw;
-    }
+  .header {
+    padding-left: 5vw;
+    padding-right: 5vw;
+  }
 
-    .center {
-        display: none;
-    }
+  .center {
+    display: none;
+  }
 
-    .right {
-        display: none;
-    }
+  .right {
+    display: none;
+  }
 
-    .mobileMenuOpen {
-        display: block;
-    }
+  .mobileMenuOpen {
+    display: block;
+  }
 }
 @media (min-width: 992px) {
-    .burgerContainer {
-        display: none;
-    }
+  .burgerContainer {
+    display: none;
+  }
 
-    .mobileMenu {
-        display: none;
-    }
+  .mobileMenu {
+    display: none;
+  }
 }
 @media (max-width: 767.98px) {
-    .header {
-        padding-left: 5vw;
-        padding-right: 5vw;
-    }
+  .header {
+    padding-left: 5vw;
+    padding-right: 5vw;
+  }
 }
 
 /* Для очень узких экранов */
 @media (max-width: 480px) {
-    .header {
-        padding-left: 10vw;
-        padding-right: 10vw;
-    }
+  .header {
+    padding-left: 10vw;
+    padding-right: 10vw;
+  }
 }

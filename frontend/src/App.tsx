@@ -5,14 +5,14 @@ import { AppRouter } from './app/routes/AppRouter';
 import './app/styles/global.css';
 
 export const App: React.FC = () => {
-    return (
-        <BrowserRouter>
-            <ReduxProvider>
-                <div className="App">
-                    <AppRouter />
-                </div>
-            </ReduxProvider>
-        </BrowserRouter>
-    );
+  return (
+    <BrowserRouter>
+      <ReduxProvider>
+        <div className="App">
+          <AppRouter />
+        </div>
+      </ReduxProvider>
+    </BrowserRouter>
+  );
 };
 export default App;
