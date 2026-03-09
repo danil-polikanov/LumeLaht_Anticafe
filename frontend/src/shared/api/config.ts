@@ -38,15 +38,15 @@ apiClient.interceptors.response.use(
 export class ApiError extends Error {
   status: number;
   response: string;
-  headers: { [key: string]: any };
-  result: any;
+  headers: { [key: string]: string };
+  result: unknown;
 
   constructor(
     message: string,
     status: number,
     response: string,
-    headers: { [key: string]: any },
-    result: any,
+    headers: { [key: string]: string },
+    result: unknown,
   ) {
     super(message);
     this.status = status;

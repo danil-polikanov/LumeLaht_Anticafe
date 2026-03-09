@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { Location, Outlet, useLocation } from 'react-router-dom';
+import { Outlet, useLocation } from 'react-router-dom';
 import styles from './Layout.module.css';
 import { scroller } from 'react-scroll';
 import { Header } from '@/widgets/header/ui';

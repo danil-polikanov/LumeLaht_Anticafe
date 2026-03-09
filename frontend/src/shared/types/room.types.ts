@@ -50,5 +50,5 @@ export interface ProblemDetails {
   status?: number | undefined;
   detail?: string | undefined;
   instance?: string | undefined;
-  [key: string]: any;
+  [key: string]: string | number | boolean | undefined;
 }

@@ -34,8 +34,8 @@ export const applyFiltersAndSorting = (state: RoomsState) => {
   filtered = filtered.filter((room) => room.status === 'Available');
 
   filtered.sort((a, b) => {
-    let aValue: any;
-    let bValue: any;
+    let aValue: string | number;
+    let bValue: string | number;
 
     switch (state.sorting.field) {
       case 'name':
@@ -69,7 +69,4 @@ export const applyFiltersAndSorting = (state: RoomsState) => {
 
   state.pagination.totalItems = filtered.length;
   state.pagination.totalPages = Math.ceil(filtered.length / state.pagination.pageSize);
-
-  const startIndex = (state.pagination.currentPage - 1) * state.pagination.totalPages;
-  const endIndex = startIndex + state.pagination.totalPages;
 };
