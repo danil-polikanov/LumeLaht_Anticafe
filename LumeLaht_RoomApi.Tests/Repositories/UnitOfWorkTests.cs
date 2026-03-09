@@ -3,16 +3,11 @@ using LumeLaht_RoomApi.Infrastructure.Data;
 using LumeLaht_RoomApi.Infrastructure.Repositories;
 using LumeLaht_RoomApi.Tests.Helpers;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Xunit;
 
 namespace LumeLaht_RoomApi.Tests.Repositories
 {
-    public class UnitOfWorkTests
+    public class UnitOfWorkTests : IDisposable
     {
         private readonly AppDbContext _context;
         private readonly UnitOfWork _unitOfWork;
@@ -37,6 +32,11 @@ namespace LumeLaht_RoomApi.Tests.Repositories
             );
         }
 
+        public void Dispose()
+        {
+            _context.Database.EnsureDeleted();
+            _context.Dispose();
+        }
 
         [Fact]
         public void UnitOfWork_ShouldInitializeAllRepositories()

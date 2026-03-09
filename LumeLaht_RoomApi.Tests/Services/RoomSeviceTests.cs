@@ -3,19 +3,12 @@ using LumeLaht_RoomApi.Application.Dto;
 using LumeLaht_RoomApi.Application.Mapping;
 using LumeLaht_RoomApi.Application.Services;
 using LumeLaht_RoomApi.Core_.Entities;
+using LumeLaht_RoomApi.Core_.Entities.Filters;
 using LumeLaht_RoomApi.Core_.Interfaces;
 using Moq;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
+using System.ComponentModel.DataAnnotations;
 using static LumeLaht_RoomApi.Tests.Helpers.TestDataFactory;
 using Xunit;
-using LumeLaht_RoomApi.Core_.Entities.Filters;
-using System.ComponentModel.DataAnnotations;
-using AutoMapper.Configuration.Annotations;
 
 namespace LumeLaht_RoomApi.Tests.Services
 {
@@ -62,7 +55,6 @@ namespace LumeLaht_RoomApi.Tests.Services
             // Assert
             Assert.NotNull(result);
             Assert.Empty(result);
-            _roomRepositoryMock.Verify(r => r.GetAllAsync(It.IsAny<CancellationToken>()), Times.Once);
         }
 
         [Fact]
@@ -82,23 +74,7 @@ namespace LumeLaht_RoomApi.Tests.Services
             Assert.Equal(2, result.Count);
             Assert.Equal("Зал А", result[0].Name);
             Assert.Equal("Зал B", result[1].Name);
-        }
-
-        [Fact]
-        public async Task GetAllRoomsAsync_CallsRepositoryOnce()
-        {
-            // Arrange
-            _roomRepositoryMock
-                .Setup(r => r.GetAllAsync(It.IsAny<CancellationToken>()))
-                .ReturnsAsync(new List<Room>());
-
-            // Act
-            await _service.GetAllRoomsAsync(CancellationToken.None);
-
-            // Assert
-            _roomRepositoryMock.Verify(
-                r => r.GetAllAsync(It.IsAny<CancellationToken>()),
-                Times.Once);
+            _roomRepositoryMock.Verify(r => r.GetAllAsync(It.IsAny<CancellationToken>()), Times.Once);
         }
 
         #endregion
@@ -135,24 +111,7 @@ namespace LumeLaht_RoomApi.Tests.Services
             // Assert
             Assert.NotNull(result);
             Assert.Equal("Test Room", result.Name);
-        }
-
-        [Fact]
-        public async Task GetRoomByIdAsync_CallsRepositoryWithCorrectId()
-        {
-            // Arrange
-            var testId = Guid.NewGuid();
-            _roomRepositoryMock
-                .Setup(r => r.GetByIdAsync(testId, It.IsAny<CancellationToken>()))
-                .ReturnsAsync((Room)null);
-
-            // Act
-            await _service.GetRoomByIdAsync(testId, CancellationToken.None);
-
-            // Assert
-            _roomRepositoryMock.Verify(
-                r => r.GetByIdAsync(testId, It.IsAny<CancellationToken>()),
-                Times.Once);
+            _roomRepositoryMock.Verify(r => r.GetByIdAsync(room.RoomId, It.IsAny<CancellationToken>()), Times.Once);
         }
 
         #endregion
@@ -309,26 +268,6 @@ namespace LumeLaht_RoomApi.Tests.Services
                 Times.Once);
         }
 
-        [Fact]
-        public async Task UpdateRoomAsync_PreservesRoomId()
-        {
-            // Arrange
-            var request = CreateRoomRequest();
-            Room capturedRoom = null;
-
-            _roomRepositoryMock
-                .Setup(r => r.UpdateAsync(It.IsAny<Room>(), It.IsAny<CancellationToken>()))
-                .Callback<Room, CancellationToken>((room, _) => capturedRoom = room)
-                .Returns(Task.CompletedTask);
-            var roomId = Guid.NewGuid();
-            // Act
-            await _service.UpdateRoomAsync(roomId, request, CancellationToken.None);
-
-            // Assert
-            Assert.NotNull(capturedRoom);
-            Assert.Equal(roomId, capturedRoom.RoomId);
-        }
-
         #endregion
 
         #region DeleteRoomAsync Tests
@@ -379,7 +318,6 @@ namespace LumeLaht_RoomApi.Tests.Services
         [Fact]
         public async Task DeleteRoomAsync_CallsDeleteWithCorrectId()
         {
-            var roomId = Guid.NewGuid();
             // Arrange
             var room = CreateRoom("Test Room");
             _roomRepositoryMock

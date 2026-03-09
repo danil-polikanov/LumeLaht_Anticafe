@@ -142,7 +142,7 @@ namespace LumeLaht_RoomApi.Tests.Helpers
                 },
                 RoomActivity = new List<RoomActivity>
                 {
-                    new RoomActivity { RoomId = Guid.NewGuid(), ActivityId = activity1.ActivityId, Activity = activity1 }
+                    new RoomActivity { RoomId = room1.RoomId, ActivityId = activity1.ActivityId, Activity = activity1 }
                 }
             };
 
@@ -161,7 +161,7 @@ namespace LumeLaht_RoomApi.Tests.Helpers
                 },
                 RoomActivity = new List<RoomActivity>
                 {
-                    new RoomActivity { RoomId = Guid.NewGuid(), ActivityId = activity2.ActivityId, Activity = activity2 }
+                    new RoomActivity { RoomId = room2.RoomId, ActivityId = activity2.ActivityId, Activity = activity2 }
                 }
             };
 

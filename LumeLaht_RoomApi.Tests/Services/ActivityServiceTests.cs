@@ -2,11 +2,6 @@
 using LumeLaht_RoomApi.Core_.Entities;
 using LumeLaht_RoomApi.Core_.Interfaces;
 using Moq;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Xunit;
 
 namespace LumeLaht_RoomApi.Tests.Services
@@ -68,23 +63,7 @@ namespace LumeLaht_RoomApi.Tests.Services
             Assert.Equal("Boxing", result[0].Name);
             Assert.Equal("Pilates", result[1].Name);
             Assert.Equal("Yoga", result[2].Name);
-        }
-
-        [Fact]
-        public async Task GetAllActivitiesAsync_CallsRepositoryOnce()
-        {
-            // Arrange
-            _activityRepositoryMock
-                .Setup(r => r.GetAllAsync(It.IsAny<CancellationToken>()))
-                .ReturnsAsync(new List<Activity>());
-
-            // Act
-            await _service.GetAllActivitiesAsync(CancellationToken.None);
-
-            // Assert
-            _activityRepositoryMock.Verify(
-                r => r.GetAllAsync(It.IsAny<CancellationToken>()),
-                Times.Once);
+            _activityRepositoryMock.Verify(r => r.GetAllAsync(It.IsAny<CancellationToken>()), Times.Once);
         }
     }
 }

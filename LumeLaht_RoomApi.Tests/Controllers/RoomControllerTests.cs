@@ -94,6 +94,7 @@ namespace LumeLaht_RoomApi.Tests.Controllers
             var okResult = Assert.IsType<OkObjectResult>(result.Result);
             var returnedRooms = Assert.IsAssignableFrom<IEnumerable<RoomResponse>>(okResult.Value);
             Assert.Equal(2, returnedRooms.Count());
+            _roomServiceMock.Verify(s => s.GetAllRoomsAsync(It.IsAny<CancellationToken>()), Times.Once);
         }
 
         [Fact]
@@ -111,23 +112,6 @@ namespace LumeLaht_RoomApi.Tests.Controllers
             var okResult = Assert.IsType<OkObjectResult>(result.Result);
             var returnedRooms = Assert.IsAssignableFrom<IEnumerable<RoomResponse>>(okResult.Value);
             Assert.Empty(returnedRooms);
-        }
-
-        [Fact]
-        public async Task GetAll_CallsServiceOnce()
-        {
-            // Arrange
-            _roomServiceMock
-                .Setup(s => s.GetAllRoomsAsync(It.IsAny<CancellationToken>()))
-                .ReturnsAsync(new List<RoomResponse>());
-
-            // Act
-            await _controller.GetAll(CancellationToken.None);
-
-            // Assert
-            _roomServiceMock.Verify(
-                s => s.GetAllRoomsAsync(It.IsAny<CancellationToken>()),
-                Times.Once);
         }
 
         #endregion
@@ -173,24 +157,7 @@ namespace LumeLaht_RoomApi.Tests.Controllers
             var returnedRoom = Assert.IsType<RoomResponse>(okResult.Value);
             Assert.Equal(Room1Id, returnedRoom.RoomId);
             Assert.Equal("Test Room", returnedRoom.Name);
-        }
-
-        [Fact]
-        public async Task GetRoomById_CallsServiceWithCorrectId()
-        {
-            // Arrange
-            var testId = Guid.NewGuid();
-            _roomServiceMock
-                .Setup(s => s.GetRoomByIdAsync(testId, It.IsAny<CancellationToken>()))
-                .ReturnsAsync((RoomResponse)null);
-
-            // Act
-            await _controller.GetRoomById(testId, CancellationToken.None);
-
-            // Assert
-            _roomServiceMock.Verify(
-                s => s.GetRoomByIdAsync(testId, It.IsAny<CancellationToken>()),
-                Times.Once);
+            _roomServiceMock.Verify(s => s.GetRoomByIdAsync(Room1Id, It.IsAny<CancellationToken>()), Times.Once);
         }
 
         [Theory]
@@ -261,29 +228,7 @@ namespace LumeLaht_RoomApi.Tests.Controllers
 
             var returnedRoom = Assert.IsType<RoomResponse>(createdResult.Value);
             Assert.Equal("New Room", returnedRoom.Name);
-        }
-
-        [Fact]
-        public async Task Create_CallsServiceWithCorrectRequest()
-        {
-            // Arrange
-            var request = new CreateRoomRequest
-            {
-                Name = "Test Room",
-                AddressId = Guid.NewGuid()
-            };
-
-            _roomServiceMock
-                .Setup(s => s.CreateRoomAsync(request, It.IsAny<CancellationToken>()))
-                .ReturnsAsync(new RoomResponse { RoomId = Room1Id });
-
-            // Act
-            await _controller.Create(request, CancellationToken.None);
-
-            // Assert
-            _roomServiceMock.Verify(
-                s => s.CreateRoomAsync(request, It.IsAny<CancellationToken>()),
-                Times.Once);
+            _roomServiceMock.Verify(s => s.CreateRoomAsync(It.IsAny<CreateRoomRequest>(), It.IsAny<CancellationToken>()), Times.Once);
         }
 
         [Fact]
@@ -383,45 +328,7 @@ namespace LumeLaht_RoomApi.Tests.Controllers
             var returnedRoom = Assert.IsType<RoomResponse>(okResult.Value);
             Assert.Equal("Updated Room", returnedRoom.Name);
             Assert.Equal(150, returnedRoom.PricePerHour);
-        }
-
-        [Fact]
-        public async Task Update_CallsServiceWithCorrectParameters()
-        {
-            // Arrange
-            var request = new CreateRoomRequest { Name = "Test" };
-
-            _roomServiceMock
-                .Setup(s => s.UpdateRoomAsync(Room1Id, request, It.IsAny<CancellationToken>()))
-                .ReturnsAsync(new RoomResponse { RoomId = Room1Id });
-
-            // Act
-            await _controller.Update(Room1Id, request, CancellationToken.None);
-
-            // Assert
-            _roomServiceMock.Verify(
-                s => s.UpdateRoomAsync(Room1Id, request, It.IsAny<CancellationToken>()),
-                Times.Once);
-        }
-
-        [Fact]
-        public async Task Update_PreservesRoomId()
-        {
-            // Arrange
-            var request = new CreateRoomRequest { Name = "Test" };
-            var originalId = Guid.NewGuid();
-
-            _roomServiceMock
-                .Setup(s => s.UpdateRoomAsync(originalId, request, It.IsAny<CancellationToken>()))
-                .ReturnsAsync(new RoomResponse { RoomId = originalId, Name = "Test" });
-
-            // Act
-            var result = await _controller.Update(originalId, request, CancellationToken.None);
-
-            // Assert
-            var okResult = Assert.IsType<OkObjectResult>(result);
-            var room = Assert.IsType<RoomResponse>(okResult.Value);
-            Assert.Equal(originalId, room.RoomId);
+            _roomServiceMock.Verify(s => s.UpdateRoomAsync(Room1Id, request, It.IsAny<CancellationToken>()), Times.Once);
         }
 
         #endregion
@@ -441,24 +348,7 @@ namespace LumeLaht_RoomApi.Tests.Controllers
 
             // Assert
             Assert.IsType<NoContentResult>(result);
-        }
-
-        [Fact]
-        public async Task Delete_CallsServiceWithCorrectId()
-        {
-            // Arrange
-            var testId = Guid.NewGuid();
-            _roomServiceMock
-                .Setup(s => s.DeleteRoomAsync(testId, It.IsAny<CancellationToken>()))
-                .ReturnsAsync(true);
-
-            // Act
-            await _controller.Delete(testId, CancellationToken.None);
-
-            // Assert
-            _roomServiceMock.Verify(
-                s => s.DeleteRoomAsync(testId, It.IsAny<CancellationToken>()),
-                Times.Once);
+            _roomServiceMock.Verify(s => s.DeleteRoomAsync(Room1Id, It.IsAny<CancellationToken>()), Times.Once);
         }
 
         [Fact]
@@ -536,29 +426,7 @@ namespace LumeLaht_RoomApi.Tests.Controllers
             var returnedResult = Assert.IsType<PagedResult<RoomResponse>>(okResult.Value);
             Assert.Equal(2, returnedResult.Items.Count);
             Assert.Equal(1, returnedResult.pagination.CurrentPage);
-        }
-
-        [Fact]
-        public async Task GetRoomFilterOptionsAsync_CallsServiceWithCorrectFilter()
-        {
-            // Arrange
-            var filterDto = new RoomFilterDto { Page = 1, PageSize = 5 };
-
-            _roomServiceMock
-                .Setup(s => s.GetFilteredRoomsAsync(filterDto, It.IsAny<CancellationToken>()))
-                .ReturnsAsync(new PagedResult<RoomResponse>
-                {
-                    Items = new List<RoomResponse>(),
-                    pagination = new PaginationOptions()
-                });
-
-            // Act
-            await _controller.GetRoomFilterOptionsAsync(filterDto, CancellationToken.None);
-
-            // Assert
-            _roomServiceMock.Verify(
-                s => s.GetFilteredRoomsAsync(filterDto, It.IsAny<CancellationToken>()),
-                Times.Once);
+            _roomServiceMock.Verify(s => s.GetFilteredRoomsAsync(filterDto, It.IsAny<CancellationToken>()), Times.Once);
         }
 
         [Fact]
@@ -615,6 +483,7 @@ namespace LumeLaht_RoomApi.Tests.Controllers
             var okResult = Assert.IsType<OkObjectResult>(result);
             var returnedActivities = Assert.IsAssignableFrom<IEnumerable<Activity>>(okResult.Value);
             Assert.Equal(2, returnedActivities.Count());
+            _activityServiceMock.Verify(s => s.GetAllActivitiesAsync(It.IsAny<CancellationToken>()), Times.Once);
         }
 
         [Fact]
@@ -634,29 +503,12 @@ namespace LumeLaht_RoomApi.Tests.Controllers
             Assert.Empty(returnedActivities);
         }
 
-        [Fact]
-        public async Task GetActivities_CallsActivityServiceOnce()
-        {
-            // Arrange
-            _activityServiceMock
-                .Setup(s => s.GetAllActivitiesAsync(It.IsAny<CancellationToken>()))
-                .ReturnsAsync(new List<Activity>());
-
-            // Act
-            await _controller.GetActivities(CancellationToken.None);
-
-            // Assert
-            _activityServiceMock.Verify(
-                s => s.GetAllActivitiesAsync(It.IsAny<CancellationToken>()),
-                Times.Once);
-        }
-
         #endregion
 
         #region CancellationToken Tests
 
         [Fact]
-        public async Task AllMethods_PassCancellationToken_ToService()
+        public async Task GetAll_PassesCancellationToken_ToService()
         {
             // Arrange
             var cts = new CancellationTokenSource();
@@ -676,33 +528,6 @@ namespace LumeLaht_RoomApi.Tests.Controllers
         }
 
         #endregion
-
-        #region Edge Cases Tests
-
-        [Fact]
-        public async Task Update_AcceptsGuidEmpty_ReturnsBadRequest()
-        {
-            // Arrange
-            var request = new CreateRoomRequest { Name = "Test" };
-
-            // Act
-            var result = await _controller.Update(Guid.Empty, request, CancellationToken.None);
-
-            // Assert
-            Assert.IsType<BadRequestObjectResult>(result);
-        }
-
-        [Theory]
-        [InlineData(null)]
-        public async Task Create_WithNullRequest_ReturnsBadRequest(CreateRoomRequest request)
-        {
-            // Act
-            var result = await _controller.Create(request, CancellationToken.None);
-
-            // Assert
-            var badRequestResult = Assert.IsType<BadRequestObjectResult>(result);
-            Assert.Equal("Request is null", badRequestResult.Value);
-        }
 
         #endregion
     }

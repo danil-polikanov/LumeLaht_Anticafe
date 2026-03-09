@@ -104,7 +104,7 @@ namespace LumeLaht_RoomApi.Tests.Repositories
 
         #region GetFilteredRoomsAsync Tests
         [Fact]
-        public async Task GetFilteredRoomsAsync_ShouldReturnAllRomms_WhenFiltersApplied()
+        public async Task GetFilteredRoomsAsync_ShouldReturnAllRooms_WhenFiltersApplied()
         {
             // Arrange
             var testData = CreateTestRooms();
@@ -227,6 +227,7 @@ namespace LumeLaht_RoomApi.Tests.Repositories
             var result = await _repository.GetFilteredRoomsAsync(filterOptions, CancellationToken.None);
 
             // Assert
+            Assert.Single(result.Items);
             Assert.InRange(result.Items[0].PricePerHour, 500.0m, 1500.0m);
         }
 
