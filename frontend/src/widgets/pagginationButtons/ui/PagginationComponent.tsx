@@ -1,8 +1,8 @@
 import React from 'react';
-import { setSorting, setPage, setLimit } from '@/entities/room/model';
-import { selectSorting, selectPagination } from '@/entities/room/model';
+import { setPage } from '@/entities/room/model';
+import { selectPagination } from '@/entities/room/model';
 import { useAppDispatch, useAppSelector } from '@/shared/lib/hooks/useRedux';
-// Компонент пагинации (отдельный для переиспользования)
+// Pagination component (extracted for reuse)
 export const PaginationComponent: React.FC = () => {
   const dispatch = useAppDispatch();
   const pagination = useAppSelector(selectPagination);
@@ -15,7 +15,7 @@ export const PaginationComponent: React.FC = () => {
     const currentPage = pagination.currentPage;
     const totalPages = pagination.totalPages;
 
-    // Предыдущая страница
+    // Previous page
     items.push(
       <li key="prev" className={`page-item ${currentPage === 1 ? 'disabled' : ''}`}>
         <button
@@ -28,7 +28,7 @@ export const PaginationComponent: React.FC = () => {
       </li>,
     );
 
-    // Первая страница
+    // First page
     if (currentPage > 3) {
       items.push(
         <li key="first" className="page-item">
@@ -46,7 +46,7 @@ export const PaginationComponent: React.FC = () => {
       }
     }
 
-    // Страницы вокруг текущей
+    // Pages around current
     const startPage = Math.max(1, currentPage - 2);
     const endPage = Math.min(totalPages, currentPage + 2);
 
@@ -60,7 +60,7 @@ export const PaginationComponent: React.FC = () => {
       );
     }
 
-    // Последняя страница
+    // Last page
     if (currentPage < totalPages - 2) {
       if (currentPage < totalPages - 3) {
         items.push(
@@ -78,7 +78,7 @@ export const PaginationComponent: React.FC = () => {
       );
     }
 
-    // Следующая страница
+    // Next page
     items.push(
       <li key="next" className={`page-item ${currentPage === totalPages ? 'disabled' : ''}`}>
         <button

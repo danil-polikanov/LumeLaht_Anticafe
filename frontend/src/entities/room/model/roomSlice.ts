@@ -1,7 +1,7 @@
 // store/rooms/roomsSlice.ts
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { RoomFilters, RoomSorting, RoomsPagination } from '@/shared/types/filters.types';
-import { fetchRooms, fetchRoomById, fetchRoomsByFilters, fetchActivities } from '@/entities/room';
+import { fetchRoomById, fetchRoomsByFilters, fetchActivities } from '@/entities/room';
 import { RoomResponse, ActivityResponse } from '@/shared/types/room.types';
 export interface RoomsState {
   rooms: RoomResponse[];
@@ -75,7 +75,7 @@ export const roomSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      // 1️⃣ Вывести все комнаты
+      // 1️⃣ Fetch all rooms
       .addCase(fetchRoomsByFilters.pending, (state) => {
         state.loading = true;
         state.error = null;
@@ -89,7 +89,7 @@ export const roomSlice = createSlice({
         state.loading = false;
         state.error = action.payload ?? 'Error';
       })
-      // 2️⃣ Вывести комнату по ID
+      // 2️⃣ Fetch room by ID
       .addCase(fetchRoomById.pending, (state) => {
         state.loading = true;
         state.error = null;
@@ -102,7 +102,7 @@ export const roomSlice = createSlice({
         state.loading = false;
         state.error = action.payload ?? 'Error';
       });
-    //3️⃣ Вывести активности
+    // 3️⃣ Fetch activities
     builder
       .addCase(fetchActivities.pending, (state) => {
         state.loading = true;

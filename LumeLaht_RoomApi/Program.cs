@@ -1,6 +1,7 @@
 using LumaCove_RoomApi;
 using LumeLaht_RoomApi.Application.IServices;
 using LumeLaht_RoomApi.Application.Services;
+using LumeLaht_RoomApi.Application.Settings;
 using LumeLaht_RoomApi.Core_.Interfaces;
 using LumeLaht_RoomApi.Extensions;
 using LumeLaht_RoomApi.Infrastructure.Data;
@@ -39,6 +40,8 @@ namespace LumeLaht_RoomApi
             builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
             builder.Services.AddScoped<IRoomService, RoomService>();
             builder.Services.AddScoped<IActivityService, ActivityService>();
+            builder.Services.Configure<CloudinarySettings>(builder.Configuration.GetSection("Cloudinary"));
+            builder.Services.AddScoped<IImageService, ImageService>();
             builder.Services.AddDbContext<AppDbContext>(option =>
             {
                 option.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")).LogTo(Console.WriteLine, LogLevel.Information);

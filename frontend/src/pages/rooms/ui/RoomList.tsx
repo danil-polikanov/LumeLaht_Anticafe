@@ -1,19 +1,9 @@
 import React, { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import {
-  setFilters,
-  resetFilters,
-  setSorting,
-  setPage,
-  setLimit,
-  setSelectedRoom,
-  clearSelectedRoom,
-  clearError,
-} from '@/entities/room/model';
+import { useSelector } from 'react-redux';
+import { clearSelectedRoom } from '@/entities/room/model';
 import { fetchRoomsByFilters, fetchActivities } from '@/entities/room/model';
 import {
   selectRooms,
-  selectActivities,
   selectSelectedRoom,
   selectLoading,
   selectError,
@@ -21,7 +11,7 @@ import {
   selectSorting,
   selectPagination,
 } from '@/entities/room/model';
-import { fetchRooms, fetchRoomById } from '@/entities/room/model';
+import { fetchRoomById } from '@/entities/room/model';
 import { RoomFilters } from '@/widgets/room-filters/ui';
 import { RoomSortingAndPagination } from '@/widgets/room-sortPaggination/ui';
 import { RoomCard } from '@/widgets/room-card/ui';
@@ -37,7 +27,7 @@ export const RoomList: React.FC = () => {
   const loading = useSelector(selectLoading);
   const error = useSelector(selectError);
   const selectedRoomDetail = useAppSelector(selectSelectedRoom);
-  // Загрузка активностей при монтировании
+  // Load activities on mount
   useEffect(() => {
     dispatch(fetchActivities());
   }, [dispatch]);
@@ -47,8 +37,8 @@ export const RoomList: React.FC = () => {
   }, [dispatch, filters, sorting, pagination.currentPage, pagination.pageSize]);
   const handleRoomClick = (roomId: string) => {
     dispatch(fetchRoomById(roomId));
-    // Здесь можно добавить навигацию к детальной странице комнаты
-    // например, с помощью React Router
+    // Navigation to room detail page can be added here
+    // e.g. using React Router
     console.log('Navigate to room detail:', roomId);
   };
   const handleCloseDetail = () => {
@@ -88,7 +78,7 @@ export const RoomList: React.FC = () => {
 
   return (
     <div className="container-fluid py-4">
-      {/* Заголовок */}
+      {/* Header */}
       <div className="row mb-4">
         <div className="col-12">
           <div className="d-flex justify-content-between align-items-center">
@@ -96,7 +86,7 @@ export const RoomList: React.FC = () => {
               <i className="fas fa-building me-2 text-primary"></i>
               Room catalog
             </h2>
-            {/* Сортировка и информация */}
+            {/* Sorting and info */}
             <div className="row mb-0">
               <div className="col-12">
                 <RoomSortingAndPagination />
@@ -109,7 +99,7 @@ export const RoomList: React.FC = () => {
           </div>
         </div>
       </div>
-      {/* Фильтры */}
+      {/* Filters */}
       <div className="row">
         <div className="col-3">
           <div className="row mb-4">
@@ -117,7 +107,7 @@ export const RoomList: React.FC = () => {
               <RoomFilters />
             </div>
           </div>
-          {/* Индикатор загрузки при фильтрации */}
+          {/* Loading indicator while filtering */}
           {loading && (
             <div className="row mb-3">
               <div className="col-12">
@@ -131,7 +121,7 @@ export const RoomList: React.FC = () => {
             </div>
           )}
         </div>
-        {/* Список комнат */}
+        {/* Room list */}
         <div className="col-9">
           <div className="row">
             {rooms.length > 0 ? (
@@ -150,14 +140,14 @@ export const RoomList: React.FC = () => {
               </div>
             )}
           </div>
-          {/* Детальная информация о комнате */}
+          {/* Room detail overlay */}
           {selectedRoomDetail && (
             <RoomDetailOverlay
               room={selectedRoomDetail || selectedRoomDetail}
               onClose={handleCloseDetail}
             />
           )}
-          {/* Дополнительная информация <AdditionalInfo></AdditionalInfo> */}
+          {/* Additional info <AdditionalInfo></AdditionalInfo> */}
           <PaginationComponent></PaginationComponent>
         </div>
       </div>

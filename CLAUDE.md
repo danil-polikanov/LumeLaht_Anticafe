@@ -3,11 +3,11 @@
 ## Project Overview
 
 LumeLaht is an anticafe booking system built as a bachelor's thesis comparing three web architectures:
-- **Monolithic** — single .NET 9 project serving API + static frontend
-- **Separated** — React SPA (CRA, FSD architecture) + standalone .NET 9 API
-- **Microservices** — React SPA + multiple .NET 9 services + API Gateway + RabbitMQ
+- **Monolithic** — single .NET 10 project serving API + static frontend
+- **Separated** — React SPA (CRA, FSD architecture) + standalone .NET 10 API
+- **Microservices** — React SPA + multiple .NET 10 services + API Gateway + RabbitMQ
 
-Stack: React 19 / TypeScript / Redux Toolkit / Bootstrap (frontend), .NET 9 / Clean Architecture / EF Core / SQL Server (backend), Docker Compose, k6, Prometheus, Grafana.
+Stack: React 19 / TypeScript / Redux Toolkit / Bootstrap (frontend), .NET 10 / Clean Architecture / EF Core / SQL Server (backend), Docker Compose, k6, Prometheus, Grafana.
 
 ## Repository Layout
 

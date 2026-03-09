@@ -1,16 +1,16 @@
 // roomsThunks.ts
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import axios, { AxiosError } from 'axios';
+import axios from 'axios';
 import { RoomResponse, CreateRoomRequest, ActivityResponse } from '@/shared/types';
-import { PagedRoomsResponse, RoomFilters } from '@/shared/types/filters.types';
+import { PagedRoomsResponse } from '@/shared/types/filters.types';
 import { RoomsState } from '@/entities/room/model';
 
-const API_URL = 'https://localhost:7001/api/room'; // базовый путь
+const API_URL = 'https://localhost:7001/api/room'; // base URL
 
-// 1️⃣ Получить все комнаты
+// 1️⃣ Fetch all rooms
 export const fetchRooms = createAsyncThunk<
-  RoomResponse[], // что возвращаем при успехе
-  void, // аргументы, если бы они были
+  RoomResponse[], // return type on success
+  void, // thunk argument type
   { rejectValue: string }
 >('rooms/fetchRooms', async (_, { rejectWithValue }) => {
   try {
@@ -22,7 +22,7 @@ export const fetchRooms = createAsyncThunk<
   }
 });
 
-// 2️⃣ Получить комнату по id
+// 2️⃣ Fetch room by id
 export const fetchRoomById = createAsyncThunk<RoomResponse, string, { rejectValue: string }>(
   'rooms/fetchRoomById',
   async (roomId, { rejectWithValue }) => {
@@ -35,7 +35,7 @@ export const fetchRoomById = createAsyncThunk<RoomResponse, string, { rejectValu
   },
 );
 
-// 3️⃣ Создать комнату
+// 3️⃣ Create room
 export const createRoom = createAsyncThunk<
   RoomResponse,
   CreateRoomRequest,
@@ -49,7 +49,7 @@ export const createRoom = createAsyncThunk<
   }
 });
 
-// 4️⃣ Обновить комнату
+// 4️⃣ Update room
 export const updateRoom = createAsyncThunk<
   RoomResponse,
   { id: string; data: CreateRoomRequest },
@@ -63,7 +63,7 @@ export const updateRoom = createAsyncThunk<
   }
 });
 
-// 5️⃣ Удалить комнату
+// 5️⃣ Delete room
 export const deleteRoom = createAsyncThunk<void, string, { rejectValue: string }>(
   'rooms/deleteRoom',
   async (roomId, { rejectWithValue }) => {
@@ -74,12 +74,12 @@ export const deleteRoom = createAsyncThunk<void, string, { rejectValue: string }
     }
   },
 );
-// ========== THROTTLE ДЛЯ ЗАПРОСОВ ==========
+// ========== REQUEST THROTTLE ==========
 let lastFetchTime = 0;
 let pendingFetch: Promise<PagedRoomsResponse> | null = null;
-const FETCH_THROTTLE = 300; // мс
+const FETCH_THROTTLE = 300; // ms
 
-// 6️⃣ Вывести все активности
+// 6️⃣ Fetch all activities
 export const fetchActivities = createAsyncThunk<ActivityResponse[], void, { rejectValue: string }>(
   'rooms/fetchActivities',
   async (_, { rejectWithValue }) => {
@@ -93,7 +93,7 @@ export const fetchActivities = createAsyncThunk<ActivityResponse[], void, { reje
   },
 );
 
-// 7️⃣ Вывести комнаты по фильтрам (с правильным throttle)
+// 7️⃣ Fetch rooms by filters (with throttle)
 export const fetchRoomsByFilters = createAsyncThunk<
   PagedRoomsResponse,
   void,
@@ -101,13 +101,13 @@ export const fetchRoomsByFilters = createAsyncThunk<
 >('rooms/fetchRoomsByFilters', async (_, { getState, rejectWithValue }) => {
   const now = Date.now();
 
-  // ✅ ИСПРАВЛЕНИЕ: Если есть pending запрос, возвращаем его
+  // reuse pending request if within throttle window
   if (now - lastFetchTime < FETCH_THROTTLE && pendingFetch) {
     console.log('🔄 Throttled: reusing pending request');
     return pendingFetch;
   }
 
-  // ✅ Если throttle прошел, но запрос еще не завершен, ждем его
+  // throttle passed but request not yet complete — wait for it
   if (pendingFetch) {
     console.log('⏳ Waiting for pending request to complete');
     return pendingFetch;
@@ -126,16 +126,15 @@ export const fetchRoomsByFilters = createAsyncThunk<
 
     console.log('📤 Sending request:', JSON.stringify(params, null, 2));
 
-    // Создаем промис и сохраняем его
     pendingFetch = axios
       .post<PagedRoomsResponse>(`${API_URL}/filters`, params)
       .then((response) => {
         console.log('✅ Response received:', response.data);
-        pendingFetch = null; // Очищаем после завершения
+        pendingFetch = null; // clear after completion
         return response.data;
       })
       .catch((error) => {
-        pendingFetch = null; // Очищаем при ошибке
+        pendingFetch = null; // clear on error
         throw error;
       });
 

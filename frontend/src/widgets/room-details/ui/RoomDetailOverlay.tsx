@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { RoomResponse } from '@/shared/types/room.types';
 export const RoomDetailOverlay: React.FC<{
   room: RoomResponse;
@@ -6,12 +6,7 @@ export const RoomDetailOverlay: React.FC<{
 }> = ({ room, onClose }) => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
-  // Мок изображения для слайдера
-  const images = [
-    'https://images.unsplash.com/photo-1497366216548-37526070297c?w=800&h=600&fit=crop',
-    'https://images.unsplash.com/photo-1497366811353-6870744d04b2?w=800&h=600&fit=crop',
-    'https://images.unsplash.com/photo-1497366754035-f200968a6e72?w=800&h=600&fit=crop',
-  ];
+  const images = room.images?.map((img) => img.url) ?? [];
 
   const nextImage = () => {
     setCurrentImageIndex((prev) => (prev + 1) % images.length);
@@ -42,70 +37,81 @@ export const RoomDetailOverlay: React.FC<{
 
         <div className="card-body overflow-auto">
           <div className="row">
-            {/* Левая колонка - изображения */}
+            {/* Left column — images */}
             <div className="col-md-6 mb-3">
               <div className="position-relative">
-                <img
-                  src={images[currentImageIndex]}
-                  alt={`Room ${currentImageIndex + 1}`}
-                  className="img-fluid rounded"
-                  style={{
-                    width: '100%',
-                    height: '250px',
-                    objectFit: 'cover',
-                  }}
-                />
-                <button
-                  className="btn btn-dark btn-sm position-absolute top-50 start-0 translate-middle-y ms-2"
-                  onClick={prevImage}
-                >
-                  <i className="fas fa-chevron-left"></i>
-                </button>
-                <button
-                  className="btn btn-dark btn-sm position-absolute top-50 end-0 translate-middle-y me-2"
-                  onClick={nextImage}
-                >
-                  <i className="fas fa-chevron-right"></i>
-                </button>
-                <div className="position-absolute bottom-0 end-0 me-2 mb-2">
-                  <span className="badge bg-dark">
-                    {currentImageIndex + 1} / {images.length}
-                  </span>
-                </div>
+                {images.length > 0 ? (
+                  <>
+                    <img
+                      src={images[currentImageIndex]}
+                      alt={`Room ${currentImageIndex + 1}`}
+                      className="img-fluid rounded"
+                      style={{ width: '100%', height: '250px', objectFit: 'cover' }}
+                    />
+                    {images.length > 1 && (
+                      <>
+                        <button
+                          className="btn btn-dark btn-sm position-absolute top-50 start-0 translate-middle-y ms-2"
+                          onClick={prevImage}
+                        >
+                          <i className="fas fa-chevron-left"></i>
+                        </button>
+                        <button
+                          className="btn btn-dark btn-sm position-absolute top-50 end-0 translate-middle-y me-2"
+                          onClick={nextImage}
+                        >
+                          <i className="fas fa-chevron-right"></i>
+                        </button>
+                      </>
+                    )}
+                    <div className="position-absolute bottom-0 end-0 me-2 mb-2">
+                      <span className="badge bg-dark">
+                        {currentImageIndex + 1} / {images.length}
+                      </span>
+                    </div>
+                  </>
+                ) : (
+                  <div
+                    className="bg-light rounded d-flex align-items-center justify-content-center text-muted"
+                    style={{ height: '250px' }}
+                  >
+                    <i className="fas fa-image fa-3x"></i>
+                  </div>
+                )}
               </div>
             </div>
 
-            {/* Правая колонка - информация */}
+            {/* Right column — info */}
             <div className="col-md-6">
               <div className="mb-3">
-                <h6 className="text-muted">Описание</h6>
+                <h6 className="text-muted">Description</h6>
                 <p className="mb-2">{room.description}</p>
               </div>
 
               <div className="mb-3">
-                <h6 className="text-muted">Стоимость</h6>
+                <h6 className="text-muted">Price</h6>
                 <div className="d-flex align-items-center justify-content-center">
                   <span className="h4 text-success mb-0">{room.pricePerHour} €</span>
-                  <span className="text-muted ms-2">/ час</span>
+                  <span className="text-muted ms-2">/ hour</span>
                 </div>
               </div>
 
               <div className="mb-3">
-                <h6 className="text-muted">Статус</h6>
+                <h6 className="text-muted">Status</h6>
                 <span className={`badge ${room.status ? 'bg-success' : 'bg-danger'}`}>
                   <i className={`fas ${room.status ? 'fa-check' : 'fa-times'} me-1`}></i>
-                  {room.status ? 'Активен' : 'Не активен'}
+                  {room.status ? 'Active' : 'Inactive'}
                 </span>
               </div>
             </div>
           </div>
 
-          {/* Адрес */}
+          {/* Address */}
           {room.address && (
             <div className="mb-3">
               <h6 className="text-muted">
                 <i className="fas fa-map-marker-alt me-1"></i>
-                Адрес
+                Address
               </h6>
               <div className="bg-light p-3 rounded">
                 <div className="row">
@@ -133,12 +139,12 @@ export const RoomDetailOverlay: React.FC<{
             </div>
           )}
 
-          {/* Активности */}
+          {/* Activities */}
           {room.activity && room.activity.length > 0 && (
             <div className="mb-3">
               <h6 className="text-muted">
                 <i className="fas fa-list me-1"></i>
-                Доступные активности
+                Available activities
               </h6>
               <div className="row">
                 {room.activity.map((activity) => (
@@ -155,18 +161,18 @@ export const RoomDetailOverlay: React.FC<{
             </div>
           )}
 
-          {/* Действия */}
+          {/* Actions */}
           <div className="d-flex gap-2 mt-4">
             <button className="btn btn-primary">
               <i className="fas fa-calendar-plus me-1"></i>
-              Забронировать
+              Book
             </button>
             <button className="btn btn-outline-primary">
-              <i className="fas fa-heart me-1"></i>В избранное
+              <i className="fas fa-heart me-1"></i>Add to favourites
             </button>
             <button className="btn btn-outline-secondary">
               <i className="fas fa-share me-1"></i>
-              Поделиться
+              Share
             </button>
           </div>
         </div>

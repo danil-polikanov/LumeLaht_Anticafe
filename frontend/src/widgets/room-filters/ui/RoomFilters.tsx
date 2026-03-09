@@ -11,21 +11,21 @@ export const RoomFilters: React.FC = () => {
   const activities = useAppSelector(selectActivities);
   const [isCollapsed, setIsCollapsed] = useState(false);
 
-  // Хук debounce для всех текстовых полей
-  const debouncedSetFilter = useDebounce((key: string, value: any) => {
+  // Debounce hook for all text fields
+  const debouncedSetFilter = useDebounce((key: string, value: string | number) => {
     dispatch(setFilters({ [key]: value }));
   }, 500);
 
-  // Локальные состояния для всех текстовых полей
+  // Local state for all text fields
   const [localSearch, setLocalSearch] = useState(filters.search);
   const [localCity, setLocalCity] = useState(filters.city);
   const [localRegion, setLocalRegion] = useState(filters.region);
 
-  // Обработчики для текстовых полей с debounce
+  // Handlers for text fields with debounce
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
-    setLocalSearch(value); // мгновенно обновляем локальное состояние
-    debouncedSetFilter('search', value); // отправляем в Redux с задержкой
+    setLocalSearch(value); // update local state immediately
+    debouncedSetFilter('search', value); // dispatch to Redux with delay
   };
 
   const handleCityChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -40,13 +40,13 @@ export const RoomFilters: React.FC = () => {
     debouncedSetFilter('region', value);
   };
 
-  // Обработчики для остальных полей (без debounce)
-  // Числовые поля (цена) — сразу отправляем в Redux, т.к. изменений меньше
-  const handleFilterChange = (filterKey: string, value: any) => {
+  // Handlers for other fields (no debounce)
+  // Numeric fields (price) — dispatch to Redux immediately, fewer changes expected
+  const handleFilterChange = (filterKey: string, value: string | number) => {
     dispatch(setFilters({ [filterKey]: value }));
   };
 
-  // Активности — чекбоксы, сразу отправляем в Redux
+  // Activities — checkboxes, dispatch to Redux immediately
   const handleActivityToggle = (activityId: string) => {
     const newActivities = filters.activitiesIds.includes(activityId)
       ? filters.activitiesIds.filter((id) => id !== activityId)
@@ -55,7 +55,7 @@ export const RoomFilters: React.FC = () => {
     dispatch(setFilters({ activitiesIds: newActivities }));
   };
 
-  // Очистка фильтров
+  // Clear filters
   const clearFilters = () => {
     dispatch(resetFilters());
   };
@@ -81,7 +81,7 @@ export const RoomFilters: React.FC = () => {
         <div className={`collapse ${!isCollapsed ? 'show' : ''}`}>
           <div className="card-body">
             <div className="row g-3">
-              {/* Поиск с debounce */}
+              {/* Search with debounce */}
               <div className="col-md-6">
                 <label htmlFor="search" className="form-label">
                   <i className="fas fa-search me-1"></i>
@@ -95,16 +95,16 @@ export const RoomFilters: React.FC = () => {
                   value={localSearch}
                   onChange={handleSearchChange}
                 />
-                {/* Индикатор debounce */}
+                {/* Debounce indicator */}
                 {localSearch !== filters.search && (
                   <small className="text-muted d-block mt-1">
                     <i className="fas fa-hourglass-half me-1"></i>
-                    Применение фильтра...
+                    Applying filter...
                   </small>
                 )}
               </div>
 
-              {/* Город с debounce */}
+              {/* City with debounce */}
               <div className="col-md-3">
                 <label htmlFor="city" className="form-label">
                   <i className="fas fa-map-marker-alt me-1"></i>
@@ -121,12 +121,12 @@ export const RoomFilters: React.FC = () => {
                 {localCity !== filters.city && (
                   <small className="text-muted d-block mt-1">
                     <i className="fas fa-hourglass-half me-1"></i>
-                    Применение фильтра...
+                    Applying filter...
                   </small>
                 )}
               </div>
 
-              {/* Регион с debounce */}
+              {/* Region with debounce */}
               <div className="col-md-3">
                 <label htmlFor="region" className="form-label">
                   <i className="fas fa-globe me-1"></i>
@@ -143,12 +143,12 @@ export const RoomFilters: React.FC = () => {
                 {localRegion !== filters.region && (
                   <small className="text-muted d-block mt-1">
                     <i className="fas fa-hourglass-half me-1"></i>
-                    Применение фильтра...
+                    Applying filter...
                   </small>
                 )}
               </div>
 
-              {/* Цена (без debounce) */}
+              {/* Price (no debounce) */}
               <div className="col-md-3">
                 <label htmlFor="minPrice" className="form-label">
                   <i className="fas fa-euro-sign me-1"></i>
@@ -193,7 +193,7 @@ export const RoomFilters: React.FC = () => {
                 />
               </div>
 
-              {/* Кнопка очистки */}
+              {/* Clear button */}
               <div className="col-md-3 d-flex align-items-end">
                 <button
                   type="button"
@@ -206,7 +206,7 @@ export const RoomFilters: React.FC = () => {
               </div>
             </div>
 
-            {/* Активности */}
+            {/* Activities */}
             <div className="mt-4">
               <label className="form-label">
                 <i className="fas fa-running me-1"></i>
@@ -235,7 +235,7 @@ export const RoomFilters: React.FC = () => {
               </div>
             </div>
 
-            {/* Индикатор активных фильтров */}
+            {/* Active filters indicator */}
             {(filters.search ||
               filters.city ||
               filters.region ||
@@ -246,7 +246,7 @@ export const RoomFilters: React.FC = () => {
                 <div className="alert alert-info d-flex align-items-center">
                   <i className="fas fa-info-circle me-2"></i>
                   <span>
-                    Текущие фильтры:{' '}
+                    Active filters:{' '}
                     {filters.search && <span className="badge bg-primary me-1">Search</span>}
                     {filters.city && <span className="badge bg-primary me-1">City</span>}
                     {filters.region && <span className="badge bg-primary me-1">Region</span>}

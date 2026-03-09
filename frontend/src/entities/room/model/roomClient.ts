@@ -1,9 +1,8 @@
 import axios, { AxiosError } from 'axios';
 import { RoomResponse } from '@/shared/types/room.types';
-import type { AxiosInstance, AxiosRequestConfig, AxiosResponse, CancelToken } from 'axios';
 import { CreateRoomRequest } from '@/shared/types/room.types';
 
-const API_URL = 'https://localhost:7001/api'; // заменить на реальный
+const API_URL = 'https://localhost:7001/api'; // replace with actual URL
 
 export const RoomClient = {
   getAllRooms: async (): Promise<RoomResponse[]> => {
@@ -53,15 +52,15 @@ export const RoomClient = {
 export class SwaggerException extends Error {
   status: number;
   response: string;
-  headers: { [key: string]: any };
-  result: any;
+  headers: Record<string, unknown>;
+  result: unknown;
 
   constructor(
     message: string,
     status: number,
     response: string,
-    headers: { [key: string]: any },
-    result: any,
+    headers: Record<string, unknown>,
+    result: unknown,
   ) {
     super(message);
     this.status = status;
@@ -73,8 +72,8 @@ export class SwaggerException extends Error {
 
   protected isSwaggerException = true;
 
-  static isSwaggerException(obj: any): obj is SwaggerException {
-    return obj?.isSwaggerException === true;
+  static isSwaggerException(obj: unknown): obj is SwaggerException {
+    return (obj as Record<string, unknown>)?.isSwaggerException === true;
   }
 }
 
@@ -90,10 +89,10 @@ function handleError(error: unknown): never {
     throw new SwaggerException(message, status, JSON.stringify(response), headers, response);
   }
 
-  // если это не axios-ошибка — выбросить как есть
+  // not an axios error — rethrow as is
   throw error;
 }
 
-function isAxiosError(obj: any): obj is AxiosError {
-  return obj && obj.isAxiosError === true;
+function isAxiosError(obj: unknown): obj is AxiosError {
+  return !!(obj && (obj as Record<string, unknown>).isAxiosError === true);
 }

@@ -1,21 +1,10 @@
 import React from 'react';
-import { RoomResponse } from '@/shared/types/room.types';
+import { RoomResponse, ActivityResponse, AddressResponse } from '@/shared/types/room.types';
 import styles from './RoomCard.module.css';
 
 interface RoomCardProps {
   room: RoomResponse;
   onRoomClick: (roomId: string) => void;
-}
-
-export function getPCloudThumbnailUrl(publicLink: string, size: string = '450x200'): string | null {
-  try {
-    const url = new URL(publicLink);
-    const code = url.searchParams.get('code');
-    if (!code) return null;
-    return `https://eapi.pcloud.com/getpubthumb?code=${code}&size=${size}&type=auto`;
-  } catch {
-    return null;
-  }
 }
 
 export const RoomCard: React.FC<RoomCardProps> = ({ room, onRoomClick }) => {
@@ -39,7 +28,7 @@ export const RoomCard: React.FC<RoomCardProps> = ({ room, onRoomClick }) => {
     );
   };
 
-  const formatAddress = (address: any) => {
+  const formatAddress = (address: AddressResponse | undefined) => {
     if (!address) return 'No info';
     const parts = [];
     if (address.city) parts.push(address.city);
@@ -48,7 +37,7 @@ export const RoomCard: React.FC<RoomCardProps> = ({ room, onRoomClick }) => {
     return parts.join(', ') || 'Address not specified';
   };
 
-  const getActivityBadges = (activities: any[] | undefined) => {
+  const getActivityBadges = (activities: ActivityResponse[] | undefined) => {
     if (!activities || activities.length === 0) return null;
     return activities.slice(0, 3).map((activity, index) => (
       <span key={activity.activityId || index} className="badge bg-info me-1">
@@ -59,13 +48,9 @@ export const RoomCard: React.FC<RoomCardProps> = ({ room, onRoomClick }) => {
 
   const renderImage = () => {
     if (room.images && room.images.length > 0) {
-      const mainImage = room.images.find((r) => r.isMain);
-      const imageUrl = mainImage?.url
-        ? (getPCloudThumbnailUrl(mainImage.url) ?? mainImage.url)
-        : undefined;
-
-      return imageUrl ? (
-        <img src={imageUrl} className={styles.room_image} alt="Room photo" />
+      const mainImage = room.images.find((r) => r.isMain) ?? room.images[0];
+      return mainImage?.url ? (
+        <img src={mainImage.url} className={styles.room_image} alt="Room photo" />
       ) : (
         <div>Image unavailable</div>
       );
