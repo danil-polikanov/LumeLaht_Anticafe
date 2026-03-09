@@ -528,7 +528,5 @@ namespace LumeLaht_RoomApi.Tests.Controllers
         }
 
         #endregion
-
-        #endregion
     }
 }

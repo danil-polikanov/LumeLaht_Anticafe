@@ -127,9 +127,12 @@ namespace LumeLaht_RoomApi.Tests.Helpers
                 PhoneNumber = "+372009876543"
             };
 
+            var room1Id = Guid.NewGuid();
+            var room2Id = Guid.NewGuid();
+
             var room1 = new Room
             {
-                RoomId = Guid.NewGuid(),
+                RoomId = room1Id,
                 Name = "Зал А",
                 Description = "Просторный зал для йоги",
                 PricePerHour = 1000,
@@ -142,13 +145,13 @@ namespace LumeLaht_RoomApi.Tests.Helpers
                 },
                 RoomActivity = new List<RoomActivity>
                 {
-                    new RoomActivity { RoomId = room1.RoomId, ActivityId = activity1.ActivityId, Activity = activity1 }
+                    new RoomActivity { RoomId = room1Id, ActivityId = activity1.ActivityId, Activity = activity1 }
                 }
             };
 
             var room2 = new Room
             {
-                RoomId = Guid.NewGuid(),
+                RoomId = room2Id,
                 Name = "Зал B",
                 Description = "Зал для фитнеса",
                 PricePerHour = 1500,
@@ -161,7 +164,7 @@ namespace LumeLaht_RoomApi.Tests.Helpers
                 },
                 RoomActivity = new List<RoomActivity>
                 {
-                    new RoomActivity { RoomId = room2.RoomId, ActivityId = activity2.ActivityId, Activity = activity2 }
+                    new RoomActivity { RoomId = room2Id, ActivityId = activity2.ActivityId, Activity = activity2 }
                 }
             };
 
