@@ -38,14 +38,14 @@ apiClient.interceptors.response.use(
 export class ApiError extends Error {
   status: number;
   response: string;
-  headers: { [key: string]: string };
+  headers: Record<string, unknown>;
   result: unknown;
 
   constructor(
     message: string,
     status: number,
     response: string,
-    headers: { [key: string]: string },
+    headers: Record<string, unknown>,
     result: unknown,
   ) {
     super(message);
