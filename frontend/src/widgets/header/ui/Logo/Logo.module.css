@@ -1,0 +1,18 @@
+.logo {
+  width: 100px;
+  height: 100px;
+  border-radius: 100px;
+  background-color: rgb(156, 147, 147);
+  transition: all 0.3 ease;
+}
+.logo:hover {
+  cursor: pointer;
+  opacity: 0.7;
+  transition: all 0.3s ease;
+}
+@media (max-width: 767.98px) {
+  .logo {
+    width: 75px;
+    height: 75px;
+  }
+}

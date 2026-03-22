@@ -1,0 +1,41 @@
+﻿using LumeLaht_RoomApi.Core_.Entities;
+using LumeLaht_RoomApi.Core_.Interfaces;
+using LumeLaht_RoomApi.Infrastructure.Data;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace LumeLaht_RoomApi.Infrastructure.Repositories
+{
+    public class UnitOfWork : IUnitOfWork
+    {
+        private readonly AppDbContext _context;
+
+        public IRoomRepository Rooms { get; }
+        public IRepository<Address> Addresses { get; }
+        public IRepository<Activity> Activities { get; }
+
+        public UnitOfWork(AppDbContext context,
+                          IRoomRepository rooms,
+                          IRepository<Address> addresses,
+                          IRepository<Activity> activities)
+        {
+            _context = context;
+            Rooms = rooms;
+            Addresses = addresses;
+            Activities = activities;
+        }
+
+        public async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default) =>
+            await _context.SaveChangesAsync(cancellationToken);
+
+        public void Dispose()
+        {
+            _context.Dispose();
+        }
+    }
+
+
+}

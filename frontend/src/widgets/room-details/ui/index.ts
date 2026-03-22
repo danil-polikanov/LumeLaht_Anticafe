@@ -1,0 +1,1 @@
+export { RoomDetailOverlay } from './RoomDetailOverlay';

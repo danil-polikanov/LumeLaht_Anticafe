@@ -10,6 +10,16 @@
 *.userosscache
 *.sln.docstates
 
+LumeLaht_RoomApi/appsettings.Local.json
+
+# Claude Code local settings (personal permissions, not for sharing)
+.claude/settings.local.json
+
+# Personal thesis planning document
+DIPLOMA_PLAN.md
+
+# Frontend build output
+frontend/dist/
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
 
