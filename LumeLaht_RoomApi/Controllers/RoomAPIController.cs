@@ -1,4 +1,4 @@
-﻿using AutoMapper;
+﻿using MapsterMapper;
 using Azure.Core;
 using LumeLaht_RoomApi.Application.Dto;
 using LumeLaht_RoomApi.Application.IServices;

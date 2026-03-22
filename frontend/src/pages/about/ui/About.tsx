@@ -1,14 +1,18 @@
 import React from 'react';
-import styles from './About.module.css';
-import { AboutContext, AboutImage } from '@/widgets/about-section/ui';
+import { AboutContext } from '@/widgets/about-section/ui/AboutContext';
+import { AboutImage } from '@/widgets/about-section/ui/AboutImage';
+
 export const About = () => {
   return (
-    <section id="about-section" className={styles.aboutSection}>
-      <div className={styles.aboutContent}>
-        <AboutContext />
-        <AboutImage />
-      </div>
-    </section>
+    <div className="bg-gradient-to-br from-[#f8f9fa] to-[#e9ecef]">
+      <section className="font-['Inter'] py-16 px-8 bg-[#f9f9f9]">
+        <div className="flex justify-between text-left gap-16 flex-wrap max-w-[1200px] mx-auto">
+          <AboutContext />
+          <AboutImage />
+        </div>
+      </section>
+    </div>
   );
 };
+
 export default About;

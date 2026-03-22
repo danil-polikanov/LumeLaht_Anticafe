@@ -1,4 +1,4 @@
-﻿using AutoMapper;
+﻿using MapsterMapper;
 using LumeLaht_RoomApi.Application.Dto;
 using LumeLaht_RoomApi.Core_.Entities;
 using LumeLaht_RoomApi.Core_.Entities.Filters;

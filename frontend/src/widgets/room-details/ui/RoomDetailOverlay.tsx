@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { RoomResponse } from '@/shared/types/room.types';
+
 export const RoomDetailOverlay: React.FC<{
   room: RoomResponse;
   onClose: () => void;
@@ -17,64 +18,58 @@ export const RoomDetailOverlay: React.FC<{
   };
 
   return (
-    <div
-      className="position-fixed top-0 start-0 w-100 h-100 d-flex justify-content-center align-items-center"
-      style={{ backgroundColor: 'rgba(0,0,0,0.8)', zIndex: 1050 }}
-    >
-      <div
-        className="card shadow-lg"
-        style={{ maxWidth: '800px', width: '90%', maxHeight: '90vh' }}
-      >
-        <div className="card-header bg-primary text-white d-flex justify-content-between align-items-center">
-          <h5 className="mb-0">
-            <i className="fas fa-door-open me-2"></i>
+    <div className="fixed inset-0 flex justify-center items-center bg-black/80 z-[1050]">
+      <div className="bg-white rounded-lg shadow-2xl flex flex-col max-w-[800px] w-[90%] max-h-[90vh]">
+        {/* Header */}
+        <div className="bg-blue-600 text-white p-4 rounded-t-lg flex justify-between items-center">
+          <h5 className="mb-0 text-base font-semibold">
+            <i className="fas fa-door-open mr-2"></i>
             {room.name}
           </h5>
-          <button className="btn btn-sm btn-outline-light" onClick={onClose}>
+          <button
+            className="border border-white text-white px-2 py-1 rounded text-sm hover:bg-white/10 bg-transparent cursor-pointer"
+            onClick={onClose}
+          >
             <i className="fas fa-times"></i>
           </button>
         </div>
 
-        <div className="card-body overflow-auto">
-          <div className="row">
+        <div className="p-4 overflow-auto flex-1">
+          <div className="flex flex-wrap -mx-2">
             {/* Left column — images */}
-            <div className="col-md-6 mb-3">
-              <div className="position-relative">
+            <div className="w-full md:w-1/2 px-2 mb-3">
+              <div className="relative">
                 {images.length > 0 ? (
                   <>
                     <img
                       src={images[currentImageIndex]}
                       alt={`Room ${currentImageIndex + 1}`}
-                      className="img-fluid rounded"
-                      style={{ width: '100%', height: '250px', objectFit: 'cover' }}
+                      className="max-w-full rounded w-full h-[250px] object-cover"
                     />
                     {images.length > 1 && (
                       <>
                         <button
-                          className="btn btn-dark btn-sm position-absolute top-50 start-0 translate-middle-y ms-2"
+                          className="bg-gray-800 text-white px-2 py-1 rounded text-sm hover:bg-gray-900 absolute top-1/2 left-2 -translate-y-1/2 border-none cursor-pointer"
                           onClick={prevImage}
                         >
                           <i className="fas fa-chevron-left"></i>
                         </button>
                         <button
-                          className="btn btn-dark btn-sm position-absolute top-50 end-0 translate-middle-y me-2"
+                          className="bg-gray-800 text-white px-2 py-1 rounded text-sm hover:bg-gray-900 absolute top-1/2 right-2 -translate-y-1/2 border-none cursor-pointer"
                           onClick={nextImage}
                         >
                           <i className="fas fa-chevron-right"></i>
                         </button>
                       </>
                     )}
-                    <div className="position-absolute bottom-0 end-0 me-2 mb-2">
-                      <span className="badge bg-dark">
+                    <div className="absolute bottom-2 right-2">
+                      <span className="bg-gray-800 text-white px-2 py-0.5 rounded text-xs">
                         {currentImageIndex + 1} / {images.length}
                       </span>
                     </div>
                   </>
                 ) : (
-                  <div
-                    className="bg-light rounded d-flex align-items-center justify-content-center text-muted"
-                    style={{ height: '250px' }}
-                  >
+                  <div className="bg-gray-50 rounded flex items-center justify-center text-gray-500 h-[250px]">
                     <i className="fas fa-image fa-3x"></i>
                   </div>
                 )}
@@ -82,24 +77,28 @@ export const RoomDetailOverlay: React.FC<{
             </div>
 
             {/* Right column — info */}
-            <div className="col-md-6">
+            <div className="w-full md:w-1/2 px-2">
               <div className="mb-3">
-                <h6 className="text-muted">Description</h6>
+                <h6 className="text-gray-500">Description</h6>
                 <p className="mb-2">{room.description}</p>
               </div>
 
               <div className="mb-3">
-                <h6 className="text-muted">Price</h6>
-                <div className="d-flex align-items-center justify-content-center">
-                  <span className="h4 text-success mb-0">{room.pricePerHour} €</span>
-                  <span className="text-muted ms-2">/ hour</span>
+                <h6 className="text-gray-500">Price</h6>
+                <div className="flex items-center justify-center">
+                  <span className="text-2xl font-bold text-green-600 mb-0">
+                    {room.pricePerHour} €
+                  </span>
+                  <span className="text-gray-500 ml-2">/ hour</span>
                 </div>
               </div>
 
               <div className="mb-3">
-                <h6 className="text-muted">Status</h6>
-                <span className={`badge ${room.status ? 'bg-success' : 'bg-danger'}`}>
-                  <i className={`fas ${room.status ? 'fa-check' : 'fa-times'} me-1`}></i>
+                <h6 className="text-gray-500">Status</h6>
+                <span
+                  className={`px-2 py-0.5 rounded text-xs text-white ${room.status ? 'bg-green-500' : 'bg-red-500'}`}
+                >
+                  <i className={`fas ${room.status ? 'fa-check' : 'fa-times'} mr-1`}></i>
                   {room.status ? 'Active' : 'Inactive'}
                 </span>
               </div>
@@ -109,13 +108,13 @@ export const RoomDetailOverlay: React.FC<{
           {/* Address */}
           {room.address && (
             <div className="mb-3">
-              <h6 className="text-muted">
-                <i className="fas fa-map-marker-alt me-1"></i>
+              <h6 className="text-gray-500">
+                <i className="fas fa-map-marker-alt mr-1"></i>
                 Address
               </h6>
-              <div className="bg-light p-3 rounded">
-                <div className="row">
-                  <div className="col-md-6">
+              <div className="bg-gray-50 p-3 rounded">
+                <div className="flex flex-wrap -mx-2">
+                  <div className="w-full md:w-1/2 px-2">
                     <p className="mb-1">
                       <strong>{room.address.addressName}</strong>
                     </p>
@@ -126,10 +125,10 @@ export const RoomDetailOverlay: React.FC<{
                       {room.address.postalCode}, {room.address.country}
                     </p>
                   </div>
-                  <div className="col-md-6">
+                  <div className="w-full md:w-1/2 px-2">
                     {room.address.phoneNumber && (
                       <p className="mb-1">
-                        <i className="fas fa-phone me-1"></i>
+                        <i className="fas fa-phone mr-1"></i>
                         {room.address.phoneNumber}
                       </p>
                     )}
@@ -142,17 +141,17 @@ export const RoomDetailOverlay: React.FC<{
           {/* Activities */}
           {room.activity && room.activity.length > 0 && (
             <div className="mb-3">
-              <h6 className="text-muted">
-                <i className="fas fa-list me-1"></i>
+              <h6 className="text-gray-500">
+                <i className="fas fa-list mr-1"></i>
                 Available activities
               </h6>
-              <div className="row">
+              <div className="flex flex-wrap -mx-2">
                 {room.activity.map((activity) => (
-                  <div key={activity.activityId} className="col-md-6 mb-2">
-                    <div className="card border-primary">
-                      <div className="card-body p-3">
-                        <h6 className="card-title mb-1">{activity.name}</h6>
-                        <p className="card-text small text-muted mb-0">{activity.description}</p>
+                  <div key={activity.activityId} className="w-full md:w-1/2 px-2 mb-2">
+                    <div className="border border-blue-600 rounded">
+                      <div className="p-3">
+                        <h6 className="font-semibold mb-1">{activity.name}</h6>
+                        <p className="text-sm text-gray-500 mb-0">{activity.description}</p>
                       </div>
                     </div>
                   </div>
@@ -162,16 +161,16 @@ export const RoomDetailOverlay: React.FC<{
           )}
 
           {/* Actions */}
-          <div className="d-flex gap-2 mt-4">
-            <button className="btn btn-primary">
-              <i className="fas fa-calendar-plus me-1"></i>
+          <div className="flex gap-2 mt-4">
+            <button className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 border-none cursor-pointer">
+              <i className="fas fa-calendar-plus mr-1"></i>
               Book
             </button>
-            <button className="btn btn-outline-primary">
-              <i className="fas fa-heart me-1"></i>Add to favourites
+            <button className="border border-blue-600 text-blue-600 px-4 py-2 rounded hover:bg-blue-50 bg-transparent cursor-pointer">
+              <i className="fas fa-heart mr-1"></i>Add to favourites
             </button>
-            <button className="btn btn-outline-secondary">
-              <i className="fas fa-share me-1"></i>
+            <button className="border border-gray-400 text-gray-700 px-4 py-2 rounded hover:bg-gray-100 bg-transparent cursor-pointer">
+              <i className="fas fa-share mr-1"></i>
               Share
             </button>
           </div>

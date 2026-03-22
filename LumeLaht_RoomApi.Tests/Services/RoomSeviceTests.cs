@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using Mapster;
+using MapsterMapper;
 using LumeLaht_RoomApi.Application.Dto;
 using LumeLaht_RoomApi.Application.Mapping;
 using LumeLaht_RoomApi.Application.Services;
@@ -32,11 +33,9 @@ namespace LumeLaht_RoomApi.Tests.Services
             _unitOfWorkMock.Setup(u => u.Activities).Returns(_activityRepositoryMock.Object);
             _unitOfWorkMock.Setup(u => u.Rooms).Returns(_roomRepositoryMock.Object);
 
-            var config = new MapperConfiguration(cfg =>
-            {
-                cfg.AddProfile<RoomProfile>();
-            });
-            _mapper = config.CreateMapper();
+            var config = new TypeAdapterConfig();
+            new RoomProfile().Register(config);
+            _mapper = new Mapper(config);
             _service = new RoomService(_unitOfWorkMock.Object, _mapper);
 
         }

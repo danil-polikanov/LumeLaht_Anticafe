@@ -1,15 +1,15 @@
-// index.ts — единая точка входа для модели "rooms"
+// index.ts — single entry point for the "rooms" model
 
-// API‑клиент
+// API client
 export { RoomClient, SwaggerException } from './model/roomClient';
 
-// Slice (редьюсер + экшены)
+// Slice (reducer + actions)
 export * from './model/roomSlice';
 
-// Селекторы
+// Selectors
 export * from './model/roomSelectors';
 
-// Thunks (асинхронные операции)
+// Thunks (async operations)
 export {
   fetchRooms,
   fetchRoomById,

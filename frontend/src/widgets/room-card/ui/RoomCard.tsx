@@ -1,6 +1,5 @@
 import React from 'react';
 import { RoomResponse, ActivityResponse, AddressResponse } from '@/shared/types/room.types';
-import styles from './RoomCard.module.css';
 
 interface RoomCardProps {
   room: RoomResponse;
@@ -22,7 +21,9 @@ export const RoomCard: React.FC<RoomCardProps> = ({ room, onRoomClick }) => {
   const getStatusBadge = (status: string | undefined) => {
     if (status === undefined) return null;
     return (
-      <span className={`badge ${status ? 'bg-success' : 'bg-danger'}`}>
+      <span
+        className={`inline-block text-white text-xs px-2 py-0.5 rounded ${status ? 'bg-green-500' : 'bg-red-500'}`}
+      >
         {status ? 'Active' : 'Closed'}
       </span>
     );
@@ -40,7 +41,10 @@ export const RoomCard: React.FC<RoomCardProps> = ({ room, onRoomClick }) => {
   const getActivityBadges = (activities: ActivityResponse[] | undefined) => {
     if (!activities || activities.length === 0) return null;
     return activities.slice(0, 3).map((activity, index) => (
-      <span key={activity.activityId || index} className="badge bg-info me-1">
+      <span
+        key={activity.activityId || index}
+        className="inline-block bg-sky-400 text-white text-xs px-2 py-0.5 rounded mr-1"
+      >
         {activity.name}
       </span>
     ));
@@ -50,7 +54,7 @@ export const RoomCard: React.FC<RoomCardProps> = ({ room, onRoomClick }) => {
     if (room.images && room.images.length > 0) {
       const mainImage = room.images.find((r) => r.isMain) ?? room.images[0];
       return mainImage?.url ? (
-        <img src={mainImage.url} className={styles.room_image} alt="Room photo" />
+        <img src={mainImage.url} className="w-full h-[200px] object-cover block" alt="Room photo" />
       ) : (
         <div>Image unavailable</div>
       );
@@ -59,27 +63,25 @@ export const RoomCard: React.FC<RoomCardProps> = ({ room, onRoomClick }) => {
   };
 
   return (
-    <div className="col-md-6 col-lg-4 mb-4">
-      <div className={`card h-100 shadow-sm ${styles.room_card}`} onClick={handleCardClick}>
+    <div className="w-full md:w-1/2 lg:w-1/3 px-2 mb-4">
+      <div
+        className="bg-white rounded-lg shadow-sm h-full flex flex-col transition-all duration-200 cursor-pointer hover:-translate-y-0.5 hover:shadow-md"
+        onClick={handleCardClick}
+      >
         {/* Room image */}
-        <div
-          className="card-img-top bg-light d-flex align-items-center justify-content-center"
-          style={{ height: '200px', cursor: 'pointer' }}
-        >
-          <div className="text-center text-muted">{renderImage()}</div>
+        <div className="bg-gray-100 flex items-center justify-center h-[200px]">
+          <div className="text-center text-gray-500">{renderImage()}</div>
         </div>
 
-        <div className="card-body d-flex flex-column">
+        <div className="p-4 flex flex-col flex-1">
           {/* Title and status */}
-          <div className="d-flex justify-content-between align-items-start mb-2">
-            <h5 className="card-title mb-0" style={{ cursor: 'pointer' }}>
-              {room.name || 'Untitled'}
-            </h5>
+          <div className="flex justify-between items-start mb-2">
+            <h5 className="text-lg font-semibold mb-0 cursor-pointer">{room.name || 'Untitled'}</h5>
             {getStatusBadge(room.status)}
           </div>
 
           {/* Description */}
-          <p className="card-text text-muted small mb-3">
+          <p className="text-gray-500 text-sm mb-3">
             {room.description
               ? room.description.length > 100
                 ? `${room.description.substring(0, 100)}...`
@@ -89,13 +91,13 @@ export const RoomCard: React.FC<RoomCardProps> = ({ room, onRoomClick }) => {
 
           {/* Address */}
           <div className="mb-3">
-            <div className="d-flex align-items-center text-muted small">
-              <i className="fas fa-map-marker-alt me-2"></i>
+            <div className="flex items-center text-gray-500 text-sm">
+              <i className="fas fa-map-marker-alt mr-2"></i>
               <span>{formatAddress(room.address)}</span>
             </div>
             {room.address?.phoneNumber && (
-              <div className="d-flex align-items-center text-muted small mt-1">
-                <i className="fas fa-phone me-2"></i>
+              <div className="flex items-center text-gray-500 text-sm mt-1">
+                <i className="fas fa-phone mr-2"></i>
                 <span>{room.address.phoneNumber}</span>
               </div>
             )}
@@ -104,11 +106,13 @@ export const RoomCard: React.FC<RoomCardProps> = ({ room, onRoomClick }) => {
           {/* Activities */}
           {room.activity && room.activity.length > 0 && (
             <div className="mb-3">
-              <div className="small text-muted mb-1">Available activities:</div>
+              <div className="text-sm text-gray-500 mb-1">Available activities:</div>
               <div>
                 {getActivityBadges(room.activity)}
                 {room.activity.length > 3 && (
-                  <span className="badge bg-secondary">+{room.activity.length - 3}</span>
+                  <span className="inline-block bg-gray-500 text-white text-xs px-2 py-0.5 rounded">
+                    +{room.activity.length - 3}
+                  </span>
                 )}
               </div>
             </div>
@@ -116,16 +120,16 @@ export const RoomCard: React.FC<RoomCardProps> = ({ room, onRoomClick }) => {
 
           {/* Price and button */}
           <div className="mt-auto">
-            <div className="d-flex justify-content-between align-items-center">
-              <div className="text-primary fw-bold">{formatPrice(room.pricePerHour)}</div>
+            <div className="flex justify-between items-center">
+              <div className="text-blue-600 font-bold">{formatPrice(room.pricePerHour)}</div>
               <button
-                className="btn btn-primary btn-sm"
+                className="bg-blue-600 text-white px-3 py-1 rounded text-sm hover:bg-blue-700 transition-colors"
                 onClick={(e) => {
                   e.stopPropagation();
                   handleCardClick();
                 }}
               >
-                <i className="fas fa-eye me-1"></i>
+                <i className="fas fa-eye mr-1"></i>
                 Read More
               </button>
             </div>

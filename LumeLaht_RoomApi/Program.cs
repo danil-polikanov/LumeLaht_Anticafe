@@ -1,5 +1,6 @@
 using LumaCove_RoomApi;
 using LumeLaht_RoomApi.Application.IServices;
+using LumeLaht_RoomApi.Application.Mapping;
 using LumeLaht_RoomApi.Application.Services;
 using LumeLaht_RoomApi.Application.Settings;
 using LumeLaht_RoomApi.Core_.Interfaces;
@@ -7,6 +8,8 @@ using LumeLaht_RoomApi.Extensions;
 using LumeLaht_RoomApi.Infrastructure.Data;
 using LumeLaht_RoomApi.Infrastructure.Repositories;
 using LumeLaht_RoomApi.Middlewares;
+using Mapster;
+using MapsterMapper;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
 using System;
@@ -32,7 +35,10 @@ namespace LumeLaht_RoomApi
             builder.Host.UseSerilog();
             builder.Configuration.AddJsonFile("appsettings.Local.json", optional: true, reloadOnChange: true);
             builder.Services.AddLogging();
-            builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+            var mapperConfig = TypeAdapterConfig.GlobalSettings;
+            mapperConfig.Scan(typeof(RoomProfile).Assembly);
+            builder.Services.AddSingleton(mapperConfig);
+            builder.Services.AddScoped<IMapper, ServiceMapper>();
             builder.Services.AddTransient<ExceptionHandlingMiddleware>();
             builder.Services.AddTransient<RequestResponseLoggingMiddleware>();
             builder.Services.AddScoped<IRoomRepository, RoomRepository>();
