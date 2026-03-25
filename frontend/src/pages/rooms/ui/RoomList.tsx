@@ -1,17 +1,10 @@
-import React, { useEffect } from 'react';
-import { useSelector } from 'react-redux';
-import { clearSelectedRoom } from '@/entities/room/model';
-import { fetchRoomsByFilters, fetchActivities } from '@/entities/room/model';
+import React, { useState } from 'react';
+import { setPagination } from '@/entities/room/model';
 import {
-  selectRooms,
-  selectSelectedRoom,
-  selectLoading,
-  selectError,
-  selectFilters,
-  selectSorting,
-  selectPagination,
-} from '@/entities/room/model';
-import { fetchRoomById } from '@/entities/room/model';
+  useGetRoomsByFiltersQuery,
+  useGetRoomByIdQuery,
+} from '@/entities/room';
+import { selectFilters, selectSorting, selectPagination } from '@/entities/room/model';
 import { RoomFilters } from '@/widgets/room-filters/ui';
 import { RoomSortingAndPagination } from '@/widgets/room-sortPaggination/ui';
 import { RoomCard } from '@/widgets/room-card/ui';
@@ -21,33 +14,49 @@ import { useAppDispatch, useAppSelector } from '@/shared/lib/hooks/useRedux';
 
 export const RoomList: React.FC = () => {
   const dispatch = useAppDispatch();
-  const rooms = useAppSelector(selectRooms);
   const filters = useAppSelector(selectFilters);
   const sorting = useAppSelector(selectSorting);
   const pagination = useAppSelector(selectPagination);
-  const loading = useSelector(selectLoading);
-  const error = useSelector(selectError);
-  const selectedRoomDetail = useAppSelector(selectSelectedRoom);
 
-  // Load activities on mount
-  useEffect(() => {
-    dispatch(fetchActivities());
-  }, [dispatch]);
+  const [selectedRoomId, setSelectedRoomId] = useState<string | null>(null);
 
-  useEffect(() => {
-    dispatch(fetchRoomsByFilters());
-  }, [dispatch, filters, sorting, pagination.currentPage, pagination.pageSize]);
+  // RTK Query: rooms by filters — auto-refetches when args change
+  const {
+    data: roomsData,
+    isLoading,
+    isFetching,
+    error: roomsError,
+  } = useGetRoomsByFiltersQuery({
+    filters,
+    sorting,
+    currentPage: pagination.currentPage,
+    pageSize: pagination.pageSize,
+  });
+
+  // RTK Query: room by id — only fetches when selectedRoomId is set
+  const { data: selectedRoom } = useGetRoomByIdQuery(selectedRoomId!, {
+    skip: !selectedRoomId,
+  });
+
+  // Sync pagination from server response back to Redux
+  React.useEffect(() => {
+    if (roomsData?.pagination) {
+      dispatch(setPagination(roomsData.pagination));
+    }
+  }, [roomsData?.pagination, dispatch]);
+
+  const rooms = roomsData?.items ?? [];
+  const error = roomsError ? 'Failed to load rooms' : null;
 
   const handleRoomClick = (roomId: string) => {
-    dispatch(fetchRoomById(roomId));
-    console.log('Navigate to room detail:', roomId);
+    setSelectedRoomId(roomId);
   };
 
   const handleCloseDetail = () => {
-    dispatch(clearSelectedRoom());
+    setSelectedRoomId(null);
   };
 
-  if (loading && rooms.length === 0) {
+  if (isLoading && rooms.length === 0) {
     return (
       <div className="w-full py-4">
         <div className="flex justify-center items-center min-h-[400px]">
@@ -114,7 +123,7 @@ export const RoomList: React.FC = () => {
             <RoomFilters />
           </div>
           {/* Loading indicator while filtering */}
-          {loading && (
+          {isFetching && (
             <div className="mb-3">
               <div className="flex justify-center items-center">
                 <div
@@ -150,14 +159,11 @@ export const RoomList: React.FC = () => {
           </div>
 
           {/* Room detail overlay */}
-          {selectedRoomDetail && (
-            <RoomDetailOverlay
-              room={selectedRoomDetail || selectedRoomDetail}
-              onClose={handleCloseDetail}
-            />
+          {selectedRoom && (
+            <RoomDetailOverlay room={selectedRoom} onClose={handleCloseDetail} />
           )}
 
-          <PaginationComponent></PaginationComponent>
+          <PaginationComponent />
         </div>
       </div>
     </div>

@@ -170,7 +170,7 @@ namespace LumeLaht_RoomApi.Tests.Helpers
 
             return new List<Room> { room1, room2 };
         }
-        public static CreateRoomRequest CreateRoomRequest(List<ActivityResponse> activities = null)
+        public static CreateRoomRequest CreateRoomRequest(List<Guid>? activityIds = null)
         {
             return new CreateRoomRequest
             {
@@ -179,7 +179,7 @@ namespace LumeLaht_RoomApi.Tests.Helpers
                 PricePerHour = 100,
                 Status = "Available",
                 AddressId = Guid.NewGuid(),
-                Activities = activities
+                ActivityIds = activityIds
             };
         }
 

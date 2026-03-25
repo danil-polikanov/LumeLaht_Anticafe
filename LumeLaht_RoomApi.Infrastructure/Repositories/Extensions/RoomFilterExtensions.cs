@@ -73,8 +73,11 @@ namespace LumeLaht_RoomApi.Infrastructure.Repositories.Extensions
             if (options.Filters.TryGetValue("ActivitiesIds", out var activityIds)
                 && activityIds is List<Guid> ids && ids.Any())
             {
-                query = query.Where(r =>
-                    ids.All(id => r.RoomActivity.Any(ra => ra.ActivityId == id)));    
+                foreach (var id in ids)
+                {
+                    var capturedId = id;
+                    query = query.Where(r => r.RoomActivity.Any(ra => ra.ActivityId == capturedId));
+                }
             }
 
             return query;

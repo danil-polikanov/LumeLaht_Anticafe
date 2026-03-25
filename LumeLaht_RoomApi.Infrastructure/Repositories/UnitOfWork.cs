@@ -16,16 +16,19 @@ namespace LumeLaht_RoomApi.Infrastructure.Repositories
         public IRoomRepository Rooms { get; }
         public IRepository<Address> Addresses { get; }
         public IRepository<Activity> Activities { get; }
+        public IRepository<RoomImage> RoomImages { get; }
 
         public UnitOfWork(AppDbContext context,
                           IRoomRepository rooms,
                           IRepository<Address> addresses,
-                          IRepository<Activity> activities)
+                          IRepository<Activity> activities,
+                          IRepository<RoomImage> roomImages)
         {
             _context = context;
             Rooms = rooms;
             Addresses = addresses;
             Activities = activities;
+            RoomImages = roomImages;
         }
 
         public async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default) =>

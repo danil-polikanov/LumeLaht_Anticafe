@@ -1,16 +1,10 @@
-﻿using MapsterMapper;
+using MapsterMapper;
 using LumeLaht_RoomApi.Application.Dto;
 using LumeLaht_RoomApi.Core_.Entities;
 using LumeLaht_RoomApi.Core_.Entities.Filters;
 using LumeLaht_RoomApi.Core_.Interfaces;
-using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
+
 namespace LumeLaht_RoomApi.Application.Services
 {
     public class RoomService : IRoomService
@@ -38,38 +32,37 @@ namespace LumeLaht_RoomApi.Application.Services
 
         public async Task<RoomResponse> CreateRoomAsync(CreateRoomRequest request, CancellationToken cancellationToken)
         {
-            // 1. Does address exists
             var address = await _uow.Addresses.GetByIdAsync(request.AddressId, cancellationToken)
                 ?? throw new ValidationException($"Address with ID {request.AddressId} does not exist.");
 
-            // 2.Do activities exist
-            if (request.Activities != null && request.Activities.Any())
+            if (request.ActivityIds != null && request.ActivityIds.Any())
             {
-                foreach (var activity in request.Activities)
+                foreach (var activityId in request.ActivityIds)
                 {
-                    var existing = await _uow.Activities.GetByIdAsync(activity.ActivityId, cancellationToken)
-                        ?? throw new ValidationException($"Activity with ID {activity.ActivityId} does not exist.");
+                    var activity = await _uow.Activities.GetByIdAsync(activityId, cancellationToken)
+                        ?? throw new ValidationException($"Activity with ID {activityId} does not exist.");
                 }
             }
+
             var room = _mapper.Map<Room>(request);
-#pragma warning disable CS8601 // Возможно, назначение-ссылка, допускающее значение NULL.
-            room.RoomActivity = request.Activities?.Select(a => new RoomActivity
+            room.RoomActivity = request.ActivityIds?.Select(id => new RoomActivity
             {
-                Activity = _mapper.Map<Activity>(a),
+                ActivityId = id,
                 Room = room
             }).ToList();
-#pragma warning restore CS8601 // Возможно, назначение-ссылка, допускающее значение NULL.
 
-            await _uow.Rooms.AddAsync(room, cancellationToken); 
+            await _uow.Rooms.AddAsync(room, cancellationToken);
             return _mapper.Map<RoomResponse>(room);
         }
-        public async Task<RoomResponse> UpdateRoomAsync(Guid id,CreateRoomRequest request,CancellationToken cancellationToken)
+
+        public async Task<RoomResponse> UpdateRoomAsync(Guid id, CreateRoomRequest request, CancellationToken cancellationToken)
         {
             var room = _mapper.Map<Room>(request);
             room.RoomId = id;
             await _uow.Rooms.UpdateAsync(room, cancellationToken);
             return _mapper.Map<RoomResponse>(room);
         }
+
         public async Task<bool> DeleteRoomAsync(Guid id, CancellationToken cancellationToken)
         {
             var room = await _uow.Rooms.GetByIdAsync(id, cancellationToken);
@@ -77,6 +70,7 @@ namespace LumeLaht_RoomApi.Application.Services
             await _uow.Rooms.DeleteAsync(room.RoomId, cancellationToken);
             return true;
         }
+
         public async Task<PagedResult<RoomResponse>> GetFilteredRoomsAsync(
            RoomFilterDto filter,
            CancellationToken cancellationToken)
@@ -92,10 +86,8 @@ namespace LumeLaht_RoomApi.Application.Services
                     CurrentPage = result.pagination.CurrentPage,
                     PageSize = result.pagination.PageSize,
                     TotalItems = result.pagination.TotalItems,
-
                 }
             };
         }
     }
-
 }

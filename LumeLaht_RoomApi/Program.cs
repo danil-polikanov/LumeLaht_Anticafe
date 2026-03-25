@@ -65,6 +65,7 @@ namespace LumeLaht_RoomApi
                 });
             });
             var app = builder.Build();
+            app.UseCors("AllowReactApp");
             app.UseCustomMiddlewares();
             if (app.Environment.IsDevelopment())
             {
@@ -72,9 +73,6 @@ namespace LumeLaht_RoomApi
                 app.UseSwaggerUI();
             }
 
-
-
-            app.UseCors("AllowReactApp");
             app.UseHttpsRedirection();
 
             app.UseAuthorization();

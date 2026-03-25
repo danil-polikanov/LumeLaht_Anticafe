@@ -1,13 +1,14 @@
 import React, { useState } from 'react';
 import { useAppDispatch, useAppSelector } from '@/shared/lib/hooks/useRedux';
 import { resetFilters, setFilters } from '@/entities/room/model';
-import { selectFilters, selectActivities } from '@/entities/room/';
+import { selectFilters } from '@/entities/room/';
+import { useGetActivitiesQuery } from '@/entities/room/';
 import { useDebounce } from '@/shared/lib/hooks/useDebounce';
 
 export const RoomFilters: React.FC = () => {
   const dispatch = useAppDispatch();
   const filters = useAppSelector(selectFilters);
-  const activities = useAppSelector(selectActivities);
+  const { data: activities = [] } = useGetActivitiesQuery();
   const [isCollapsed, setIsCollapsed] = useState(false);
 
   // Debounce hook for all text fields

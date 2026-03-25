@@ -23,6 +23,11 @@ namespace LumeLaht_RoomApi.Infrastructure.Data
         }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            // Explicit column type for PricePerHour
+            modelBuilder.Entity<Room>()
+                .Property(r => r.PricePerHour)
+                .HasColumnType("decimal(18,2)");
+
             // Связь many-to-many
             modelBuilder.Entity<RoomActivity>()
                 .HasKey(ra => new { ra.RoomId, ra.ActivityId });

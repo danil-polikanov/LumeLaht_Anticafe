@@ -217,7 +217,7 @@ namespace LumeLaht_RoomApi.Tests.Repositories
                 roomOptionDTO = new RoomOptionDTO
                 {
                     MinPrice = 500.0m,
-                    MaxPrice = 1500.0m
+                    MaxPrice = 1200.0m
                 }
             };
 
@@ -228,7 +228,7 @@ namespace LumeLaht_RoomApi.Tests.Repositories
 
             // Assert
             Assert.Single(result.Items);
-            Assert.InRange(result.Items[0].PricePerHour, 500.0m, 1500.0m);
+            Assert.InRange(result.Items[0].PricePerHour, 500.0m, 1200.0m);
         }
 
         [Fact]
@@ -246,7 +246,7 @@ namespace LumeLaht_RoomApi.Tests.Repositories
                 PageSize = 10,
                 Filters = new Dictionary<string, object>
                 {
-                    { "ActivityIds", new List<Guid> { activityId } }
+                    { "ActivitiesIds", new List<Guid> { activityId } }
                 },
                 SortOptions = new SortOptions()
             };
@@ -260,8 +260,8 @@ namespace LumeLaht_RoomApi.Tests.Repositories
         }
 
         [Theory]
-        [InlineData("price", "asc", "Зал А")]
-        [InlineData("price", "desc", "Зал B")]
+        [InlineData("pricePerHour", "asc", "Зал А")]
+        [InlineData("pricePerHour", "desc", "Зал B")]
         [InlineData("name", "asc", "Зал А")]
         [InlineData("name", "desc", "Зал B")]
         public async Task GetFilteredRoomsAsync_ShouldSortCorrectly(string sortBy, string sortOrder, string expectedFirstName)

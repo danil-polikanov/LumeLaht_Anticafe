@@ -166,19 +166,16 @@ namespace LumeLaht_RoomApi.Tests.Services
         public async Task CreateRoomAsync_CreatesRoomWithActivities_WhenActivitiesProvided()
         {
             // Arrange
-            var activities = new List<ActivityResponse>
-            {
-                new ActivityResponse { ActivityId = Guid.NewGuid(), Name = "Yoga", Description = "Yoga class" }
-            };
-            var request = CreateRoomRequest(activities);
+            var activityId = Guid.NewGuid();
+            var request = CreateRoomRequest(new List<Guid> { activityId });
 
             _addressRepositoryMock
                 .Setup(r => r.GetByIdAsync(request.AddressId, It.IsAny<CancellationToken>()))
                 .ReturnsAsync(new Address { AddressId = request.AddressId });
 
             _activityRepositoryMock
-                .Setup(r => r.GetByIdAsync(activities[0].ActivityId, It.IsAny<CancellationToken>()))
-                .ReturnsAsync(new Activity { ActivityId = activities[0].ActivityId, Name = "Yoga" });
+                .Setup(r => r.GetByIdAsync(activityId, It.IsAny<CancellationToken>()))
+                .ReturnsAsync(new Activity { ActivityId = activityId, Name = "Yoga" });
 
             Room capturedRoom = null;
             _roomRepositoryMock
@@ -202,12 +199,7 @@ namespace LumeLaht_RoomApi.Tests.Services
             // Arrange
             var activity1Id = Guid.NewGuid();
             var activity2Id = Guid.NewGuid();
-            var activities = new List<ActivityResponse>
-            {
-                new ActivityResponse { ActivityId = activity1Id, Name = "Yoga" },
-                new ActivityResponse { ActivityId = activity2Id, Name = "Pilates" }
-            };
-            var request = CreateRoomRequest(activities);
+            var request = CreateRoomRequest(new List<Guid> { activity1Id, activity2Id });
 
             _addressRepositoryMock
                 .Setup(r => r.GetByIdAsync(request.AddressId, It.IsAny<CancellationToken>()))
@@ -223,7 +215,7 @@ namespace LumeLaht_RoomApi.Tests.Services
 
             _roomRepositoryMock
                 .Setup(r => r.AddAsync(It.IsAny<Room>(), It.IsAny<CancellationToken>()))
-                .ReturnsAsync(new Room { Name = request.Name }); 
+                .ReturnsAsync(new Room { Name = request.Name });
 
             // Act
             await _service.CreateRoomAsync(request, CancellationToken.None);
