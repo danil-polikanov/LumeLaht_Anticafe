@@ -2,53 +2,57 @@
 export interface RoomImages {
   imageId: string;
   url: string;
+  cloudinaryPublicId?: string;
   isMain: boolean;
   roomId: string;
 }
 
 export interface RoomResponse {
   roomId?: string;
-  name?: string | undefined;
-  description?: string | undefined;
+  name?: string;
+  description?: string;
   pricePerHour?: number;
+  capacity?: number;
   status?: string;
+  createdAt?: string;
+  updatedAt?: string;
   address?: AddressResponse;
-  activity?: ActivityResponse[] | undefined;
-  images?: RoomImages[] | undefined;
+  activity?: ActivityResponse[];
+  images?: RoomImages[];
 }
 
 export interface CreateRoomRequest {
-  name?: string | undefined;
-  description?: string | undefined;
+  name?: string;
+  description?: string;
   pricePerHour?: number;
+  capacity?: number;
   status?: string;
   addressId?: string;
-  address?: AddressResponse;
-  activities?: ActivityResponse[] | undefined;
-  roomImages?: RoomImages[] | undefined;
+  activityIds?: string[];
 }
 
 export interface ActivityResponse {
   activityId?: string;
   name?: string;
   description?: string;
+  category?: string;
 }
 
 export interface AddressResponse {
   addressId?: string;
-  addressName?: string | undefined;
-  city?: string | undefined;
-  region?: string | undefined;
-  postalCode?: string | undefined;
-  country?: string | undefined;
-  phoneNumber?: string | undefined;
+  addressName?: string;
+  city?: string;
+  region?: string;
+  postalCode?: string;
+  country?: string;
+  phoneNumber?: string;
 }
 
 export interface ProblemDetails {
-  type?: string | undefined;
-  title?: string | undefined;
-  status?: number | undefined;
-  detail?: string | undefined;
-  instance?: string | undefined;
+  type?: string;
+  title?: string;
+  status?: number;
+  detail?: string;
+  instance?: string;
   [key: string]: string | number | boolean | undefined;
 }

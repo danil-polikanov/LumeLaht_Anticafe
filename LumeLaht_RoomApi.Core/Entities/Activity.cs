@@ -1,4 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations;
 
 namespace LumeLaht_RoomApi.Core_.Entities
 {
@@ -11,6 +11,9 @@ namespace LumeLaht_RoomApi.Core_.Entities
         public string Name { get; set; }
         [MaxLength(500)]
         public string Description { get; set; }
+        [Required]
+        [MaxLength(50)]
+        public string Category { get; set; }
         public List<RoomActivity> RoomActivity { get; set; }
     }
 }

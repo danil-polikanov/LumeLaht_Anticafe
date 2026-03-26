@@ -48,6 +48,7 @@ namespace LumeLaht_RoomApi.Infrastructure.Repositories
                 .ApplyStatusFilter(filterOptions)
                 .ApplyAddressFilter(filterOptions)
                 .ApplyPriceFilter(filterOptions)
+                .ApplyCapacityFilter(filterOptions)
                 .ApplyActivityFilter(filterOptions)
                 .ApplySorting(filterOptions.SortOptions);
 

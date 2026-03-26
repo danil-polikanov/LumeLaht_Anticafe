@@ -135,7 +135,7 @@ namespace LumeLaht_RoomApi.Tests.Repositories
 
             var filterOptions = new FilterOptions
             {
-                Search = "Зал А",
+                Search = "Cozy Corner",
                 Page = 1,
                 PageSize = 10,
                 SortOptions = new SortOptions()
@@ -146,7 +146,7 @@ namespace LumeLaht_RoomApi.Tests.Repositories
 
             // Assert
             Assert.Single(result.Items);
-            Assert.Contains("Зал А", result.Items[0].Name);
+            Assert.Contains("Cozy Corner", result.Items[0].Name);
         }
 
         [Fact]
@@ -216,8 +216,8 @@ namespace LumeLaht_RoomApi.Tests.Repositories
                 SortOptions = new SortOptions(),
                 roomOptionDTO = new RoomOptionDTO
                 {
-                    MinPrice = 500.0m,
-                    MaxPrice = 1200.0m
+                    MinPrice = 3.0m,
+                    MaxPrice = 8.0m
                 }
             };
 
@@ -228,7 +228,7 @@ namespace LumeLaht_RoomApi.Tests.Repositories
 
             // Assert
             Assert.Single(result.Items);
-            Assert.InRange(result.Items[0].PricePerHour, 500.0m, 1200.0m);
+            Assert.InRange(result.Items[0].PricePerHour, 3.0m, 8.0m);
         }
 
         [Fact]
@@ -320,15 +320,15 @@ namespace LumeLaht_RoomApi.Tests.Repositories
 
             var filterOptions = new FilterOptions
             {
-                Search = "Зал",
+                Search = "Cozy",
                 Page = 1,
                 PageSize = 10,
                 Filters = new Dictionary<string, object>
                 {
                     { "Status", "Available" },
-                    { "MinPrice", 500.0m }
+                    { "MinPrice", 3.0m }
                 },
-                SortOptions = new SortOptions { Field = "price", Direction = "asc" }
+                SortOptions = new SortOptions { Field = "pricePerHour", Direction = "asc" }
             };
 
             // Act
@@ -336,9 +336,9 @@ namespace LumeLaht_RoomApi.Tests.Repositories
 
             // Assert
             Assert.Single(result.Items);
-            Assert.Contains("Зал", result.Items[0].Name);
+            Assert.Contains("Cozy", result.Items[0].Name);
             Assert.Equal("Available", result.Items[0].Status);
-            Assert.True(result.Items[0].PricePerHour >= 500.0m);
+            Assert.True(result.Items[0].PricePerHour >= 3.0m);
         }
 
         #endregion

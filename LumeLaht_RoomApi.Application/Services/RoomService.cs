@@ -59,6 +59,7 @@ namespace LumeLaht_RoomApi.Application.Services
         {
             var room = _mapper.Map<Room>(request);
             room.RoomId = id;
+            room.UpdatedAt = DateTime.UtcNow;
             await _uow.Rooms.UpdateAsync(room, cancellationToken);
             return _mapper.Map<RoomResponse>(room);
         }
