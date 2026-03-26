@@ -1,4 +1,5 @@
 using LumeLaht_RoomApi.Core_.Entities;
+using LumeLaht_RoomApi.Core_.Entities.User;
 using Microsoft.EntityFrameworkCore;
 
 namespace LumeLaht_RoomApi.Infrastructure.Data
@@ -12,6 +13,8 @@ namespace LumeLaht_RoomApi.Infrastructure.Data
         public DbSet<RoomActivity> RoomsActivity { get; set; }
         public DbSet<Address> Address { get; set; }
         public DbSet<RoomImage> RoomImages { get; set; }
+        public DbSet<User> Users { get; set; }
+        public DbSet<Booking> Bookings { get; set; }
 
         private static Guid GenerateDeterministicGuid(char prefix, int index)
         {
@@ -28,6 +31,14 @@ namespace LumeLaht_RoomApi.Infrastructure.Data
 
             modelBuilder.Entity<RoomActivity>()
                 .HasKey(ra => new { ra.RoomId, ra.ActivityId });
+
+            modelBuilder.Entity<User>()
+                .HasIndex(u => u.Email)
+                .IsUnique();
+
+            modelBuilder.Entity<Booking>()
+                .Property(b => b.TotalPrice)
+                .HasColumnType("decimal(18,2)");
 
             // ── Addresses (7) ──
             var addr = Enumerable.Range(1, 7).ToDictionary(i => i, i => GenerateDeterministicGuid('B', i));

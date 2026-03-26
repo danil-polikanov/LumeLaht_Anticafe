@@ -24,5 +24,6 @@ namespace LumeLaht_RoomApi.Core_.Entities
         public Address Address { get; set; }
         public List<RoomActivity> RoomActivity { get; set; }
         public List<RoomImage> Images { get; set; }
+        public List<Booking> Bookings { get; set; } = new();
     }
 }

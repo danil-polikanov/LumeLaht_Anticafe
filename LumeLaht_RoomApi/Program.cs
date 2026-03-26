@@ -1,4 +1,4 @@
-using LumaCove_RoomApi;
+using System.Text;
 using LumeLaht_RoomApi.Application.IServices;
 using LumeLaht_RoomApi.Application.Mapping;
 using LumeLaht_RoomApi.Application.Services;
@@ -10,10 +10,10 @@ using LumeLaht_RoomApi.Infrastructure.Repositories;
 using LumeLaht_RoomApi.Middlewares;
 using Mapster;
 using MapsterMapper;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using Serilog;
-using System;
-using System.Text.Json.Serialization;
 
 namespace LumeLaht_RoomApi
 {
@@ -47,12 +47,32 @@ namespace LumeLaht_RoomApi
             builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
             builder.Services.AddScoped<IRoomService, RoomService>();
             builder.Services.AddScoped<IActivityService, ActivityService>();
+            builder.Services.AddScoped<IAuthService, AuthService>();
+            builder.Services.AddScoped<IBookingService, BookingService>();
             builder.Services.Configure<CloudinarySettings>(builder.Configuration.GetSection("Cloudinary"));
+            builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection("Jwt"));
             builder.Services.AddScoped<IImageService, ImageService>();
             builder.Services.AddDbContext<AppDbContext>(option =>
             {
                 option.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")).LogTo(Console.WriteLine, LogLevel.Information);
             });
+            var jwtSettings = builder.Configuration.GetSection("Jwt").Get<JwtSettings>()!;
+            builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddJwtBearer(options =>
+                {
+                    options.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidateIssuer = true,
+                        ValidateAudience = true,
+                        ValidateLifetime = true,
+                        ValidateIssuerSigningKey = true,
+                        ValidIssuer = jwtSettings.Issuer,
+                        ValidAudience = jwtSettings.Audience,
+                        IssuerSigningKey = new SymmetricSecurityKey(
+                            Encoding.UTF8.GetBytes(jwtSettings.SecretKey))
+                    };
+                });
+
             builder.Services.AddControllers();
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
@@ -76,6 +96,7 @@ namespace LumeLaht_RoomApi
 
             app.UseHttpsRedirection();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.MapControllers();

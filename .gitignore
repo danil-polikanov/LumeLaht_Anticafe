@@ -18,6 +18,9 @@ LumeLaht_RoomApi/appsettings.Local.json
 # Personal thesis planning document
 DIPLOMA_PLAN.md
 
+# Thesis document
+Polikanov_diploma_Reworked.docx
+
 # Frontend build output
 frontend/dist/
 # User-specific files (MonoDevelop/Xamarin Studio)

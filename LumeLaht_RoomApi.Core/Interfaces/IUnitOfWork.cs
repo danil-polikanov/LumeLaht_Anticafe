@@ -1,9 +1,5 @@
 ﻿using LumeLaht_RoomApi.Core_.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using LumeLaht_RoomApi.Core_.Entities.User;
 
 namespace LumeLaht_RoomApi.Core_.Interfaces
 {
@@ -13,6 +9,8 @@ namespace LumeLaht_RoomApi.Core_.Interfaces
         IRepository<Address> Addresses { get; }
         IRepository<Activity> Activities { get; }
         IRepository<RoomImage> RoomImages { get; }
+        IRepository<User> Users { get; }
+        IRepository<Booking> Bookings { get; }
 
         Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
         void Dispose();
