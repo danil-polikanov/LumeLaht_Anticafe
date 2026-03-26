@@ -23,12 +23,14 @@ namespace LumeLaht_RoomApi.Tests.Repositories
             var roomRepository = new RoomRepository(_context);
             var addressRepository = new Repository<Address>(_context);
             var activityRepository = new Repository<Activity>(_context);
+            var roomImageRepository = new Repository<RoomImage>(_context);
 
             _unitOfWork = new UnitOfWork(
                 _context,
                 roomRepository,
                 addressRepository,
-                activityRepository
+                activityRepository,
+                roomImageRepository
             );
         }
 
