@@ -1,11 +1,75 @@
 import React from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { useAppDispatch } from '@/shared/lib/hooks/useRedux';
+import { setFilters } from '@/entities/room/model';
+import styles from './Welcome.module.css';
+
+const CITIES = ['Tallinn', 'Tartu', 'Pärnu', 'Narva'];
+const DEFAULT_CITY = 'Tallinn';
 
 export const Welcome = () => {
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+
+  const handleCityClick = (city: string) => {
+    dispatch(setFilters({ city }));
+    navigate('/rooms');
+  };
+
   return (
-    <div className="max-w-[800px] mx-auto px-4 bg-[color-mix(in_srgb,#2e2b28,transparent_95%)] backdrop-blur-[5px] rounded-[15px] p-8 flex flex-col items-center justify-center text-[#f9f9f9]">
-      <h2>Tere tulemast!</h2>
-      <p>Here you can order a room for your company</p>
-    </div>
+    <section
+      className={styles.hero}
+      style={{ backgroundImage: "url('/Test_LumeLaht_Image.jpg')" }}
+    >
+      <div className={styles.overlay} />
+      <div className={styles.content}>
+        <div className={styles.locationBadge}>
+          <i className={`fas fa-map-marker-alt ${styles.locationBadgeIcon}`}></i>
+          Pikk tn 36, Old Tallinn
+        </div>
+
+        <h1 className={styles.title}>Tere tulemast!</h1>
+        <p className={styles.subtitle}>
+          Your creative space awaits — choose a city and start exploring
+        </p>
+
+        {/* City tags */}
+        <div className={styles.cityRow}>
+          {CITIES.map((city) =>
+            city === DEFAULT_CITY ? (
+              <button
+                key={city}
+                className={styles.cityPillActive}
+                onClick={() => handleCityClick(city)}
+              >
+                <i className="fas fa-map-pin text-accent"></i>
+                {city}
+                <i className="fas fa-check text-accent text-xs"></i>
+              </button>
+            ) : (
+              <button
+                key={city}
+                className={styles.cityPill}
+                onClick={() => handleCityClick(city)}
+              >
+                <i className={`fas fa-map-pin ${styles.cityPillIcon}`}></i>
+                {city}
+              </button>
+            ),
+          )}
+        </div>
+
+        {/* Action buttons */}
+        <div className={styles.actions}>
+          <Link to="/rooms" className={styles.primaryBtn}>
+            <i className="fas fa-door-open mr-2"></i>Browse Rooms
+          </Link>
+          <a href="/about" className={styles.secondaryBtn}>
+            <i className="fas fa-info-circle mr-2"></i>About Us
+          </a>
+        </div>
+      </div>
+    </section>
   );
 };
 

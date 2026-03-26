@@ -1,0 +1,70 @@
+.wrapper {
+  @apply flex-1 px-3 transition-all duration-700;
+}
+
+.hidden {
+  @apply opacity-0 -translate-x-12;
+}
+
+.visible {
+  @apply opacity-100 translate-x-0;
+}
+
+.badge {
+  @apply inline-flex items-center bg-accent-100 text-accent-800 text-xs font-semibold px-3 py-1 rounded-full uppercase tracking-wide mb-4;
+}
+
+.title {
+  @apply text-3xl font-bold text-gray-900 mb-4;
+}
+
+.titleAccent {
+  @apply text-accent;
+}
+
+.description {
+  @apply text-gray-600 leading-relaxed mb-6 text-base;
+}
+
+.featureGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+  @apply mb-6;
+}
+
+@media (min-width: 640px) {
+  .featureGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.featureCard {
+  @apply flex items-start gap-3 p-4 rounded-xl bg-white border border-gray-100 shadow-sm transition-all duration-300;
+}
+
+.featureCard:hover {
+  @apply -translate-y-0.5 border-accent-200;
+  box-shadow: 0 4px 20px rgba(206, 152, 87, 0.12);
+}
+
+.featureIcon {
+  @apply w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0 text-white text-sm;
+  background: linear-gradient(135deg, #CE9857, #b8863f);
+}
+
+.featureTitle {
+  @apply font-semibold text-gray-800 text-sm mb-0.5;
+}
+
+.featureText {
+  @apply text-gray-500 text-xs leading-relaxed;
+}
+
+.pricingRow {
+  @apply flex flex-wrap gap-3;
+}
+
+.pricingChip {
+  @apply inline-flex items-center gap-1.5 bg-accent-50 text-accent-800 text-sm px-4 py-2 rounded-lg border border-accent-100 font-medium;
+}

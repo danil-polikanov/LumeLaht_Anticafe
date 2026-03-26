@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Hero Section Variants — LumeLaht</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            accent: {
+              DEFAULT: '#CE9857',
+              hover: '#b8863f',
+              light: '#e8c48a',
+              dark: '#a07235',
+              50: '#fdf6ec',
+              100: '#f9e6cc',
+              200: '#f0cc99',
+              300: '#e4ae66',
+              400: '#d9994d',
+              500: '#CE9857',
+              600: '#b8863f',
+              700: '#a07235',
+              800: '#7d5a2a',
+              900: '#5e4320',
+            },
+          },
+        },
+      },
+    };
+  </script>
+  <style>
+    body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
+    .variant-label {
+      position: sticky; top: 0; z-index: 50;
+      background: linear-gradient(135deg, #1a1a2e, #16213e);
+      color: white; padding: 16px 24px; font-size: 1.25rem; font-weight: 700;
+      border-bottom: 3px solid #CE9857;
+    }
+  </style>
+</head>
+<body class="bg-gray-100">
+
+  <header class="bg-gray-900 text-white text-center py-6">
+    <h1 class="text-3xl font-bold">Hero Section Variants</h1>
+    <p class="text-gray-400 mt-1">Pick one for the LumeLaht home page</p>
+    <nav class="flex justify-center gap-4 mt-4 text-sm">
+      <a href="#search-bar" class="text-accent-300 hover:text-white transition">#1 Search Bar</a>
+      <a href="#quick-stats" class="text-accent-300 hover:text-white transition">#2 Quick Stats</a>
+      <a href="#mini-booking" class="text-accent-300 hover:text-white transition">#3 Mini Booking</a>
+    </nav>
+  </header>
+
+  <!-- =============== VARIANT 1: SEARCH BAR =============== -->
+  <div id="search-bar" class="variant-label"><i class="fas fa-search mr-2"></i> Variant 1 — Search Bar Hero</div>
+  <section
+    class="relative w-full min-h-[75vh] bg-cover bg-center bg-no-repeat flex items-center justify-center"
+    style="background-image: url('https://images.unsplash.com/photo-1497366216548-37526070297c?w=1600&q=80')"
+  >
+    <div class="absolute inset-0 bg-gradient-to-b from-black/50 via-black/30 to-black/60"></div>
+    <div class="relative z-10 w-full max-w-[900px] mx-auto px-6 text-center">
+      <!-- Glassmorphism card -->
+      <div class="bg-white/10 backdrop-blur-md rounded-2xl border border-white/20 p-10 shadow-2xl">
+        <h1 class="text-4xl md:text-5xl font-bold text-white mb-3 drop-shadow-lg">Tere tulemast!</h1>
+        <p class="text-lg md:text-xl text-white/90 mb-8 drop-shadow">
+          Find the perfect space for your team — work, play, or relax
+        </p>
+
+        <!-- Search bar -->
+        <div class="bg-white rounded-xl p-2 flex flex-col md:flex-row gap-2 shadow-lg">
+          <div class="flex-1 relative">
+            <i class="fas fa-search absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"></i>
+            <input
+              type="text"
+              placeholder="Search rooms..."
+              class="w-full pl-10 pr-4 py-3 rounded-lg text-gray-700 bg-gray-50 border border-gray-200 focus:outline-none focus:ring-2 focus:ring-accent-300"
+            />
+          </div>
+          <div class="flex-1 relative">
+            <i class="fas fa-map-marker-alt absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"></i>
+            <input
+              type="text"
+              placeholder="City or region..."
+              class="w-full pl-10 pr-4 py-3 rounded-lg text-gray-700 bg-gray-50 border border-gray-200 focus:outline-none focus:ring-2 focus:ring-accent-300"
+            />
+          </div>
+          <button class="bg-accent hover:bg-accent-hover text-white px-8 py-3 rounded-lg font-semibold transition-all hover:shadow-lg whitespace-nowrap">
+            <i class="fas fa-arrow-right mr-2"></i>Find Rooms
+          </button>
+        </div>
+
+        <!-- Quick tags -->
+        <div class="flex flex-wrap justify-center gap-2 mt-5">
+          <span class="bg-white/20 text-white px-3 py-1 rounded-full text-sm backdrop-blur-sm border border-white/20 cursor-pointer hover:bg-white/30 transition">
+            <i class="fas fa-gamepad mr-1"></i> Board Games
+          </span>
+          <span class="bg-white/20 text-white px-3 py-1 rounded-full text-sm backdrop-blur-sm border border-white/20 cursor-pointer hover:bg-white/30 transition">
+            <i class="fas fa-laptop mr-1"></i> Coworking
+          </span>
+          <span class="bg-white/20 text-white px-3 py-1 rounded-full text-sm backdrop-blur-sm border border-white/20 cursor-pointer hover:bg-white/30 transition">
+            <i class="fas fa-users mr-1"></i> Meetings
+          </span>
+          <span class="bg-white/20 text-white px-3 py-1 rounded-full text-sm backdrop-blur-sm border border-white/20 cursor-pointer hover:bg-white/30 transition">
+            <i class="fas fa-tv mr-1"></i> Movie Night
+          </span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =============== VARIANT 2: QUICK STATS =============== -->
+  <div id="quick-stats" class="variant-label"><i class="fas fa-chart-bar mr-2"></i> Variant 2 — Quick Stats Hero</div>
+  <section
+    class="relative w-full min-h-[75vh] bg-cover bg-center bg-no-repeat flex items-center justify-center"
+    style="background-image: url('https://images.unsplash.com/photo-1497366216548-37526070297c?w=1600&q=80')"
+  >
+    <div class="absolute inset-0 bg-gradient-to-br from-black/60 via-black/40 to-accent-900/50"></div>
+    <div class="relative z-10 w-full max-w-[1000px] mx-auto px-6">
+      <!-- Text -->
+      <div class="text-center mb-10">
+        <h1 class="text-4xl md:text-5xl font-bold text-white mb-3 drop-shadow-lg">Tere tulemast!</h1>
+        <p class="text-lg md:text-xl text-white/90 drop-shadow max-w-[600px] mx-auto">
+          Here you can order a room for your company
+        </p>
+        <div class="flex justify-center gap-3 mt-6">
+          <a href="#" class="bg-accent hover:bg-accent-hover text-white px-6 py-3 rounded-lg font-semibold transition-all hover:shadow-lg no-underline">
+            <i class="fas fa-door-open mr-2"></i>Browse Rooms
+          </a>
+          <a href="#" class="bg-white/15 hover:bg-white/25 text-white px-6 py-3 rounded-lg font-semibold backdrop-blur-sm border border-white/25 transition-all no-underline">
+            <i class="fas fa-info-circle mr-2"></i>Learn More
+          </a>
+        </div>
+      </div>
+
+      <!-- Stats cards -->
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <div class="bg-white/10 backdrop-blur-md rounded-xl border border-white/20 p-5 text-center hover:-translate-y-1 transition-transform">
+          <div class="text-3xl font-bold text-accent-300 mb-1">12+</div>
+          <div class="text-white/80 text-sm">Unique Rooms</div>
+        </div>
+        <div class="bg-white/10 backdrop-blur-md rounded-xl border border-white/20 p-5 text-center hover:-translate-y-1 transition-transform">
+          <div class="text-3xl font-bold text-accent-300 mb-1">8€</div>
+          <div class="text-white/80 text-sm">Starting Price</div>
+        </div>
+        <div class="bg-white/10 backdrop-blur-md rounded-xl border border-white/20 p-5 text-center hover:-translate-y-1 transition-transform">
+          <div class="text-3xl font-bold text-accent-300 mb-1">500+</div>
+          <div class="text-white/80 text-sm">Happy Guests</div>
+        </div>
+        <div class="bg-white/10 backdrop-blur-md rounded-xl border border-white/20 p-5 text-center hover:-translate-y-1 transition-transform">
+          <div class="text-3xl font-bold text-accent-300 mb-1">4.8<i class="fas fa-star text-lg ml-1"></i></div>
+          <div class="text-white/80 text-sm">Rating</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =============== VARIANT 3: MINI BOOKING =============== -->
+  <div id="mini-booking" class="variant-label"><i class="fas fa-calendar-check mr-2"></i> Variant 3 — Mini Booking Hero</div>
+  <section
+    class="relative w-full min-h-[75vh] bg-cover bg-center bg-no-repeat flex items-center"
+    style="background-image: url('https://images.unsplash.com/photo-1497366216548-37526070297c?w=1600&q=80')"
+  >
+    <div class="absolute inset-0 bg-gradient-to-r from-black/70 via-black/40 to-transparent"></div>
+    <div class="relative z-10 w-full max-w-[1200px] mx-auto px-6 flex flex-col lg:flex-row items-center gap-10">
+      <!-- Left: text -->
+      <div class="flex-1 text-white">
+        <h1 class="text-4xl md:text-5xl font-bold mb-4 drop-shadow-lg leading-tight">
+          Tere tulemast!
+        </h1>
+        <p class="text-lg text-white/90 mb-6 max-w-[500px] drop-shadow">
+          Book your ideal anticafe space in seconds — for work, events, or relaxation
+        </p>
+        <div class="flex gap-3">
+          <div class="flex items-center gap-2 text-white/80">
+            <div class="w-10 h-10 rounded-full bg-accent/20 flex items-center justify-center border border-accent/40">
+              <i class="fas fa-wifi text-accent-300"></i>
+            </div>
+            <span class="text-sm">Free Wi-Fi</span>
+          </div>
+          <div class="flex items-center gap-2 text-white/80">
+            <div class="w-10 h-10 rounded-full bg-accent/20 flex items-center justify-center border border-accent/40">
+              <i class="fas fa-coffee text-accent-300"></i>
+            </div>
+            <span class="text-sm">Free Drinks</span>
+          </div>
+          <div class="flex items-center gap-2 text-white/80">
+            <div class="w-10 h-10 rounded-full bg-accent/20 flex items-center justify-center border border-accent/40">
+              <i class="fas fa-gamepad text-accent-300"></i>
+            </div>
+            <span class="text-sm">Games</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right: Mini booking form -->
+      <div class="w-full lg:w-[420px] bg-white rounded-2xl shadow-2xl p-6">
+        <h3 class="text-gray-900 font-bold text-xl mb-1">Quick Book</h3>
+        <p class="text-gray-500 text-sm mb-5">Reserve your spot in 30 seconds</p>
+
+        <div class="space-y-3">
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">
+              <i class="fas fa-door-open mr-1 text-accent"></i> Room Type
+            </label>
+            <select class="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-accent-300 bg-white">
+              <option>Any room</option>
+              <option>Coworking Space</option>
+              <option>Meeting Room</option>
+              <option>Game Room</option>
+              <option>Event Hall</option>
+            </select>
+          </div>
+
+          <div class="grid grid-cols-2 gap-3">
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">
+                <i class="fas fa-calendar mr-1 text-accent"></i> Date
+              </label>
+              <input
+                type="date"
+                class="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-accent-300"
+              />
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">
+                <i class="fas fa-clock mr-1 text-accent"></i> Time
+              </label>
+              <input
+                type="time"
+                class="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-accent-300"
+              />
+            </div>
+          </div>
+
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">
+              <i class="fas fa-users mr-1 text-accent"></i> Guests
+            </label>
+            <input
+              type="number"
+              min="1"
+              max="20"
+              value="2"
+              class="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-accent-300"
+            />
+          </div>
+
+          <button class="w-full bg-accent hover:bg-accent-hover text-white py-3 rounded-lg font-semibold transition-all hover:shadow-lg mt-2">
+            <i class="fas fa-calendar-check mr-2"></i>Check Availability
+          </button>
+
+          <p class="text-center text-gray-400 text-xs mt-2">
+            <i class="fas fa-lock mr-1"></i> No payment required to check
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</body>
+</html>

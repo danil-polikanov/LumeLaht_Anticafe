@@ -1,0 +1,52 @@
+.page {
+  @apply w-full py-6 max-w-[1200px] mx-auto px-4;
+}
+
+.headerRow {
+  @apply flex justify-between items-center mb-6;
+}
+
+.pageTitle {
+  @apply mb-0 text-gray-900 text-2xl font-bold;
+}
+
+.roomGrid {
+  @apply flex flex-wrap -mx-2;
+}
+
+.updatingIndicator {
+  @apply flex justify-center items-center py-2 mb-4;
+}
+
+.spinner {
+  @apply w-4 h-4 border-2 border-accent border-t-transparent rounded-full animate-spin mr-2;
+}
+
+.updatingText {
+  @apply text-gray-400 text-sm;
+}
+
+/* Error / Empty states */
+.stateContainer {
+  @apply w-full;
+}
+
+.stateInner {
+  @apply text-center py-16 animate-fade-in;
+}
+
+.stateIcon {
+  @apply mb-4;
+}
+
+.stateTitle {
+  @apply text-gray-700 font-semibold mb-2;
+}
+
+.stateText {
+  @apply text-gray-400 max-w-md mx-auto;
+}
+
+.refreshLink {
+  @apply text-accent-500 hover:text-accent-700 no-underline transition-colors;
+}

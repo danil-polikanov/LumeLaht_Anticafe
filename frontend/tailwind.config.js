@@ -7,8 +7,19 @@ module.exports = {
         accent: {
           DEFAULT: '#CE9857',
           hover: '#b8863f',
+          light: '#e8c48a',
+          dark: '#a07235',
+          50: '#fdf6ec',
+          100: '#f9e6cc',
+          200: '#f0cc99',
+          300: '#e4ae66',
+          400: '#d9994d',
+          500: '#CE9857',
+          600: '#b8863f',
+          700: '#a07235',
+          800: '#7d5a2a',
+          900: '#5e4320',
         },
-        primary: '#0d6efd',
       },
       keyframes: {
         slideDown: {
@@ -35,14 +46,17 @@ module.exports = {
           from: { opacity: '0', transform: 'translateX(50px)' },
           to: { opacity: '1', transform: 'translateX(0)' },
         },
-        burgerLineMiddle: {
-          to: { opacity: '0' },
+        shimmer: {
+          '0%': { backgroundPosition: '-200% 0' },
+          '100%': { backgroundPosition: '200% 0' },
         },
-        burgerLineTop: {
-          to: { transform: 'rotate(45deg) translate(4px, 4px)' },
+        fadeIn: {
+          from: { opacity: '0' },
+          to: { opacity: '1' },
         },
-        burgerLineBottom: {
-          to: { transform: 'rotate(-45deg) translate(7px, -6px)' },
+        scaleIn: {
+          from: { opacity: '0', transform: 'scale(0.95)' },
+          to: { opacity: '1', transform: 'scale(1)' },
         },
       },
       animation: {
@@ -57,6 +71,9 @@ module.exports = {
         'float-4': 'float 6s ease-in-out 4s infinite',
         'fade-in-left': 'fadeInLeft 0.8s ease-out 0.2s forwards',
         'fade-in-right': 'fadeInRight 0.8s ease-out 0.4s forwards',
+        shimmer: 'shimmer 1.5s ease-in-out infinite',
+        'fade-in': 'fadeIn 0.3s ease-out',
+        'scale-in': 'scaleIn 0.3s ease-out',
       },
     },
   },

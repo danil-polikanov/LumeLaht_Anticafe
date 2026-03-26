@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Filter Variants — LumeLaht</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            accent: {
+              DEFAULT: '#CE9857',
+              hover: '#b8863f',
+              light: '#e8c48a',
+              dark: '#a07235',
+              50: '#fdf6ec',
+              100: '#f9e6cc',
+              200: '#f0cc99',
+              300: '#e4ae66',
+              400: '#d9994d',
+              500: '#CE9857',
+              600: '#b8863f',
+              700: '#a07235',
+              800: '#7d5a2a',
+              900: '#5e4320',
+            },
+          },
+        },
+      },
+    };
+  </script>
+  <style>
+    body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
+    .variant-label {
+      position: sticky; top: 0; z-index: 50;
+      background: linear-gradient(135deg, #1a1a2e, #16213e);
+      color: white; padding: 16px 24px; font-size: 1.25rem; font-weight: 700;
+      border-bottom: 3px solid #CE9857;
+    }
+    /* Drawer animation */
+    .drawer-overlay { transition: opacity 0.3s; }
+    .drawer-panel { transition: transform 0.3s ease; }
+    .drawer-panel.closed { transform: translateX(-100%); }
+    .drawer-panel.open { transform: translateX(0); }
+  </style>
+</head>
+<body class="bg-gray-100">
+
+  <header class="bg-gray-900 text-white text-center py-6">
+    <h1 class="text-3xl font-bold">Filter Variants</h1>
+    <p class="text-gray-400 mt-1">Pick a filtering approach for the Room Catalog</p>
+    <nav class="flex justify-center gap-4 mt-4 text-sm">
+      <a href="#horizontal" class="text-accent-300 hover:text-white transition">#1 Horizontal Bar</a>
+      <a href="#sidebar" class="text-accent-300 hover:text-white transition">#2 Sidebar</a>
+      <a href="#drawer" class="text-accent-300 hover:text-white transition">#3 Drawer</a>
+    </nav>
+  </header>
+
+  <!-- =============== VARIANT 1: HORIZONTAL BAR =============== -->
+  <div id="horizontal" class="variant-label"><i class="fas fa-grip-lines mr-2"></i> Variant 1 — Horizontal Filter Bar</div>
+  <section class="max-w-[1200px] mx-auto py-8 px-4">
+    <!-- Horizontal filter strip -->
+    <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-4 mb-6">
+      <div class="flex flex-wrap items-end gap-3">
+        <!-- Search -->
+        <div class="flex-1 min-w-[180px]">
+          <label class="block text-xs font-medium text-gray-500 mb-1">
+            <i class="fas fa-search mr-1 text-accent-400"></i>Search
+          </label>
+          <input
+            type="text"
+            placeholder="Room name..."
+            class="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-accent-300"
+          />
+        </div>
+        <!-- City -->
+        <div class="flex-1 min-w-[140px]">
+          <label class="block text-xs font-medium text-gray-500 mb-1">
+            <i class="fas fa-map-marker-alt mr-1 text-accent-400"></i>City
+          </label>
+          <input
+            type="text"
+            placeholder="City"
+            class="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-accent-300"
+          />
+        </div>
+        <!-- Price range -->
+        <div class="flex-1 min-w-[200px]">
+          <label class="block text-xs font-medium text-gray-500 mb-1">
+            <i class="fas fa-euro-sign mr-1 text-accent-400"></i>Price range
+          </label>
+          <div class="flex gap-2">
+            <input type="number" placeholder="Min" class="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-accent-300" />
+            <input type="number" placeholder="Max" class="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-accent-300" />
+          </div>
+        </div>
+        <!-- Activities dropdown -->
+        <div class="flex-1 min-w-[160px]">
+          <label class="block text-xs font-medium text-gray-500 mb-1">
+            <i class="fas fa-running mr-1 text-accent-400"></i>Activity
+          </label>
+          <select class="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-accent-300 bg-white">
+            <option>All activities</option>
+            <option>Board Games</option>
+            <option>Coworking</option>
+            <option>Movie Night</option>
+          </select>
+        </div>
+        <!-- Actions -->
+        <div class="flex gap-2">
+          <button class="bg-accent hover:bg-accent-hover text-white px-5 py-2 rounded-lg text-sm font-medium transition-all hover:shadow-md whitespace-nowrap">
+            <i class="fas fa-search mr-1"></i> Apply
+          </button>
+          <button class="border border-gray-300 text-gray-600 px-4 py-2 rounded-lg text-sm hover:bg-gray-50 transition whitespace-nowrap">
+            <i class="fas fa-times mr-1"></i> Clear
+          </button>
+        </div>
+      </div>
+      <!-- Active filter pills -->
+      <div class="flex flex-wrap gap-2 mt-3">
+        <span class="inline-flex items-center bg-accent-100 text-accent-800 text-xs px-3 py-1 rounded-full font-medium">
+          City: Tallinn <button class="ml-1.5 hover:text-accent-900">&times;</button>
+        </span>
+        <span class="inline-flex items-center bg-accent-100 text-accent-800 text-xs px-3 py-1 rounded-full font-medium">
+          Board Games <button class="ml-1.5 hover:text-accent-900">&times;</button>
+        </span>
+      </div>
+    </div>
+
+    <!-- Sort + Room grid header -->
+    <div class="flex justify-between items-center mb-4">
+      <h2 class="text-xl font-bold text-gray-900 m-0">
+        <i class="fas fa-building mr-2 text-accent"></i>Room catalog
+      </h2>
+      <div class="flex items-center gap-2 text-sm text-gray-500">
+        <span>Sort by:</span>
+        <button class="bg-accent text-white px-3 py-1.5 rounded-lg text-sm border border-accent">
+          <i class="fas fa-sort-up mr-1"></i>Name
+        </button>
+        <button class="border border-accent-300 text-accent-700 px-3 py-1.5 rounded-lg text-sm hover:bg-accent-50">
+          <i class="fas fa-sort mr-1"></i>Price
+        </button>
+        <button class="border border-accent-300 text-accent-700 px-3 py-1.5 rounded-lg text-sm hover:bg-accent-50">
+          <i class="fas fa-sort mr-1"></i>City
+        </button>
+      </div>
+    </div>
+
+    <!-- Placeholder room cards (full-width grid) -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+      <div class="bg-white rounded-xl border border-gray-100 h-[280px] flex items-center justify-center text-gray-300">
+        <i class="fas fa-image fa-3x"></i>
+      </div>
+      <div class="bg-white rounded-xl border border-gray-100 h-[280px] flex items-center justify-center text-gray-300">
+        <i class="fas fa-image fa-3x"></i>
+      </div>
+      <div class="bg-white rounded-xl border border-gray-100 h-[280px] flex items-center justify-center text-gray-300">
+        <i class="fas fa-image fa-3x"></i>
+      </div>
+      <div class="bg-white rounded-xl border border-gray-100 h-[280px] flex items-center justify-center text-gray-300">
+        <i class="fas fa-image fa-3x"></i>
+      </div>
+      <div class="bg-white rounded-xl border border-gray-100 h-[280px] flex items-center justify-center text-gray-300">
+        <i class="fas fa-image fa-3x"></i>
+      </div>
+      <div class="bg-white rounded-xl border border-gray-100 h-[280px] flex items-center justify-center text-gray-300">
+        <i class="fas fa-image fa-3x"></i>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- =============== VARIANT 2: SIDEBAR (current, refined) =============== -->
+  <div id="sidebar" class="variant-label"><i class="fas fa-columns mr-2"></i> Variant 2 — Sidebar Filters (current layout, refined)</div>
+  <section class="max-w-[1200px] mx-auto py-8 px-4">
+    <div class="flex justify-between items-center mb-6">
+      <h2 class="text-xl font-bold text-gray-900 m-0">
+        <i class="fas fa-building mr-2 text-accent"></i>Room catalog
+      </h2>
+      <div class="flex items-center gap-2 text-sm text-gray-500">
+        <span>Sort by:</span>
+        <button class="bg-accent text-white px-3 py-1.5 rounded-lg text-sm border border-accent">
+          <i class="fas fa-sort-up mr-1"></i>Name
+        </button>
+        <button class="border border-accent-300 text-accent-700 px-3 py-1.5 rounded-lg text-sm hover:bg-accent-50">
+          <i class="fas fa-sort mr-1"></i>Price
+        </button>
+        <button class="border border-accent-300 text-accent-700 px-3 py-1.5 rounded-lg text-sm hover:bg-accent-50">
+          <i class="fas fa-sort mr-1"></i>City
+        </button>
+      </div>
+    </div>
+
+    <div class="flex gap-6">
+      <!-- Sidebar -->
+      <aside class="w-[280px] flex-shrink-0">
+        <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden sticky top-4">
+          <!-- Header -->
+          <div class="bg-gradient-to-r from-accent to-accent-hover text-white p-4 flex justify-between items-center">
+            <h5 class="m-0 font-semibold text-base"><i class="fas fa-filter mr-2"></i>Filters</h5>
+            <button class="border border-white/40 text-white px-2 py-1 rounded text-xs hover:bg-white/15 bg-transparent">
+              <i class="fas fa-chevron-up"></i>
+            </button>
+          </div>
+          <div class="p-4 space-y-4">
+            <!-- Search -->
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1"><i class="fas fa-search mr-1 text-accent-400"></i>Search</label>
+              <input type="text" placeholder="Search by name..." class="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-accent-300" />
+            </div>
+            <!-- City -->
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1"><i class="fas fa-map-marker-alt mr-1 text-accent-400"></i>City</label>
+              <input type="text" placeholder="City" class="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-accent-300" />
+            </div>
+            <!-- Region -->
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1"><i class="fas fa-globe mr-1 text-accent-400"></i>Region</label>
+              <input type="text" placeholder="Region" class="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-accent-300" />
+            </div>
+            <!-- Price -->
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1"><i class="fas fa-euro-sign mr-1 text-accent-400"></i>Price</label>
+              <div class="flex gap-2">
+                <input type="number" placeholder="From" class="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-accent-300" />
+                <input type="number" placeholder="To" class="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-accent-300" />
+              </div>
+            </div>
+            <!-- Activities -->
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-2"><i class="fas fa-running mr-1 text-accent-400"></i>Activities</label>
+              <div class="space-y-1.5">
+                <label class="flex items-center gap-2 px-3 py-2 rounded-lg bg-accent-100 text-accent-800 text-sm font-medium cursor-pointer">
+                  <input type="checkbox" checked class="accent-accent" /> Board Games
+                </label>
+                <label class="flex items-center gap-2 px-3 py-2 rounded-lg bg-gray-50 text-gray-600 text-sm cursor-pointer hover:bg-gray-100">
+                  <input type="checkbox" class="accent-accent" /> Coworking
+                </label>
+                <label class="flex items-center gap-2 px-3 py-2 rounded-lg bg-gray-50 text-gray-600 text-sm cursor-pointer hover:bg-gray-100">
+                  <input type="checkbox" class="accent-accent" /> Movie Night
+                </label>
+                <label class="flex items-center gap-2 px-3 py-2 rounded-lg bg-gray-50 text-gray-600 text-sm cursor-pointer hover:bg-gray-100">
+                  <input type="checkbox" class="accent-accent" /> Events
+                </label>
+              </div>
+            </div>
+            <!-- Clear -->
+            <button class="w-full border border-gray-300 text-gray-600 px-3 py-2 rounded-lg text-sm hover:bg-gray-50 transition">
+              <i class="fas fa-times mr-1"></i> Clear all
+            </button>
+            <!-- Active indicator -->
+            <div class="bg-accent-50 border border-accent-200 text-accent-800 p-3 rounded-lg text-sm flex items-center flex-wrap gap-1">
+              <i class="fas fa-info-circle mr-1"></i>
+              <span class="mr-1">Active:</span>
+              <span class="bg-accent text-white text-xs px-2 py-0.5 rounded-full">Board Games</span>
+            </div>
+          </div>
+        </div>
+      </aside>
+
+      <!-- Room cards -->
+      <div class="flex-1">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          <div class="bg-white rounded-xl border border-gray-100 h-[280px] flex items-center justify-center text-gray-300"><i class="fas fa-image fa-3x"></i></div>
+          <div class="bg-white rounded-xl border border-gray-100 h-[280px] flex items-center justify-center text-gray-300"><i class="fas fa-image fa-3x"></i></div>
+          <div class="bg-white rounded-xl border border-gray-100 h-[280px] flex items-center justify-center text-gray-300"><i class="fas fa-image fa-3x"></i></div>
+          <div class="bg-white rounded-xl border border-gray-100 h-[280px] flex items-center justify-center text-gray-300"><i class="fas fa-image fa-3x"></i></div>
+          <div class="bg-white rounded-xl border border-gray-100 h-[280px] flex items-center justify-center text-gray-300"><i class="fas fa-image fa-3x"></i></div>
+          <div class="bg-white rounded-xl border border-gray-100 h-[280px] flex items-center justify-center text-gray-300"><i class="fas fa-image fa-3x"></i></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- =============== VARIANT 3: DRAWER =============== -->
+  <div id="drawer" class="variant-label"><i class="fas fa-bars mr-2"></i> Variant 3 — Drawer (Off-canvas) Filters</div>
+  <section class="max-w-[1200px] mx-auto py-8 px-4">
+    <!-- Top bar with open-filter button -->
+    <div class="flex justify-between items-center mb-6">
+      <div class="flex items-center gap-3">
+        <h2 class="text-xl font-bold text-gray-900 m-0">
+          <i class="fas fa-building mr-2 text-accent"></i>Room catalog
+        </h2>
+        <button
+          onclick="document.getElementById('drawer-panel').classList.toggle('closed'); document.getElementById('drawer-panel').classList.toggle('open'); document.getElementById('drawer-overlay').classList.toggle('hidden');"
+          class="bg-accent hover:bg-accent-hover text-white px-4 py-2 rounded-lg text-sm font-medium transition-all hover:shadow-md"
+        >
+          <i class="fas fa-sliders-h mr-1.5"></i> Filters
+          <span class="bg-white/20 text-white text-xs px-1.5 py-0.5 rounded-full ml-1">2</span>
+        </button>
+      </div>
+      <div class="flex items-center gap-2 text-sm text-gray-500">
+        <span>Sort by:</span>
+        <button class="bg-accent text-white px-3 py-1.5 rounded-lg text-sm border border-accent">
+          <i class="fas fa-sort-up mr-1"></i>Name
+        </button>
+        <button class="border border-accent-300 text-accent-700 px-3 py-1.5 rounded-lg text-sm hover:bg-accent-50">
+          <i class="fas fa-sort mr-1"></i>Price
+        </button>
+        <button class="border border-accent-300 text-accent-700 px-3 py-1.5 rounded-lg text-sm hover:bg-accent-50">
+          <i class="fas fa-sort mr-1"></i>City
+        </button>
+      </div>
+    </div>
+
+    <!-- Active filter pills (always visible) -->
+    <div class="flex flex-wrap gap-2 mb-4">
+      <span class="inline-flex items-center bg-accent-100 text-accent-800 text-xs px-3 py-1 rounded-full font-medium">
+        City: Tallinn <button class="ml-1.5 hover:text-accent-900">&times;</button>
+      </span>
+      <span class="inline-flex items-center bg-accent-100 text-accent-800 text-xs px-3 py-1 rounded-full font-medium">
+        Board Games <button class="ml-1.5 hover:text-accent-900">&times;</button>
+      </span>
+      <button class="text-gray-400 hover:text-gray-600 text-xs px-2 py-1 transition">
+        <i class="fas fa-times mr-1"></i>Clear all
+      </button>
+    </div>
+
+    <!-- Full-width room grid -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+      <div class="bg-white rounded-xl border border-gray-100 h-[280px] flex items-center justify-center text-gray-300"><i class="fas fa-image fa-3x"></i></div>
+      <div class="bg-white rounded-xl border border-gray-100 h-[280px] flex items-center justify-center text-gray-300"><i class="fas fa-image fa-3x"></i></div>
+      <div class="bg-white rounded-xl border border-gray-100 h-[280px] flex items-center justify-center text-gray-300"><i class="fas fa-image fa-3x"></i></div>
+      <div class="bg-white rounded-xl border border-gray-100 h-[280px] flex items-center justify-center text-gray-300"><i class="fas fa-image fa-3x"></i></div>
+      <div class="bg-white rounded-xl border border-gray-100 h-[280px] flex items-center justify-center text-gray-300"><i class="fas fa-image fa-3x"></i></div>
+      <div class="bg-white rounded-xl border border-gray-100 h-[280px] flex items-center justify-center text-gray-300"><i class="fas fa-image fa-3x"></i></div>
+      <div class="bg-white rounded-xl border border-gray-100 h-[280px] flex items-center justify-center text-gray-300"><i class="fas fa-image fa-3x"></i></div>
+      <div class="bg-white rounded-xl border border-gray-100 h-[280px] flex items-center justify-center text-gray-300"><i class="fas fa-image fa-3x"></i></div>
+    </div>
+  </section>
+
+  <!-- Drawer overlay + panel (initially hidden) -->
+  <div
+    id="drawer-overlay"
+    class="hidden fixed inset-0 bg-black/50 z-[999]"
+    onclick="document.getElementById('drawer-panel').classList.add('closed'); document.getElementById('drawer-panel').classList.remove('open'); this.classList.add('hidden');"
+  ></div>
+  <aside
+    id="drawer-panel"
+    class="drawer-panel closed fixed top-0 left-0 bottom-0 w-[320px] bg-white z-[1000] shadow-2xl overflow-y-auto"
+  >
+    <!-- Drawer header -->
+    <div class="bg-gradient-to-r from-accent to-accent-hover text-white p-5 flex justify-between items-center">
+      <h5 class="m-0 font-bold text-lg"><i class="fas fa-filter mr-2"></i>Filters</h5>
+      <button
+        onclick="document.getElementById('drawer-panel').classList.add('closed'); document.getElementById('drawer-panel').classList.remove('open'); document.getElementById('drawer-overlay').classList.add('hidden');"
+        class="w-8 h-8 rounded-full flex items-center justify-center text-white hover:bg-white/20 bg-white/10 border-none cursor-pointer"
+      >
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+    <div class="p-5 space-y-4">
+      <!-- Search -->
+      <div>
+        <label class="block text-sm font-medium text-gray-700 mb-1"><i class="fas fa-search mr-1 text-accent-400"></i>Search</label>
+        <input type="text" placeholder="Search by name..." class="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-accent-300" />
+      </div>
+      <!-- City -->
+      <div>
+        <label class="block text-sm font-medium text-gray-700 mb-1"><i class="fas fa-map-marker-alt mr-1 text-accent-400"></i>City</label>
+        <input type="text" placeholder="City" value="Tallinn" class="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-accent-300" />
+      </div>
+      <!-- Region -->
+      <div>
+        <label class="block text-sm font-medium text-gray-700 mb-1"><i class="fas fa-globe mr-1 text-accent-400"></i>Region</label>
+        <input type="text" placeholder="Region" class="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-accent-300" />
+      </div>
+      <!-- Price range -->
+      <div>
+        <label class="block text-sm font-medium text-gray-700 mb-1"><i class="fas fa-euro-sign mr-1 text-accent-400"></i>Price range</label>
+        <div class="flex gap-2">
+          <input type="number" placeholder="From" class="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-accent-300" />
+          <input type="number" placeholder="To" class="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-accent-300" />
+        </div>
+      </div>
+      <!-- Activities -->
+      <div>
+        <label class="block text-sm font-medium text-gray-700 mb-2"><i class="fas fa-running mr-1 text-accent-400"></i>Activities</label>
+        <div class="space-y-1.5">
+          <label class="flex items-center gap-2 px-3 py-2.5 rounded-lg bg-accent-100 text-accent-800 text-sm font-medium cursor-pointer">
+            <input type="checkbox" checked class="accent-accent" /> Board Games
+          </label>
+          <label class="flex items-center gap-2 px-3 py-2.5 rounded-lg bg-gray-50 text-gray-600 text-sm cursor-pointer hover:bg-gray-100">
+            <input type="checkbox" class="accent-accent" /> Coworking
+          </label>
+          <label class="flex items-center gap-2 px-3 py-2.5 rounded-lg bg-gray-50 text-gray-600 text-sm cursor-pointer hover:bg-gray-100">
+            <input type="checkbox" class="accent-accent" /> Movie Night
+          </label>
+          <label class="flex items-center gap-2 px-3 py-2.5 rounded-lg bg-gray-50 text-gray-600 text-sm cursor-pointer hover:bg-gray-100">
+            <input type="checkbox" class="accent-accent" /> Events
+          </label>
+        </div>
+      </div>
+      <!-- Actions -->
+      <div class="flex gap-2 pt-2">
+        <button class="flex-1 bg-accent hover:bg-accent-hover text-white py-2.5 rounded-lg text-sm font-medium transition-all">
+          <i class="fas fa-check mr-1"></i> Apply
+        </button>
+        <button class="flex-1 border border-gray-300 text-gray-600 py-2.5 rounded-lg text-sm hover:bg-gray-50 transition">
+          <i class="fas fa-times mr-1"></i> Clear
+        </button>
+      </div>
+    </div>
+  </aside>
+
+</body>
+</html>

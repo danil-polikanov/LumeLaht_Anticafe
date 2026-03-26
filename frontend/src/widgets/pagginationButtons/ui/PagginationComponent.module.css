@@ -1,0 +1,23 @@
+.wrapper {
+  @apply flex justify-center mt-4;
+}
+
+.list {
+  @apply flex list-none gap-1 p-0 m-0;
+}
+
+.item {
+  @apply inline-block;
+}
+
+.itemDisabled {
+  @apply opacity-50 pointer-events-none;
+}
+
+.link {
+  @apply px-3 py-1.5 border border-gray-200 rounded-lg text-accent-700 hover:bg-accent-50 cursor-pointer text-sm bg-white transition-colors;
+}
+
+.linkActive {
+  @apply px-3 py-1.5 border border-accent rounded-lg bg-accent text-white hover:bg-accent-hover cursor-pointer text-sm transition-colors;
+}

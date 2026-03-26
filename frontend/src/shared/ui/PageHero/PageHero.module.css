@@ -1,0 +1,43 @@
+.banner {
+  @apply relative w-full h-[220px] md:h-[280px] bg-cover bg-center bg-no-repeat flex items-center justify-center;
+}
+
+.overlay {
+  @apply absolute inset-0;
+  background: linear-gradient(135deg, rgba(0, 0, 0, 0.55), rgba(0, 0, 0, 0.35));
+}
+
+.content {
+  @apply relative z-10 text-center text-white px-4;
+}
+
+.title {
+  @apply text-3xl md:text-4xl font-bold mb-2 drop-shadow-lg;
+}
+
+.subtitle {
+  @apply text-base md:text-lg drop-shadow max-w-[500px] mx-auto;
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.breadcrumbs {
+  @apply flex justify-center items-center gap-2 mt-4 text-sm;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.breadcrumbLink {
+  @apply no-underline transition-colors;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.breadcrumbLink:hover {
+  @apply text-white;
+}
+
+.breadcrumbSep {
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.breadcrumbCurrent {
+  @apply text-white font-medium;
+}

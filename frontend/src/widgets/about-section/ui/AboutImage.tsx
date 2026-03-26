@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
+import styles from './AboutImage.module.css';
 
 export const AboutImage = () => {
   const ref = useRef<HTMLDivElement>(null);
@@ -15,11 +16,15 @@ export const AboutImage = () => {
   return (
     <div
       ref={ref}
-      className={`flex-1 text-center px-3 transition-all duration-700 ${
-        isVisible ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-12'
-      }`}
+      className={`${styles.wrapper} ${isVisible ? styles.visible : styles.hidden}`}
     >
-      <img src="/AboutPhoto.jpg" alt="Inside LumeLaht Anticafe" className="max-w-full rounded" />
+      <div className={styles.imageContainer}>
+        <img src="/AboutPhoto.jpg" alt="Inside LumeLaht Anticafe" className={styles.image} />
+        <div className={styles.statsCard}>
+          <div className={styles.statValue}>500+</div>
+          <div className={styles.statLabel}>Happy guests</div>
+        </div>
+      </div>
     </div>
   );
 };

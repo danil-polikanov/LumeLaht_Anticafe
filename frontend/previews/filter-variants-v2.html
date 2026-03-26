@@ -1,0 +1,738 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Filter Variants v2 — LumeLaht (Creative)</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            accent: {
+              DEFAULT: '#CE9857',
+              hover: '#b8863f',
+              light: '#e8c48a',
+              dark: '#a07235',
+              50: '#fdf6ec',
+              100: '#f9e6cc',
+              200: '#f0cc99',
+              300: '#e4ae66',
+              400: '#d9994d',
+              500: '#CE9857',
+              600: '#b8863f',
+              700: '#a07235',
+              800: '#7d5a2a',
+              900: '#5e4320',
+            },
+          },
+        },
+      },
+    };
+  </script>
+  <style>
+    body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
+    .variant-label {
+      position: sticky; top: 0; z-index: 50;
+      background: linear-gradient(135deg, #1a1a2e, #16213e);
+      color: white; padding: 16px 24px; font-size: 1.25rem; font-weight: 700;
+      border-bottom: 3px solid #CE9857;
+    }
+
+    /* ===== RANGE SLIDER ===== */
+    .range-track {
+      position: relative;
+      height: 6px;
+      background: #e5e7eb;
+      border-radius: 999px;
+      margin: 8px 0;
+    }
+    .range-fill {
+      position: absolute;
+      height: 100%;
+      background: linear-gradient(90deg, #CE9857, #b8863f);
+      border-radius: 999px;
+      left: 15%;
+      right: 30%;
+    }
+    .range-thumb {
+      position: absolute;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      width: 22px;
+      height: 22px;
+      background: white;
+      border: 3px solid #CE9857;
+      border-radius: 50%;
+      cursor: grab;
+      box-shadow: 0 2px 8px rgba(206,152,87,0.3);
+      transition: box-shadow 0.2s, transform 0.2s;
+    }
+    .range-thumb:hover {
+      box-shadow: 0 4px 16px rgba(206,152,87,0.5);
+      transform: translate(-50%, -50%) scale(1.15);
+    }
+    .range-thumb.left { left: 15%; }
+    .range-thumb.right { left: 70%; }
+
+    /* ===== EXPANDABLE PILLS ===== */
+    .expand-pill {
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      overflow: hidden;
+    }
+    .expand-pill .pill-content {
+      max-height: 0;
+      opacity: 0;
+      transition: max-height 0.35s ease, opacity 0.25s ease, margin 0.3s ease;
+      margin-top: 0;
+    }
+    .expand-pill.expanded .pill-content {
+      max-height: 300px;
+      opacity: 1;
+      margin-top: 12px;
+    }
+    .expand-pill.expanded {
+      background: white !important;
+      border-color: #CE9857 !important;
+      box-shadow: 0 8px 30px rgba(206,152,87,0.15);
+    }
+
+    /* ===== COMBOBOX ===== */
+    .combobox-dropdown {
+      max-height: 0;
+      opacity: 0;
+      overflow: hidden;
+      transition: max-height 0.25s ease, opacity 0.2s ease;
+    }
+    .combobox-dropdown.open {
+      max-height: 200px;
+      opacity: 1;
+    }
+
+    /* ===== ACTIVITY TOGGLES ===== */
+    .activity-toggle {
+      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+      cursor: pointer;
+      user-select: none;
+    }
+    .activity-toggle:hover {
+      transform: translateY(-2px);
+    }
+    .activity-toggle.active {
+      background: linear-gradient(135deg, #CE9857, #b8863f);
+      color: white;
+      border-color: transparent;
+      box-shadow: 0 4px 15px rgba(206,152,87,0.35);
+      transform: translateY(-2px);
+    }
+    .activity-toggle.active .toggle-icon {
+      background: rgba(255,255,255,0.2);
+      color: white;
+    }
+    .activity-toggle .toggle-check {
+      width: 18px; height: 18px;
+      border: 2px solid #d1d5db;
+      border-radius: 4px;
+      display: flex; align-items: center; justify-content: center;
+      transition: all 0.2s;
+      flex-shrink: 0;
+    }
+    .activity-toggle.active .toggle-check {
+      background: white;
+      border-color: white;
+      color: #CE9857;
+    }
+
+    /* ===== FLOATING SEARCH ===== */
+    .search-glow:focus-within {
+      box-shadow: 0 0 0 3px rgba(206,152,87,0.15), 0 4px 20px rgba(206,152,87,0.1);
+      border-color: #CE9857;
+    }
+
+    /* ===== VIEW TOGGLE ===== */
+    .view-btn.active {
+      background: #CE9857;
+      color: white;
+    }
+
+    /* pulse dot for live updates */
+    @keyframes livePulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.5; transform: scale(1.5); }
+    }
+    .live-dot {
+      width: 6px; height: 6px;
+      background: #10b981;
+      border-radius: 50%;
+      animation: livePulse 2s infinite;
+    }
+  </style>
+</head>
+<body class="bg-gray-50">
+
+  <header class="bg-gray-900 text-white text-center py-6">
+    <h1 class="text-3xl font-bold">Filter Variants v2 — Creative</h1>
+    <p class="text-gray-400 mt-1">Modern filter UX with rich interactions</p>
+    <nav class="flex justify-center gap-4 mt-4 text-sm">
+      <a href="#expandable-pills" class="text-accent-300 hover:text-white transition">#4 Expandable Pills</a>
+      <a href="#command-bar" class="text-accent-300 hover:text-white transition">#5 Command Bar</a>
+      <a href="#floating-panel" class="text-accent-300 hover:text-white transition">#6 Floating Panel</a>
+    </nav>
+  </header>
+
+
+  <!-- =============== VARIANT 4: EXPANDABLE PILLS =============== -->
+  <div id="expandable-pills" class="variant-label">
+    <i class="fas fa-magic mr-2"></i> Variant 4 — Expandable Filter Pills
+    <span class="text-sm font-normal text-accent-200 ml-2">(click pills to expand)</span>
+  </div>
+  <section class="max-w-[1200px] mx-auto py-8 px-4">
+
+    <!-- Main search bar -->
+    <div class="search-glow flex items-center bg-white rounded-2xl border border-gray-200 px-4 py-3 mb-5 transition-all">
+      <i class="fas fa-search text-accent mr-3 text-lg"></i>
+      <input
+        type="text"
+        placeholder="Search rooms by name, description, or keyword..."
+        class="flex-1 text-gray-700 bg-transparent outline-none text-base placeholder:text-gray-400"
+      />
+      <div class="flex items-center gap-2 ml-3 pl-3 border-l border-gray-200">
+        <div class="live-dot"></div>
+        <span class="text-xs text-gray-400">Live results</span>
+      </div>
+    </div>
+
+    <!-- Expandable pill row -->
+    <div class="flex flex-wrap gap-3 mb-6">
+      <!-- PILL: Location -->
+      <div
+        class="expand-pill bg-gray-100 border border-gray-200 rounded-2xl px-5 py-3 cursor-pointer"
+        onclick="this.classList.toggle('expanded')"
+      >
+        <div class="flex items-center gap-2">
+          <div class="w-8 h-8 rounded-lg bg-accent/10 flex items-center justify-center text-accent">
+            <i class="fas fa-map-marker-alt text-sm"></i>
+          </div>
+          <span class="font-medium text-gray-700 text-sm">Location</span>
+          <span class="bg-accent text-white text-xs px-2 py-0.5 rounded-full">Tallinn</span>
+          <i class="fas fa-chevron-down text-xs text-gray-400 ml-1 transition-transform"></i>
+        </div>
+        <div class="pill-content">
+          <div class="space-y-2">
+            <div>
+              <label class="block text-xs font-medium text-gray-500 mb-1">City</label>
+              <div class="relative">
+                <input type="text" value="Tallinn" placeholder="Start typing..."
+                  class="w-full border border-gray-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-accent/30 focus:border-accent pr-8"
+                  onfocus="this.parentElement.querySelector('.combobox-dropdown').classList.add('open')"
+                  onblur="setTimeout(() => this.parentElement.querySelector('.combobox-dropdown').classList.remove('open'), 200)"
+                />
+                <i class="fas fa-angle-down absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 text-xs"></i>
+                <div class="combobox-dropdown absolute top-full left-0 right-0 mt-1 bg-white border border-gray-200 rounded-xl shadow-lg z-10">
+                  <div class="p-1">
+                    <div class="px-3 py-2 rounded-lg hover:bg-accent-50 cursor-pointer text-sm flex items-center gap-2 bg-accent-50">
+                      <i class="fas fa-map-pin text-accent text-xs"></i> Tallinn
+                      <i class="fas fa-check text-accent text-xs ml-auto"></i>
+                    </div>
+                    <div class="px-3 py-2 rounded-lg hover:bg-accent-50 cursor-pointer text-sm flex items-center gap-2">
+                      <i class="fas fa-map-pin text-gray-400 text-xs"></i> Tartu
+                    </div>
+                    <div class="px-3 py-2 rounded-lg hover:bg-accent-50 cursor-pointer text-sm flex items-center gap-2">
+                      <i class="fas fa-map-pin text-gray-400 text-xs"></i> Parnu
+                    </div>
+                    <div class="px-3 py-2 rounded-lg hover:bg-accent-50 cursor-pointer text-sm flex items-center gap-2">
+                      <i class="fas fa-map-pin text-gray-400 text-xs"></i> Narva
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div>
+              <label class="block text-xs font-medium text-gray-500 mb-1">Region</label>
+              <input type="text" placeholder="Harju, Tartu..."
+                class="w-full border border-gray-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-accent/30 focus:border-accent"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PILL: Price -->
+      <div
+        class="expand-pill bg-gray-100 border border-gray-200 rounded-2xl px-5 py-3 cursor-pointer"
+        onclick="this.classList.toggle('expanded')"
+      >
+        <div class="flex items-center gap-2">
+          <div class="w-8 h-8 rounded-lg bg-accent/10 flex items-center justify-center text-accent">
+            <i class="fas fa-euro-sign text-sm"></i>
+          </div>
+          <span class="font-medium text-gray-700 text-sm">Price</span>
+          <span class="text-gray-400 text-xs">5 — 25 €/h</span>
+          <i class="fas fa-chevron-down text-xs text-gray-400 ml-1"></i>
+        </div>
+        <div class="pill-content" onclick="event.stopPropagation()">
+          <div>
+            <div class="flex justify-between text-sm mb-1">
+              <span class="text-gray-500">Range</span>
+              <span class="font-semibold text-accent-700">5€ — 25€ / hour</span>
+            </div>
+            <!-- Dual range slider visual -->
+            <div class="range-track">
+              <div class="range-fill"></div>
+              <div class="range-thumb left"></div>
+              <div class="range-thumb right"></div>
+            </div>
+            <div class="flex justify-between text-xs text-gray-400 mt-1">
+              <span>0€</span>
+              <span>50€+</span>
+            </div>
+            <!-- Quick price presets -->
+            <div class="flex gap-2 mt-3">
+              <button class="flex-1 text-xs px-3 py-1.5 rounded-lg border border-gray-200 text-gray-600 hover:border-accent hover:text-accent transition">
+                Budget<br/><span class="font-semibold">0-8€</span>
+              </button>
+              <button class="flex-1 text-xs px-3 py-1.5 rounded-lg border-2 border-accent bg-accent-50 text-accent-700 font-medium">
+                Medium<br/><span class="font-semibold">5-25€</span>
+              </button>
+              <button class="flex-1 text-xs px-3 py-1.5 rounded-lg border border-gray-200 text-gray-600 hover:border-accent hover:text-accent transition">
+                Premium<br/><span class="font-semibold">25€+</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PILL: Activities -->
+      <div
+        class="expand-pill bg-gray-100 border border-gray-200 rounded-2xl px-5 py-3 cursor-pointer"
+        onclick="this.classList.toggle('expanded')"
+      >
+        <div class="flex items-center gap-2">
+          <div class="w-8 h-8 rounded-lg bg-accent/10 flex items-center justify-center text-accent">
+            <i class="fas fa-gamepad text-sm"></i>
+          </div>
+          <span class="font-medium text-gray-700 text-sm">Activities</span>
+          <span class="bg-accent text-white text-xs px-2 py-0.5 rounded-full">2</span>
+          <i class="fas fa-chevron-down text-xs text-gray-400 ml-1"></i>
+        </div>
+        <div class="pill-content" onclick="event.stopPropagation()">
+          <div class="grid grid-cols-2 gap-2">
+            <div class="activity-toggle active flex items-center gap-2.5 px-3 py-2.5 rounded-xl border border-gray-200 text-sm" onclick="this.classList.toggle('active')">
+              <div class="toggle-icon w-8 h-8 rounded-lg bg-accent-100 flex items-center justify-center text-accent">
+                <i class="fas fa-chess text-sm"></i>
+              </div>
+              <div class="flex-1">
+                <div class="font-medium text-sm">Board Games</div>
+              </div>
+              <div class="toggle-check"><i class="fas fa-check text-xs"></i></div>
+            </div>
+            <div class="activity-toggle flex items-center gap-2.5 px-3 py-2.5 rounded-xl border border-gray-200 text-sm" onclick="this.classList.toggle('active')">
+              <div class="toggle-icon w-8 h-8 rounded-lg bg-blue-100 flex items-center justify-center text-blue-600">
+                <i class="fas fa-laptop text-sm"></i>
+              </div>
+              <div class="flex-1">
+                <div class="font-medium text-sm">Coworking</div>
+              </div>
+              <div class="toggle-check"><i class="fas fa-check text-xs"></i></div>
+            </div>
+            <div class="activity-toggle active flex items-center gap-2.5 px-3 py-2.5 rounded-xl border border-gray-200 text-sm" onclick="this.classList.toggle('active')">
+              <div class="toggle-icon w-8 h-8 rounded-lg bg-purple-100 flex items-center justify-center text-purple-600">
+                <i class="fas fa-film text-sm"></i>
+              </div>
+              <div class="flex-1">
+                <div class="font-medium text-sm">Movie Night</div>
+              </div>
+              <div class="toggle-check"><i class="fas fa-check text-xs"></i></div>
+            </div>
+            <div class="activity-toggle flex items-center gap-2.5 px-3 py-2.5 rounded-xl border border-gray-200 text-sm" onclick="this.classList.toggle('active')">
+              <div class="toggle-icon w-8 h-8 rounded-lg bg-pink-100 flex items-center justify-center text-pink-600">
+                <i class="fas fa-glass-cheers text-sm"></i>
+              </div>
+              <div class="flex-1">
+                <div class="font-medium text-sm">Events</div>
+              </div>
+              <div class="toggle-check"><i class="fas fa-check text-xs"></i></div>
+            </div>
+            <div class="activity-toggle flex items-center gap-2.5 px-3 py-2.5 rounded-xl border border-gray-200 text-sm" onclick="this.classList.toggle('active')">
+              <div class="toggle-icon w-8 h-8 rounded-lg bg-green-100 flex items-center justify-center text-green-600">
+                <i class="fas fa-users text-sm"></i>
+              </div>
+              <div class="flex-1">
+                <div class="font-medium text-sm">Meetings</div>
+              </div>
+              <div class="toggle-check"><i class="fas fa-check text-xs"></i></div>
+            </div>
+            <div class="activity-toggle flex items-center gap-2.5 px-3 py-2.5 rounded-xl border border-gray-200 text-sm" onclick="this.classList.toggle('active')">
+              <div class="toggle-icon w-8 h-8 rounded-lg bg-yellow-100 flex items-center justify-center text-yellow-600">
+                <i class="fas fa-book text-sm"></i>
+              </div>
+              <div class="flex-1">
+                <div class="font-medium text-sm">Study</div>
+              </div>
+              <div class="toggle-check"><i class="fas fa-check text-xs"></i></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Clear all -->
+      <button class="flex items-center gap-2 px-4 py-3 text-gray-400 hover:text-red-500 transition text-sm rounded-2xl hover:bg-red-50">
+        <i class="fas fa-times"></i> Clear all
+      </button>
+    </div>
+
+    <!-- Active filters summary strip -->
+    <div class="flex items-center gap-3 mb-6 px-1">
+      <span class="text-xs text-gray-400">
+        <i class="fas fa-filter mr-1"></i> 3 filters active &middot; 8 rooms found
+      </span>
+      <div class="flex-1 h-px bg-gray-200"></div>
+      <div class="flex items-center gap-2">
+        <span class="text-xs text-gray-400">View:</span>
+        <button class="view-btn active w-7 h-7 rounded-lg flex items-center justify-center text-xs border border-gray-200 transition">
+          <i class="fas fa-th"></i>
+        </button>
+        <button class="view-btn w-7 h-7 rounded-lg flex items-center justify-center text-xs border border-gray-200 text-gray-400 hover:text-accent transition">
+          <i class="fas fa-list"></i>
+        </button>
+      </div>
+      <div class="flex items-center gap-2 text-sm text-gray-500">
+        <span>Sort:</span>
+        <button class="bg-accent text-white px-3 py-1.5 rounded-lg text-xs border border-accent font-medium">
+          <i class="fas fa-sort-up mr-1"></i>Name
+        </button>
+        <button class="border border-gray-200 text-gray-500 px-3 py-1.5 rounded-lg text-xs hover:border-accent hover:text-accent transition">
+          Price
+        </button>
+        <button class="border border-gray-200 text-gray-500 px-3 py-1.5 rounded-lg text-xs hover:border-accent hover:text-accent transition">
+          City
+        </button>
+      </div>
+    </div>
+
+    <!-- Room grid -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+      <div class="bg-white rounded-2xl border border-gray-100 h-[300px] flex items-center justify-center text-gray-200 hover:border-accent-200 hover:-translate-y-1 transition-all hover:shadow-lg cursor-pointer">
+        <div class="text-center">
+          <i class="fas fa-image fa-3x mb-2"></i>
+          <div class="text-xs text-gray-300">Room card</div>
+        </div>
+      </div>
+      <div class="bg-white rounded-2xl border border-gray-100 h-[300px] flex items-center justify-center text-gray-200 hover:border-accent-200 hover:-translate-y-1 transition-all hover:shadow-lg cursor-pointer">
+        <div class="text-center">
+          <i class="fas fa-image fa-3x mb-2"></i>
+          <div class="text-xs text-gray-300">Room card</div>
+        </div>
+      </div>
+      <div class="bg-white rounded-2xl border border-gray-100 h-[300px] flex items-center justify-center text-gray-200 hover:border-accent-200 hover:-translate-y-1 transition-all hover:shadow-lg cursor-pointer">
+        <div class="text-center">
+          <i class="fas fa-image fa-3x mb-2"></i>
+          <div class="text-xs text-gray-300">Room card</div>
+        </div>
+      </div>
+      <div class="bg-white rounded-2xl border border-gray-100 h-[300px] flex items-center justify-center text-gray-200 hover:border-accent-200 hover:-translate-y-1 transition-all hover:shadow-lg cursor-pointer">
+        <div class="text-center">
+          <i class="fas fa-image fa-3x mb-2"></i>
+          <div class="text-xs text-gray-300">Room card</div>
+        </div>
+      </div>
+      <div class="bg-white rounded-2xl border border-gray-100 h-[300px] flex items-center justify-center text-gray-200 hover:border-accent-200 hover:-translate-y-1 transition-all hover:shadow-lg cursor-pointer">
+        <div class="text-center">
+          <i class="fas fa-image fa-3x mb-2"></i>
+          <div class="text-xs text-gray-300">Room card</div>
+        </div>
+      </div>
+      <div class="bg-white rounded-2xl border border-gray-100 h-[300px] flex items-center justify-center text-gray-200 hover:border-accent-200 hover:-translate-y-1 transition-all hover:shadow-lg cursor-pointer">
+        <div class="text-center">
+          <i class="fas fa-image fa-3x mb-2"></i>
+          <div class="text-xs text-gray-300">Room card</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- =============== VARIANT 5: COMMAND BAR =============== -->
+  <div id="command-bar" class="variant-label">
+    <i class="fas fa-terminal mr-2"></i> Variant 5 — Spotlight / Command Bar
+    <span class="text-sm font-normal text-accent-200 ml-2">(Ctrl+K style, all-in-one)</span>
+  </div>
+  <section class="max-w-[1200px] mx-auto py-8 px-4">
+
+    <!-- Command bar trigger -->
+    <div class="flex items-center gap-4 mb-6">
+      <div
+        class="search-glow flex-1 flex items-center bg-white rounded-2xl border border-gray-200 px-5 py-4 cursor-pointer hover:border-accent transition-all group"
+        onclick="document.getElementById('command-modal').classList.remove('hidden')"
+      >
+        <i class="fas fa-search text-gray-300 group-hover:text-accent mr-4 text-lg transition-colors"></i>
+        <span class="text-gray-400 flex-1">Search rooms, filter by city, price, activities...</span>
+        <div class="flex items-center gap-2">
+          <span class="bg-accent-100 text-accent-800 text-xs px-2 py-0.5 rounded-full font-medium">Tallinn</span>
+          <span class="bg-accent-100 text-accent-800 text-xs px-2 py-0.5 rounded-full font-medium">5-25€</span>
+          <span class="bg-accent-100 text-accent-800 text-xs px-2 py-0.5 rounded-full font-medium">2 activities</span>
+        </div>
+        <kbd class="ml-4 bg-gray-100 text-gray-400 text-xs px-2 py-1 rounded border border-gray-200 font-mono">Ctrl+K</kbd>
+      </div>
+    </div>
+
+    <!-- Sort + results info -->
+    <div class="flex items-center gap-3 mb-5 px-1">
+      <span class="text-sm text-gray-500 font-medium">8 rooms found</span>
+      <div class="flex-1 h-px bg-gray-200"></div>
+      <div class="flex items-center gap-2 text-sm text-gray-500">
+        <button class="bg-accent text-white px-3 py-1.5 rounded-lg text-xs border border-accent font-medium">
+          <i class="fas fa-sort-up mr-1"></i>Name
+        </button>
+        <button class="border border-gray-200 text-gray-500 px-3 py-1.5 rounded-lg text-xs hover:border-accent hover:text-accent transition">
+          Price
+        </button>
+        <button class="border border-gray-200 text-gray-500 px-3 py-1.5 rounded-lg text-xs hover:border-accent hover:text-accent transition">
+          City
+        </button>
+      </div>
+    </div>
+
+    <!-- Full-width room grid -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
+      <div class="bg-white rounded-2xl border border-gray-100 h-[300px] flex items-center justify-center text-gray-200 hover:border-accent-200 hover:-translate-y-1 transition-all hover:shadow-lg cursor-pointer"><div class="text-center"><i class="fas fa-image fa-3x mb-2"></i><div class="text-xs text-gray-300">Room card</div></div></div>
+      <div class="bg-white rounded-2xl border border-gray-100 h-[300px] flex items-center justify-center text-gray-200 hover:border-accent-200 hover:-translate-y-1 transition-all hover:shadow-lg cursor-pointer"><div class="text-center"><i class="fas fa-image fa-3x mb-2"></i><div class="text-xs text-gray-300">Room card</div></div></div>
+      <div class="bg-white rounded-2xl border border-gray-100 h-[300px] flex items-center justify-center text-gray-200 hover:border-accent-200 hover:-translate-y-1 transition-all hover:shadow-lg cursor-pointer"><div class="text-center"><i class="fas fa-image fa-3x mb-2"></i><div class="text-xs text-gray-300">Room card</div></div></div>
+      <div class="bg-white rounded-2xl border border-gray-100 h-[300px] flex items-center justify-center text-gray-200 hover:border-accent-200 hover:-translate-y-1 transition-all hover:shadow-lg cursor-pointer"><div class="text-center"><i class="fas fa-image fa-3x mb-2"></i><div class="text-xs text-gray-300">Room card</div></div></div>
+      <div class="bg-white rounded-2xl border border-gray-100 h-[300px] flex items-center justify-center text-gray-200 hover:border-accent-200 hover:-translate-y-1 transition-all hover:shadow-lg cursor-pointer"><div class="text-center"><i class="fas fa-image fa-3x mb-2"></i><div class="text-xs text-gray-300">Room card</div></div></div>
+      <div class="bg-white rounded-2xl border border-gray-100 h-[300px] flex items-center justify-center text-gray-200 hover:border-accent-200 hover:-translate-y-1 transition-all hover:shadow-lg cursor-pointer"><div class="text-center"><i class="fas fa-image fa-3x mb-2"></i><div class="text-xs text-gray-300">Room card</div></div></div>
+      <div class="bg-white rounded-2xl border border-gray-100 h-[300px] flex items-center justify-center text-gray-200 hover:border-accent-200 hover:-translate-y-1 transition-all hover:shadow-lg cursor-pointer"><div class="text-center"><i class="fas fa-image fa-3x mb-2"></i><div class="text-xs text-gray-300">Room card</div></div></div>
+      <div class="bg-white rounded-2xl border border-gray-100 h-[300px] flex items-center justify-center text-gray-200 hover:border-accent-200 hover:-translate-y-1 transition-all hover:shadow-lg cursor-pointer"><div class="text-center"><i class="fas fa-image fa-3x mb-2"></i><div class="text-xs text-gray-300">Room card</div></div></div>
+    </div>
+  </section>
+
+  <!-- Command modal (initially hidden) -->
+  <div id="command-modal" class="hidden fixed inset-0 bg-black/60 backdrop-blur-sm z-[1000] flex items-start justify-center pt-[15vh]" onclick="if(event.target===this)this.classList.add('hidden')">
+    <div class="bg-white rounded-2xl shadow-2xl w-full max-w-[640px] overflow-hidden" style="animation: scaleIn 0.2s ease">
+      <!-- Search input -->
+      <div class="flex items-center px-5 py-4 border-b border-gray-100">
+        <i class="fas fa-search text-accent mr-3"></i>
+        <input type="text" placeholder="Type to search or filter..." class="flex-1 bg-transparent outline-none text-base text-gray-700 placeholder:text-gray-400" autofocus />
+        <kbd class="bg-gray-100 text-gray-400 text-xs px-2 py-0.5 rounded border border-gray-200 font-mono">Esc</kbd>
+      </div>
+      <!-- Quick filter sections -->
+      <div class="p-4 max-h-[400px] overflow-y-auto">
+        <div class="text-xs text-gray-400 font-semibold uppercase tracking-wide mb-2">Location</div>
+        <div class="flex flex-wrap gap-2 mb-4">
+          <button class="px-3 py-1.5 rounded-xl border-2 border-accent bg-accent-50 text-accent-700 text-sm font-medium">
+            <i class="fas fa-map-pin mr-1.5"></i>Tallinn
+          </button>
+          <button class="px-3 py-1.5 rounded-xl border border-gray-200 text-gray-600 text-sm hover:border-accent hover:text-accent transition">
+            Tartu
+          </button>
+          <button class="px-3 py-1.5 rounded-xl border border-gray-200 text-gray-600 text-sm hover:border-accent hover:text-accent transition">
+            Parnu
+          </button>
+          <button class="px-3 py-1.5 rounded-xl border border-gray-200 text-gray-600 text-sm hover:border-accent hover:text-accent transition">
+            Narva
+          </button>
+        </div>
+
+        <div class="text-xs text-gray-400 font-semibold uppercase tracking-wide mb-2">Price range</div>
+        <div class="flex gap-2 mb-4">
+          <button class="px-4 py-2 rounded-xl border border-gray-200 text-gray-600 text-sm hover:border-accent transition">
+            <i class="fas fa-tag mr-1 text-green-500"></i> Budget (0-8€)
+          </button>
+          <button class="px-4 py-2 rounded-xl border-2 border-accent bg-accent-50 text-accent-700 text-sm font-medium">
+            <i class="fas fa-tag mr-1"></i> Medium (5-25€)
+          </button>
+          <button class="px-4 py-2 rounded-xl border border-gray-200 text-gray-600 text-sm hover:border-accent transition">
+            <i class="fas fa-gem mr-1 text-purple-500"></i> Premium (25€+)
+          </button>
+        </div>
+
+        <div class="text-xs text-gray-400 font-semibold uppercase tracking-wide mb-2">Activities</div>
+        <div class="flex flex-wrap gap-2 mb-3">
+          <button class="activity-toggle active inline-flex items-center gap-2 px-3 py-2 rounded-xl border border-gray-200 text-sm" onclick="this.classList.toggle('active')">
+            <i class="fas fa-chess"></i> Board Games
+            <div class="toggle-check"><i class="fas fa-check text-xs"></i></div>
+          </button>
+          <button class="activity-toggle inline-flex items-center gap-2 px-3 py-2 rounded-xl border border-gray-200 text-sm" onclick="this.classList.toggle('active')">
+            <i class="fas fa-laptop"></i> Coworking
+            <div class="toggle-check"><i class="fas fa-check text-xs"></i></div>
+          </button>
+          <button class="activity-toggle active inline-flex items-center gap-2 px-3 py-2 rounded-xl border border-gray-200 text-sm" onclick="this.classList.toggle('active')">
+            <i class="fas fa-film"></i> Movie Night
+            <div class="toggle-check"><i class="fas fa-check text-xs"></i></div>
+          </button>
+          <button class="activity-toggle inline-flex items-center gap-2 px-3 py-2 rounded-xl border border-gray-200 text-sm" onclick="this.classList.toggle('active')">
+            <i class="fas fa-glass-cheers"></i> Events
+            <div class="toggle-check"><i class="fas fa-check text-xs"></i></div>
+          </button>
+        </div>
+      </div>
+      <!-- Footer -->
+      <div class="flex items-center justify-between px-5 py-3 border-t border-gray-100 bg-gray-50">
+        <span class="text-xs text-gray-400">
+          <span class="font-medium text-gray-600">8</span> rooms match your filters
+        </span>
+        <div class="flex gap-2">
+          <button class="text-gray-400 hover:text-red-500 text-xs px-3 py-1.5 rounded-lg transition" onclick="document.getElementById('command-modal').classList.add('hidden')">
+            Clear all
+          </button>
+          <button class="bg-accent hover:bg-accent-hover text-white text-sm px-5 py-1.5 rounded-lg font-medium transition-all hover:shadow-md" onclick="document.getElementById('command-modal').classList.add('hidden')">
+            Show rooms
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <style>
+    @keyframes scaleIn {
+      from { opacity: 0; transform: scale(0.95) translateY(-10px); }
+      to { opacity: 1; transform: scale(1) translateY(0); }
+    }
+  </style>
+
+
+  <!-- =============== VARIANT 6: FLOATING PANEL =============== -->
+  <div id="floating-panel" class="variant-label">
+    <i class="fas fa-layer-group mr-2"></i> Variant 6 — Floating Sticky Panel
+    <span class="text-sm font-normal text-accent-200 ml-2">(always visible, compact)</span>
+  </div>
+  <section class="max-w-[1200px] mx-auto py-8 px-4">
+
+    <!-- Floating filter bar (sticky) -->
+    <div class="sticky top-2 z-40 mb-6">
+      <div class="bg-white/95 backdrop-blur-xl rounded-2xl border border-gray-200/80 shadow-[0_8px_30px_rgba(0,0,0,0.08)] px-5 py-4">
+        <!-- Row 1: Search + quick filters -->
+        <div class="flex items-center gap-3">
+          <!-- Search -->
+          <div class="flex items-center bg-gray-50 rounded-xl px-3 py-2 flex-1 min-w-0 border border-transparent focus-within:border-accent focus-within:bg-white transition-all">
+            <i class="fas fa-search text-gray-400 mr-2 text-sm"></i>
+            <input type="text" placeholder="Search rooms..." class="bg-transparent outline-none text-sm text-gray-700 w-full placeholder:text-gray-400" />
+          </div>
+
+          <!-- Divider -->
+          <div class="w-px h-8 bg-gray-200"></div>
+
+          <!-- City pill-select -->
+          <div class="relative group">
+            <button class="flex items-center gap-2 px-3 py-2 rounded-xl border border-gray-200 text-sm text-gray-700 hover:border-accent transition bg-white">
+              <i class="fas fa-map-marker-alt text-accent text-xs"></i>
+              <span>Tallinn</span>
+              <i class="fas fa-chevron-down text-xs text-gray-400"></i>
+            </button>
+            <!-- Dropdown (hover demo) -->
+            <div class="absolute top-full left-0 mt-2 bg-white rounded-xl shadow-xl border border-gray-200 p-1 w-[160px] opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all z-10">
+              <div class="px-3 py-2 rounded-lg bg-accent-50 text-accent-700 text-sm font-medium flex items-center justify-between">
+                Tallinn <i class="fas fa-check text-xs"></i>
+              </div>
+              <div class="px-3 py-2 rounded-lg hover:bg-gray-50 text-gray-600 text-sm cursor-pointer">Tartu</div>
+              <div class="px-3 py-2 rounded-lg hover:bg-gray-50 text-gray-600 text-sm cursor-pointer">Parnu</div>
+              <div class="px-3 py-2 rounded-lg hover:bg-gray-50 text-gray-600 text-sm cursor-pointer">Narva</div>
+            </div>
+          </div>
+
+          <!-- Price pill -->
+          <div class="relative group">
+            <button class="flex items-center gap-2 px-3 py-2 rounded-xl border border-gray-200 text-sm text-gray-700 hover:border-accent transition bg-white">
+              <i class="fas fa-euro-sign text-accent text-xs"></i>
+              <span>5-25€</span>
+              <i class="fas fa-chevron-down text-xs text-gray-400"></i>
+            </button>
+            <div class="absolute top-full right-0 mt-2 bg-white rounded-xl shadow-xl border border-gray-200 p-4 w-[260px] opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all z-10">
+              <div class="flex justify-between text-sm mb-2">
+                <span class="text-gray-500">Price / hour</span>
+                <span class="font-semibold text-accent-700">5€ — 25€</span>
+              </div>
+              <div class="range-track">
+                <div class="range-fill"></div>
+                <div class="range-thumb left"></div>
+                <div class="range-thumb right"></div>
+              </div>
+              <div class="flex justify-between text-xs text-gray-400 mt-1">
+                <span>0€</span>
+                <span>50€+</span>
+              </div>
+              <div class="flex gap-2 mt-3">
+                <button class="flex-1 text-xs py-1.5 rounded-lg border border-gray-200 text-gray-500 hover:border-accent transition">Budget</button>
+                <button class="flex-1 text-xs py-1.5 rounded-lg border-2 border-accent bg-accent-50 text-accent-700 font-medium">Medium</button>
+                <button class="flex-1 text-xs py-1.5 rounded-lg border border-gray-200 text-gray-500 hover:border-accent transition">Premium</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="w-px h-8 bg-gray-200"></div>
+
+          <!-- Activity toggles (inline) -->
+          <div class="flex gap-1.5 overflow-x-auto">
+            <button class="activity-toggle active flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-gray-200 text-xs whitespace-nowrap" onclick="this.classList.toggle('active')">
+              <i class="fas fa-chess"></i> Board Games
+            </button>
+            <button class="activity-toggle flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-gray-200 text-xs whitespace-nowrap" onclick="this.classList.toggle('active')">
+              <i class="fas fa-laptop"></i> Coworking
+            </button>
+            <button class="activity-toggle active flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-gray-200 text-xs whitespace-nowrap" onclick="this.classList.toggle('active')">
+              <i class="fas fa-film"></i> Movie
+            </button>
+            <button class="activity-toggle flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-gray-200 text-xs whitespace-nowrap" onclick="this.classList.toggle('active')">
+              <i class="fas fa-glass-cheers"></i> Events
+            </button>
+          </div>
+
+          <div class="w-px h-8 bg-gray-200"></div>
+
+          <!-- Sort -->
+          <div class="flex items-center gap-1.5">
+            <button class="bg-accent text-white px-2.5 py-1.5 rounded-lg text-xs font-medium">
+              <i class="fas fa-sort-up mr-0.5"></i> Name
+            </button>
+            <button class="text-gray-400 hover:text-accent px-2.5 py-1.5 rounded-lg text-xs transition">
+              Price
+            </button>
+          </div>
+        </div>
+
+        <!-- Row 2: Active filter summary -->
+        <div class="flex items-center gap-2 mt-2.5 pt-2.5 border-t border-gray-100">
+          <span class="text-xs text-gray-400"><i class="fas fa-filter mr-1"></i>Active:</span>
+          <span class="inline-flex items-center bg-accent-100 text-accent-800 text-xs px-2.5 py-0.5 rounded-full font-medium">
+            Tallinn <button class="ml-1 hover:text-accent-900 text-[10px]">&times;</button>
+          </span>
+          <span class="inline-flex items-center bg-accent-100 text-accent-800 text-xs px-2.5 py-0.5 rounded-full font-medium">
+            5-25€ <button class="ml-1 hover:text-accent-900 text-[10px]">&times;</button>
+          </span>
+          <span class="inline-flex items-center bg-accent-100 text-accent-800 text-xs px-2.5 py-0.5 rounded-full font-medium">
+            Board Games <button class="ml-1 hover:text-accent-900 text-[10px]">&times;</button>
+          </span>
+          <span class="inline-flex items-center bg-accent-100 text-accent-800 text-xs px-2.5 py-0.5 rounded-full font-medium">
+            Movie <button class="ml-1 hover:text-accent-900 text-[10px]">&times;</button>
+          </span>
+          <button class="text-gray-400 hover:text-red-500 text-xs ml-auto transition">
+            <i class="fas fa-times mr-0.5"></i> Clear
+          </button>
+          <span class="text-xs text-gray-400 ml-2">
+            <span class="font-medium text-gray-600">8</span> results
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Full-width room grid -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
+      <div class="bg-white rounded-2xl border border-gray-100 h-[300px] flex items-center justify-center text-gray-200 hover:border-accent-200 hover:-translate-y-1 transition-all hover:shadow-lg cursor-pointer"><div class="text-center"><i class="fas fa-image fa-3x mb-2"></i><div class="text-xs text-gray-300">Room card</div></div></div>
+      <div class="bg-white rounded-2xl border border-gray-100 h-[300px] flex items-center justify-center text-gray-200 hover:border-accent-200 hover:-translate-y-1 transition-all hover:shadow-lg cursor-pointer"><div class="text-center"><i class="fas fa-image fa-3x mb-2"></i><div class="text-xs text-gray-300">Room card</div></div></div>
+      <div class="bg-white rounded-2xl border border-gray-100 h-[300px] flex items-center justify-center text-gray-200 hover:border-accent-200 hover:-translate-y-1 transition-all hover:shadow-lg cursor-pointer"><div class="text-center"><i class="fas fa-image fa-3x mb-2"></i><div class="text-xs text-gray-300">Room card</div></div></div>
+      <div class="bg-white rounded-2xl border border-gray-100 h-[300px] flex items-center justify-center text-gray-200 hover:border-accent-200 hover:-translate-y-1 transition-all hover:shadow-lg cursor-pointer"><div class="text-center"><i class="fas fa-image fa-3x mb-2"></i><div class="text-xs text-gray-300">Room card</div></div></div>
+      <div class="bg-white rounded-2xl border border-gray-100 h-[300px] flex items-center justify-center text-gray-200 hover:border-accent-200 hover:-translate-y-1 transition-all hover:shadow-lg cursor-pointer"><div class="text-center"><i class="fas fa-image fa-3x mb-2"></i><div class="text-xs text-gray-300">Room card</div></div></div>
+      <div class="bg-white rounded-2xl border border-gray-100 h-[300px] flex items-center justify-center text-gray-200 hover:border-accent-200 hover:-translate-y-1 transition-all hover:shadow-lg cursor-pointer"><div class="text-center"><i class="fas fa-image fa-3x mb-2"></i><div class="text-xs text-gray-300">Room card</div></div></div>
+      <div class="bg-white rounded-2xl border border-gray-100 h-[300px] flex items-center justify-center text-gray-200 hover:border-accent-200 hover:-translate-y-1 transition-all hover:shadow-lg cursor-pointer"><div class="text-center"><i class="fas fa-image fa-3x mb-2"></i><div class="text-xs text-gray-300">Room card</div></div></div>
+      <div class="bg-white rounded-2xl border border-gray-100 h-[300px] flex items-center justify-center text-gray-200 hover:border-accent-200 hover:-translate-y-1 transition-all hover:shadow-lg cursor-pointer"><div class="text-center"><i class="fas fa-image fa-3x mb-2"></i><div class="text-xs text-gray-300">Room card</div></div></div>
+    </div>
+
+    <!-- Spacer so you can scroll to test sticky -->
+    <div class="h-[600px] flex items-center justify-center text-gray-300 text-sm">
+      <i class="fas fa-arrow-up mr-2"></i> Scroll up to see the floating panel stick
+    </div>
+  </section>
+
+</body>
+</html>

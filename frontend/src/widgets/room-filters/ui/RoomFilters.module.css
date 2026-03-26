@@ -1,0 +1,334 @@
+/* ===== Search bar ===== */
+.searchBar {
+  @apply flex items-center bg-white rounded-2xl border border-gray-200 px-4 py-3 mb-5 transition-all;
+}
+
+.searchBar:focus-within {
+  @apply border-accent;
+  box-shadow: 0 0 0 3px rgba(206, 152, 87, 0.12);
+}
+
+.searchIcon {
+  @apply text-accent mr-3 text-lg;
+}
+
+.searchInput {
+  @apply flex-1 text-gray-700 bg-transparent outline-none text-sm;
+}
+
+.searchInput::placeholder {
+  @apply text-gray-400;
+}
+
+.liveBadge {
+  @apply flex items-center gap-1.5 ml-3 pl-3 border-l border-gray-200;
+}
+
+.liveDot {
+  @apply w-1.5 h-1.5 bg-emerald-500 rounded-full;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+
+.liveText {
+  @apply text-xs text-gray-400;
+}
+
+/* ===== Pill row ===== */
+.pillRow {
+  @apply flex items-center gap-3 mb-5 flex-wrap;
+}
+
+.pill {
+  @apply flex items-center gap-2 px-4 py-2.5 rounded-xl border border-gray-200 text-sm bg-white cursor-pointer transition-all;
+}
+
+.pill:hover {
+  @apply border-accent bg-accent-50;
+}
+
+.pillHasValue {
+  @apply border-accent bg-accent-50;
+}
+
+.pillIcon {
+  @apply text-accent text-xs;
+}
+
+.pillLabel {
+  @apply text-gray-500;
+}
+
+.pillValue {
+  @apply font-medium text-gray-700;
+}
+
+.pillChevron {
+  @apply text-gray-400 ml-0.5;
+  font-size: 10px;
+}
+
+.pillBadge {
+  @apply bg-accent text-white font-bold w-5 h-5 rounded-full flex items-center justify-center;
+  font-size: 10px;
+}
+
+.clearBtn {
+  @apply flex items-center gap-1.5 px-3 py-2.5 text-gray-400 hover:text-red-500 transition text-sm rounded-xl hover:bg-red-50;
+}
+
+.pillRowSpacer {
+  @apply flex-1;
+}
+
+/* ===== Popover content ===== */
+.popoverContent {
+  @apply bg-white rounded-xl border border-gray-200 overflow-hidden z-50;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.12);
+  animation: popIn 0.15s ease-out;
+}
+
+@keyframes popIn {
+  from { opacity: 0; transform: scale(0.96) translateY(-4px); }
+  to { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+.popoverArrow {
+  fill: white;
+}
+
+/* ===== City/Region select inside popover ===== */
+.selectSearch {
+  @apply p-2 border-b border-gray-100;
+}
+
+.selectSearchInner {
+  @apply flex items-center bg-gray-50 rounded-lg px-2.5 py-2;
+}
+
+.selectSearchIcon {
+  @apply text-gray-400 text-xs mr-2;
+}
+
+.selectSearchInput {
+  @apply bg-transparent outline-none text-sm text-gray-700 w-full;
+}
+
+.selectSearchInput::placeholder {
+  @apply text-gray-400;
+}
+
+.selectList {
+  @apply py-1 overflow-y-auto;
+  max-height: 200px;
+}
+
+.selectItem {
+  @apply px-3 py-2.5 flex items-center gap-2 cursor-pointer mx-1 rounded-lg text-sm transition-colors;
+}
+
+.selectItem:hover {
+  @apply bg-accent-50;
+}
+
+.selectItemSelected {
+  @apply bg-accent-50 font-medium text-gray-800;
+}
+
+.selectItemCheck {
+  @apply text-accent text-xs ml-auto;
+}
+
+.selectItemIcon {
+  @apply text-xs;
+}
+
+/* ===== Price slider inside popover ===== */
+.pricePopover {
+  @apply p-5;
+  width: 300px;
+}
+
+.priceHeader {
+  @apply flex justify-between items-center mb-4;
+}
+
+.priceLabel {
+  @apply text-sm font-medium text-gray-700;
+}
+
+.priceValue {
+  @apply text-sm font-bold text-accent-700;
+}
+
+.sliderRoot {
+  @apply relative flex items-center select-none w-full;
+  height: 20px;
+  touch-action: none;
+}
+
+.sliderTrack {
+  @apply relative rounded-full flex-1;
+  background: #e5e7eb;
+  height: 6px;
+}
+
+.sliderRange {
+  @apply absolute rounded-full h-full;
+  background: linear-gradient(90deg, #CE9857, #b8863f);
+}
+
+.sliderThumb {
+  @apply block rounded-full bg-white outline-none;
+  width: 20px;
+  height: 20px;
+  border: 3px solid #CE9857;
+  box-shadow: 0 2px 8px rgba(206, 152, 87, 0.25);
+  transition: box-shadow 0.2s, transform 0.2s;
+}
+
+.sliderThumb:hover {
+  box-shadow: 0 4px 16px rgba(206, 152, 87, 0.45);
+  transform: scale(1.15);
+}
+
+.sliderThumb:focus-visible {
+  box-shadow: 0 0 0 3px rgba(206, 152, 87, 0.3);
+}
+
+.sliderBounds {
+  @apply flex justify-between text-xs text-gray-400 mt-2 px-0.5;
+}
+
+.priceInputs {
+  @apply flex gap-3 mt-4;
+}
+
+.priceInputWrap {
+  @apply flex-1;
+}
+
+.priceInputLabel {
+  @apply text-gray-400 uppercase tracking-wide font-medium;
+  font-size: 10px;
+}
+
+.priceInputField {
+  @apply flex items-center border border-gray-200 rounded-lg px-2.5 py-1.5 mt-1;
+}
+
+.priceInputField:focus-within {
+  @apply border-accent;
+}
+
+.priceInputCurrency {
+  @apply text-xs text-gray-400 mr-1;
+}
+
+.priceInputEl {
+  @apply w-full bg-transparent outline-none text-sm text-gray-700;
+}
+
+.priceInputDash {
+  @apply flex items-end pb-1.5 text-gray-300;
+}
+
+/* ===== Activities inside popover ===== */
+.activitiesPopover {
+  @apply p-4;
+  width: 380px;
+}
+
+.activitiesHeader {
+  @apply flex items-center justify-between mb-3;
+}
+
+.activitiesTitle {
+  @apply text-sm font-medium text-gray-700;
+}
+
+.activitiesClear {
+  @apply text-xs text-gray-400 hover:text-accent transition cursor-pointer bg-transparent border-none;
+}
+
+.activitiesGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.5rem;
+}
+
+.actToggle {
+  @apply flex items-center gap-2.5 px-3 py-2.5 rounded-xl border border-gray-200 text-sm cursor-pointer select-none;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.actToggle:hover {
+  @apply -translate-y-0.5;
+}
+
+.actToggleOn {
+  @apply text-white border-transparent;
+  background: linear-gradient(135deg, #CE9857, #b8863f);
+  box-shadow: 0 3px 12px rgba(206, 152, 87, 0.3);
+}
+
+.actIcon {
+  @apply w-7 h-7 rounded-lg flex items-center justify-center text-xs flex-shrink-0;
+}
+
+.actIconOn {
+  background: rgba(255, 255, 255, 0.2);
+  @apply text-white;
+}
+
+.actName {
+  @apply flex-1 font-medium text-sm;
+}
+
+.actCheck {
+  @apply w-4 h-4 rounded flex items-center justify-center flex-shrink-0;
+  border: 2px solid #d1d5db;
+  font-size: 9px;
+  transition: all 0.15s;
+}
+
+.actCheckOn {
+  @apply bg-white;
+  border-color: white;
+  color: #CE9857;
+}
+
+/* ===== Active filters strip ===== */
+.activeStrip {
+  @apply flex items-center gap-2 mb-6 px-1 flex-wrap;
+}
+
+.activeLabel {
+  @apply text-xs text-gray-400;
+}
+
+.activeBadge {
+  @apply inline-flex items-center bg-accent-100 text-accent-800 text-xs px-2.5 py-1 rounded-full font-medium;
+}
+
+.activeBadgeIcon {
+  @apply mr-1 text-accent;
+  font-size: 10px;
+}
+
+.activeBadgeRemove {
+  @apply ml-1.5 text-accent-400 hover:text-red-500 transition bg-transparent border-none cursor-pointer p-0;
+  font-size: 10px;
+}
+
+.activeCount {
+  @apply text-xs text-gray-400 ml-auto;
+}
+
+.activeCountNum {
+  @apply font-semibold text-gray-600;
+}

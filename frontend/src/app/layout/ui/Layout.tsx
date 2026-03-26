@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import { Outlet, useLocation } from 'react-router-dom';
+import { Toaster } from 'react-hot-toast';
 import { Header } from '@/widgets/header/ui';
 import { About } from '@/pages/about/ui/About';
 import { Contact } from '@/widgets/contact-section/ui';
@@ -21,6 +22,21 @@ export const Layout = () => {
 
   return (
     <div className="relative min-h-screen flex flex-col">
+      <Toaster
+        position="top-right"
+        toastOptions={{
+          duration: 4000,
+          style: {
+            borderRadius: '12px',
+            background: '#333',
+            color: '#fff',
+            fontSize: '14px',
+          },
+          success: {
+            iconTheme: { primary: '#CE9857', secondary: '#fff' },
+          },
+        }}
+      />
       <Header />
       <main>
         <Outlet />

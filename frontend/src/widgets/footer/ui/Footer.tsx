@@ -10,22 +10,45 @@ import {
 import { BsPhone, BsSearchHeart } from 'react-icons/bs';
 import { LiaClockSolid } from 'react-icons/lia';
 
-type IconsMenu = { tag: IconType; label: string; href: string };
+interface SocialLink {
+  tag: IconType;
+  label: string;
+  href: string;
+  hoverShadow: string;
+  hoverText: string;
+}
 
 export const Footer = () => {
-  const iconsMenu: IconsMenu[] = [
-    { tag: FaTelegram, label: 'Telegram', href: '/telegram' },
-    { tag: FaInstagramSquare, label: 'Instagram', href: '/instagram' },
-    { tag: FaFacebookMessenger, label: 'Facebook', href: '/facebook' },
-    { tag: FaLinkedin, label: 'LinkedIn', href: '/linkedIn' },
+  const socialLinks: SocialLink[] = [
+    {
+      tag: FaTelegram,
+      label: 'Telegram',
+      href: '/telegram',
+      hoverShadow: 'hover:shadow-[0_8px_25px_rgba(0,136,204,0.4)]',
+      hoverText: 'hover:text-[#0088cc]',
+    },
+    {
+      tag: FaInstagramSquare,
+      label: 'Instagram',
+      href: '/instagram',
+      hoverShadow: 'hover:shadow-[0_8px_25px_rgba(225,48,108,0.4)]',
+      hoverText: 'hover:text-[#e1306c]',
+    },
+    {
+      tag: FaFacebookMessenger,
+      label: 'Facebook',
+      href: '/facebook',
+      hoverShadow: 'hover:shadow-[0_8px_25px_rgba(66,103,178,0.4)]',
+      hoverText: 'hover:text-[#4267b2]',
+    },
+    {
+      tag: FaLinkedin,
+      label: 'LinkedIn',
+      href: '/linkedIn',
+      hoverShadow: 'hover:shadow-[0_8px_25px_rgba(0,119,181,0.4)]',
+      hoverText: 'hover:text-[#0077b5]',
+    },
   ];
-
-  const socialColors: Record<string, string> = {
-    telegram: 'before:bg-[#0088cc]',
-    instagram: 'before:bg-gradient-to-br before:from-[#f09433] before:to-[#bc1888]',
-    facebook: 'before:bg-gradient-to-br before:from-[#4267b2] before:to-[#898f9c]',
-    linkedin: 'before:bg-gradient-to-br before:from-[#0077b5] before:to-[#00a0dc]',
-  };
 
   return (
     <footer className="relative bg-gradient-to-br from-[#1a1a2e] via-[#16213e] to-[#0f3460] text-white overflow-hidden">
@@ -130,15 +153,14 @@ export const Footer = () => {
               </h3>
             </div>
             <div className="flex gap-3">
-              {iconsMenu.map((icon, index) => {
-                const IconComponent = icon.tag;
-                const colorClass = socialColors[icon.label.toLowerCase()] ?? '';
+              {socialLinks.map((link, index) => {
+                const IconComponent = link.tag;
                 return (
                   <a
                     key={index}
-                    href={icon.href}
-                    aria-label={icon.label}
-                    className={`social-link w-[45px] h-[45px] rounded-xl flex items-center justify-center no-underline transition-all duration-300 bg-white/10 text-white hover:-translate-y-1 hover:scale-105 hover:shadow-[0_10px_25px_rgba(0,0,0,0.3)] ${colorClass}`}
+                    href={link.href}
+                    aria-label={link.label}
+                    className={`social-link w-[48px] h-[48px] rounded-xl flex items-center justify-center no-underline bg-white/10 text-white text-xl ${link.hoverShadow} ${link.hoverText} hover:bg-white/20`}
                   >
                     <IconComponent size={24} />
                   </a>
@@ -157,7 +179,7 @@ export const Footer = () => {
               </div>
               <span className="text-white/80 text-[0.95rem]">Made with love</span>
             </div>
-            <span className="text-white/60 text-[0.9rem]">© 2026 All rights reserved</span>
+            <span className="text-white/60 text-[0.9rem]">&copy; 2026 All rights reserved</span>
           </div>
         </div>
       </div>

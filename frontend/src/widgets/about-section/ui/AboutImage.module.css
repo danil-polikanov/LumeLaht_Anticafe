@@ -1,0 +1,31 @@
+.wrapper {
+  @apply flex-1 px-3 transition-all duration-700;
+}
+
+.hidden {
+  @apply opacity-0 translate-x-12;
+}
+
+.visible {
+  @apply opacity-100 translate-x-0;
+}
+
+.imageContainer {
+  @apply relative;
+}
+
+.image {
+  @apply max-w-full rounded-2xl shadow-lg;
+}
+
+.statsCard {
+  @apply absolute -bottom-4 -left-4 bg-white rounded-xl shadow-lg p-4 border border-gray-100;
+}
+
+.statValue {
+  @apply text-2xl font-bold text-accent;
+}
+
+.statLabel {
+  @apply text-xs text-gray-500;
+}

@@ -1,0 +1,100 @@
+.wrapper {
+  @apply w-full md:w-1/2 lg:w-1/3 px-2 mb-4;
+}
+
+.card {
+  @apply bg-white rounded-xl border border-gray-100 h-full flex flex-col overflow-hidden transition-all duration-300 cursor-pointer;
+}
+
+.card:hover {
+  @apply -translate-y-1 border-accent-200;
+  box-shadow: 0 8px 30px rgba(206, 152, 87, 0.15);
+}
+
+.imageWrap {
+  @apply overflow-hidden;
+}
+
+.image {
+  @apply w-full h-[220px] object-cover block transition-transform duration-500;
+}
+
+.card:hover .image {
+  @apply scale-105;
+}
+
+.imagePlaceholder {
+  @apply w-full h-[220px] flex items-center justify-center bg-accent-50 text-accent-400;
+}
+
+.body {
+  @apply p-5 flex flex-col flex-1;
+}
+
+.titleRow {
+  @apply flex justify-between items-start mb-3;
+}
+
+.title {
+  @apply text-lg font-semibold text-gray-900 mb-0;
+}
+
+.statusBadge {
+  @apply inline-flex items-center text-xs px-2.5 py-1 rounded-full font-medium;
+}
+
+.statusActive {
+  @apply bg-emerald-100 text-emerald-700;
+}
+
+.statusInactive {
+  @apply bg-red-100 text-red-700;
+}
+
+.statusDot {
+  @apply w-1.5 h-1.5 rounded-full mr-1.5;
+}
+
+.statusDotActive {
+  @apply bg-emerald-500;
+}
+
+.statusDotInactive {
+  @apply bg-red-500;
+}
+
+.description {
+  @apply text-gray-500 text-sm mb-3 leading-relaxed;
+}
+
+.addressRow {
+  @apply flex items-center text-gray-500 text-sm;
+}
+
+.addressIcon {
+  @apply mr-2 text-accent-400;
+}
+
+.activityBadge {
+  @apply inline-block bg-accent-100 text-accent-800 text-xs px-2.5 py-1 rounded-full font-medium mr-1.5 mb-1;
+}
+
+.activityOverflow {
+  @apply inline-block bg-gray-100 text-gray-600 text-xs px-2.5 py-1 rounded-full font-medium;
+}
+
+.footer {
+  @apply mt-auto pt-3 border-t border-gray-100;
+}
+
+.footerInner {
+  @apply flex justify-between items-center;
+}
+
+.price {
+  @apply text-accent-700 font-bold text-lg;
+}
+
+.readMoreBtn {
+  @apply bg-accent text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-accent-hover transition-all duration-200 hover:shadow-md;
+}

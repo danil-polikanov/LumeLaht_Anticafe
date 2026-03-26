@@ -50,17 +50,15 @@
     left: 100%;
   }
 
-  /* Footer social link ripple */
+  /* Social link flip + glow */
   .social-link {
     @apply relative overflow-hidden;
+    transition: transform 0.4s ease, box-shadow 0.4s ease;
+    transform-style: preserve-3d;
+    perspective: 600px;
   }
-  .social-link::before {
-    content: '';
-    @apply absolute top-1/2 left-1/2 w-0 h-0 rounded-full transition-all duration-300;
-    transform: translate(-50%, -50%);
-  }
-  .social-link:hover::before {
-    @apply w-full h-full;
+  .social-link:hover {
+    transform: translateY(-4px) rotateY(15deg);
   }
 
   /* Icon box glow */
@@ -98,5 +96,13 @@
   .filter-collapse.open {
     max-height: 999px;
     opacity: 1;
+  }
+
+  /* Skeleton shimmer */
+  .skeleton {
+    @apply rounded;
+    background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.5s ease-in-out infinite;
   }
 }

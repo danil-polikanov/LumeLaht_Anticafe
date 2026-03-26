@@ -3,9 +3,16 @@ import React from 'react';
 interface AnimatedBurgerProps {
   isOpen: boolean;
   onClick: () => void;
+  isScrolled?: boolean;
 }
 
-export const AnimatedBurger: React.FC<AnimatedBurgerProps> = ({ isOpen, onClick }) => {
+export const AnimatedBurger: React.FC<AnimatedBurgerProps> = ({
+  isOpen,
+  onClick,
+  isScrolled = false,
+}) => {
+  const lineColor = isScrolled ? 'bg-accent-800' : 'bg-white';
+
   return (
     <button
       onClick={onClick}
@@ -14,17 +21,17 @@ export const AnimatedBurger: React.FC<AnimatedBurgerProps> = ({ isOpen, onClick 
     >
       <div className="relative w-6 h-[18px] flex flex-col justify-between cursor-pointer">
         <span
-          className={`w-full h-[3px] bg-white rounded-sm transition-all duration-300 origin-center ${
+          className={`w-full h-[3px] ${lineColor} rounded-sm transition-all duration-300 origin-center ${
             isOpen ? 'rotate-45 translate-x-1 translate-y-[7px]' : ''
           }`}
         />
         <span
-          className={`w-full h-[3px] bg-white rounded-sm transition-all duration-300 ${
+          className={`w-full h-[3px] ${lineColor} rounded-sm transition-all duration-300 ${
             isOpen ? 'opacity-0' : ''
           }`}
         />
         <span
-          className={`w-full h-[3px] bg-white rounded-sm transition-all duration-300 origin-center ${
+          className={`w-full h-[3px] ${lineColor} rounded-sm transition-all duration-300 origin-center ${
             isOpen ? '-rotate-45 translate-x-[5px] -translate-y-[7px]' : ''
           }`}
         />

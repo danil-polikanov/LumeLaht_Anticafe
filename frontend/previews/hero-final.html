@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Hero Final — LumeLaht</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            accent: {
+              DEFAULT: '#CE9857', hover: '#b8863f', light: '#e8c48a', dark: '#a07235',
+              50: '#fdf6ec', 100: '#f9e6cc', 200: '#f0cc99', 300: '#e4ae66',
+              400: '#d9994d', 500: '#CE9857', 600: '#b8863f', 700: '#a07235',
+              800: '#7d5a2a', 900: '#5e4320',
+            },
+          },
+        },
+      },
+    };
+  </script>
+  <style>
+    body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
+    .variant-label {
+      position: sticky; top: 0; z-index: 50;
+      background: linear-gradient(135deg, #1a1a2e, #16213e);
+      color: white; padding: 16px 24px; font-size: 1.25rem; font-weight: 700;
+      border-bottom: 3px solid #CE9857;
+    }
+    .city-dropdown {
+      max-height: 0; opacity: 0; overflow: hidden;
+      transition: max-height 0.25s ease, opacity 0.2s ease;
+    }
+    .city-dropdown.open { max-height: 250px; opacity: 1; }
+
+    .city-option { transition: background 0.1s; }
+    .city-option:hover { background: rgba(206,152,87,0.08); }
+    .city-option.selected { background: rgba(206,152,87,0.12); }
+
+    /* Floating particles */
+    @keyframes float {
+      0%, 100% { transform: translateY(0) rotate(0deg); }
+      50% { transform: translateY(-15px) rotate(5deg); }
+    }
+    .particle { animation: float ease-in-out infinite; opacity: 0.15; }
+  </style>
+</head>
+<body class="bg-gray-100">
+
+  <header class="bg-gray-900 text-white text-center py-5">
+    <h1 class="text-2xl font-bold">Hero — Final Variants with City Search</h1>
+    <p class="text-gray-400 mt-1 text-sm">Radix Select для города, Framer Motion для анимаций</p>
+    <nav class="flex justify-center gap-4 mt-4 text-sm">
+      <a href="#hero-a" class="text-accent-300 hover:text-white transition">A — Search + Stats</a>
+      <a href="#hero-b" class="text-accent-300 hover:text-white transition">B — Split + Booking</a>
+      <a href="#hero-c" class="text-accent-300 hover:text-white transition">C — Minimal + Tags</a>
+    </nav>
+  </header>
+
+
+  <!-- ===== HERO A: Search Bar + Stats ===== -->
+  <div id="hero-a" class="variant-label"><i class="fas fa-search mr-2"></i> Hero A — Search Bar + Quick Stats</div>
+  <section
+    class="relative w-full min-h-[80vh] bg-cover bg-center flex items-center justify-center overflow-hidden"
+    style="background-image: url('https://images.unsplash.com/photo-1497366216548-37526070297c?w=1600&q=80')"
+  >
+    <div class="absolute inset-0 bg-gradient-to-b from-black/55 via-black/35 to-black/65"></div>
+
+    <!-- Particles -->
+    <div class="absolute inset-0 pointer-events-none">
+      <div class="particle absolute w-2 h-2 bg-accent rounded-full top-[20%] left-[15%]" style="animation-duration:5s"></div>
+      <div class="particle absolute w-3 h-3 bg-accent rounded-full top-[60%] right-[20%]" style="animation-duration:7s; animation-delay:1s"></div>
+      <div class="particle absolute w-1.5 h-1.5 bg-white rounded-full top-[40%] left-[70%]" style="animation-duration:6s; animation-delay:2s"></div>
+    </div>
+
+    <div class="relative z-10 w-full max-w-[900px] mx-auto px-6 text-center">
+      <h1 class="text-4xl md:text-5xl font-bold text-white mb-3 drop-shadow-lg">Tere tulemast!</h1>
+      <p class="text-lg text-white/85 mb-8 drop-shadow max-w-[550px] mx-auto">
+        Find your perfect anticafe space — for work, play, or inspiration
+      </p>
+
+      <!-- Search bar with city select -->
+      <div class="bg-white rounded-2xl p-2 flex flex-col md:flex-row gap-2 shadow-2xl">
+        <!-- Search input -->
+        <div class="flex-[2] relative">
+          <i class="fas fa-search absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"></i>
+          <input
+            type="text"
+            placeholder="Search by room name..."
+            class="w-full pl-11 pr-4 py-3.5 rounded-xl text-gray-700 bg-gray-50 border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-accent/30 focus:border-accent transition"
+          />
+        </div>
+
+        <!-- City select (Radix Select style) -->
+        <div class="flex-1 relative" id="hero-city-wrap">
+          <button
+            class="w-full flex items-center gap-2 pl-4 pr-3 py-3.5 rounded-xl bg-gray-50 border border-gray-200 text-sm text-left hover:border-accent focus:outline-none focus:ring-2 focus:ring-accent/30 focus:border-accent transition"
+            onclick="document.getElementById('hero-city-dd').classList.toggle('open')"
+          >
+            <i class="fas fa-map-marker-alt text-accent"></i>
+            <span class="flex-1 text-gray-700 font-medium" id="hero-city-label">Tallinn</span>
+            <i class="fas fa-chevron-down text-xs text-gray-400"></i>
+          </button>
+          <div id="hero-city-dd" class="city-dropdown absolute top-full left-0 right-0 mt-1 bg-white rounded-xl shadow-xl border border-gray-200 z-20">
+            <div class="p-2 border-b border-gray-100">
+              <div class="flex items-center bg-gray-50 rounded-lg px-3 py-2">
+                <i class="fas fa-search text-gray-400 text-xs mr-2"></i>
+                <input type="text" placeholder="Search city..." class="bg-transparent outline-none text-sm w-full placeholder:text-gray-400" />
+              </div>
+            </div>
+            <div class="py-1">
+              <div class="city-option selected px-4 py-2.5 flex items-center justify-between cursor-pointer rounded-lg mx-1" onclick="selectCity(this, 'Tallinn')">
+                <div class="flex items-center gap-2">
+                  <i class="fas fa-map-pin text-accent text-xs"></i>
+                  <span class="text-sm font-medium">Tallinn</span>
+                  <span class="text-xs text-gray-400">Harju</span>
+                </div>
+                <i class="fas fa-check text-accent text-xs"></i>
+              </div>
+              <div class="city-option px-4 py-2.5 flex items-center gap-2 cursor-pointer rounded-lg mx-1" onclick="selectCity(this, 'Tartu')">
+                <i class="fas fa-map-pin text-gray-300 text-xs"></i>
+                <span class="text-sm">Tartu</span>
+                <span class="text-xs text-gray-400">Tartu</span>
+              </div>
+              <div class="city-option px-4 py-2.5 flex items-center gap-2 cursor-pointer rounded-lg mx-1" onclick="selectCity(this, 'Pärnu')">
+                <i class="fas fa-map-pin text-gray-300 text-xs"></i>
+                <span class="text-sm">Pärnu</span>
+                <span class="text-xs text-gray-400">Pärnu</span>
+              </div>
+              <div class="city-option px-4 py-2.5 flex items-center gap-2 cursor-pointer rounded-lg mx-1" onclick="selectCity(this, 'Narva')">
+                <i class="fas fa-map-pin text-gray-300 text-xs"></i>
+                <span class="text-sm">Narva</span>
+                <span class="text-xs text-gray-400">Ida-Viru</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- CTA -->
+        <button class="bg-accent hover:bg-accent-hover text-white px-8 py-3.5 rounded-xl font-semibold transition-all hover:shadow-lg whitespace-nowrap text-sm">
+          <i class="fas fa-arrow-right mr-2"></i>Find Rooms
+        </button>
+      </div>
+
+      <!-- Quick tags -->
+      <div class="flex flex-wrap justify-center gap-2 mt-5">
+        <span class="bg-white/15 text-white px-3 py-1.5 rounded-full text-xs backdrop-blur-sm border border-white/20 cursor-pointer hover:bg-white/25 transition">
+          <i class="fas fa-chess mr-1"></i> Board Games
+        </span>
+        <span class="bg-white/15 text-white px-3 py-1.5 rounded-full text-xs backdrop-blur-sm border border-white/20 cursor-pointer hover:bg-white/25 transition">
+          <i class="fas fa-laptop mr-1"></i> Coworking
+        </span>
+        <span class="bg-white/15 text-white px-3 py-1.5 rounded-full text-xs backdrop-blur-sm border border-white/20 cursor-pointer hover:bg-white/25 transition">
+          <i class="fas fa-users mr-1"></i> Meetings
+        </span>
+        <span class="bg-white/15 text-white px-3 py-1.5 rounded-full text-xs backdrop-blur-sm border border-white/20 cursor-pointer hover:bg-white/25 transition">
+          <i class="fas fa-film mr-1"></i> Movie Night
+        </span>
+      </div>
+
+      <!-- Stats -->
+      <div class="grid grid-cols-4 gap-3 mt-10 max-w-[700px] mx-auto">
+        <div class="bg-white/10 backdrop-blur-md rounded-xl border border-white/15 py-4 text-center hover:-translate-y-0.5 transition-transform">
+          <div class="text-2xl font-bold text-accent-300">12+</div>
+          <div class="text-white/70 text-xs mt-0.5">Rooms</div>
+        </div>
+        <div class="bg-white/10 backdrop-blur-md rounded-xl border border-white/15 py-4 text-center hover:-translate-y-0.5 transition-transform">
+          <div class="text-2xl font-bold text-accent-300">8€</div>
+          <div class="text-white/70 text-xs mt-0.5">From/hour</div>
+        </div>
+        <div class="bg-white/10 backdrop-blur-md rounded-xl border border-white/15 py-4 text-center hover:-translate-y-0.5 transition-transform">
+          <div class="text-2xl font-bold text-accent-300">500+</div>
+          <div class="text-white/70 text-xs mt-0.5">Guests</div>
+        </div>
+        <div class="bg-white/10 backdrop-blur-md rounded-xl border border-white/15 py-4 text-center hover:-translate-y-0.5 transition-transform">
+          <div class="text-2xl font-bold text-accent-300">4.8★</div>
+          <div class="text-white/70 text-xs mt-0.5">Rating</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ===== HERO B: Split layout + Mini Booking ===== -->
+  <div id="hero-b" class="variant-label"><i class="fas fa-columns mr-2"></i> Hero B — Split Layout + Booking Form</div>
+  <section
+    class="relative w-full min-h-[80vh] bg-cover bg-center flex items-center overflow-hidden"
+    style="background-image: url('https://images.unsplash.com/photo-1497366216548-37526070297c?w=1600&q=80')"
+  >
+    <div class="absolute inset-0 bg-gradient-to-r from-black/70 via-black/45 to-transparent"></div>
+    <div class="relative z-10 w-full max-w-[1200px] mx-auto px-6 flex flex-col lg:flex-row items-center gap-12">
+      <!-- Left -->
+      <div class="flex-1 text-white">
+        <div class="inline-flex items-center bg-accent/20 text-accent-300 text-xs font-semibold px-3 py-1 rounded-full mb-4 border border-accent/30">
+          <i class="fas fa-star mr-1.5"></i> Anticafe in Old Tallinn
+        </div>
+        <h1 class="text-4xl md:text-5xl font-bold mb-4 drop-shadow-lg leading-tight">
+          Tere tulemast!
+        </h1>
+        <p class="text-lg text-white/85 mb-8 max-w-[480px] drop-shadow leading-relaxed">
+          Book your ideal space in seconds — for work, events, gaming, or just a great time with friends
+        </p>
+        <div class="flex gap-4">
+          <div class="flex items-center gap-2.5 text-white/80">
+            <div class="w-10 h-10 rounded-xl bg-white/10 flex items-center justify-center border border-white/15 backdrop-blur-sm">
+              <i class="fas fa-wifi text-accent-300 text-sm"></i>
+            </div>
+            <span class="text-sm">Free Wi-Fi</span>
+          </div>
+          <div class="flex items-center gap-2.5 text-white/80">
+            <div class="w-10 h-10 rounded-xl bg-white/10 flex items-center justify-center border border-white/15 backdrop-blur-sm">
+              <i class="fas fa-coffee text-accent-300 text-sm"></i>
+            </div>
+            <span class="text-sm">Free Drinks</span>
+          </div>
+          <div class="flex items-center gap-2.5 text-white/80">
+            <div class="w-10 h-10 rounded-xl bg-white/10 flex items-center justify-center border border-white/15 backdrop-blur-sm">
+              <i class="fas fa-gamepad text-accent-300 text-sm"></i>
+            </div>
+            <span class="text-sm">Games</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right: Booking form -->
+      <div class="w-full lg:w-[400px] bg-white rounded-2xl shadow-2xl overflow-hidden">
+        <div class="bg-gradient-to-r from-accent to-accent-hover text-white p-5">
+          <h3 class="font-bold text-lg mb-0.5">Quick Book</h3>
+          <p class="text-white/80 text-sm">Reserve your spot in 30 seconds</p>
+        </div>
+        <div class="p-5 space-y-3.5">
+          <!-- City (Radix Select) -->
+          <div>
+            <label class="block text-xs font-medium text-gray-500 mb-1">
+              <i class="fas fa-map-marker-alt mr-1 text-accent"></i> City
+            </label>
+            <div class="relative" id="booking-city-wrap">
+              <button
+                class="w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl bg-white border border-gray-200 text-sm hover:border-accent focus:ring-2 focus:ring-accent/20 transition"
+                onclick="document.getElementById('booking-city-dd').classList.toggle('open')"
+              >
+                <span class="text-gray-700">Tallinn</span>
+                <i class="fas fa-chevron-down text-xs text-gray-400"></i>
+              </button>
+              <div id="booking-city-dd" class="city-dropdown absolute top-full left-0 right-0 mt-1 bg-white rounded-xl shadow-xl border border-gray-200 z-20">
+                <div class="py-1">
+                  <div class="city-option selected px-3 py-2 flex items-center justify-between cursor-pointer mx-1 rounded-lg">
+                    <span class="text-sm font-medium">Tallinn</span>
+                    <i class="fas fa-check text-accent text-xs"></i>
+                  </div>
+                  <div class="city-option px-3 py-2 cursor-pointer mx-1 rounded-lg text-sm text-gray-600">Tartu</div>
+                  <div class="city-option px-3 py-2 cursor-pointer mx-1 rounded-lg text-sm text-gray-600">Pärnu</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Room type -->
+          <div>
+            <label class="block text-xs font-medium text-gray-500 mb-1">
+              <i class="fas fa-door-open mr-1 text-accent"></i> Room Type
+            </label>
+            <select class="w-full border border-gray-200 rounded-xl px-3.5 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-accent/20 focus:border-accent bg-white">
+              <option>Any room</option>
+              <option>Coworking Space</option>
+              <option>Meeting Room</option>
+              <option>Game Room</option>
+            </select>
+          </div>
+          <!-- Date + Time -->
+          <div class="grid grid-cols-2 gap-3">
+            <div>
+              <label class="block text-xs font-medium text-gray-500 mb-1">
+                <i class="fas fa-calendar mr-1 text-accent"></i> Date
+              </label>
+              <input type="date" class="w-full border border-gray-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-accent/20 focus:border-accent" />
+            </div>
+            <div>
+              <label class="block text-xs font-medium text-gray-500 mb-1">
+                <i class="fas fa-clock mr-1 text-accent"></i> Time
+              </label>
+              <input type="time" class="w-full border border-gray-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-accent/20 focus:border-accent" />
+            </div>
+          </div>
+          <!-- Guests -->
+          <div>
+            <label class="block text-xs font-medium text-gray-500 mb-1">
+              <i class="fas fa-users mr-1 text-accent"></i> Guests
+            </label>
+            <input type="number" min="1" max="20" value="2" class="w-full border border-gray-200 rounded-xl px-3.5 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-accent/20 focus:border-accent" />
+          </div>
+          <!-- CTA -->
+          <button class="w-full bg-accent hover:bg-accent-hover text-white py-3 rounded-xl font-semibold transition-all hover:shadow-lg text-sm mt-1">
+            <i class="fas fa-calendar-check mr-2"></i>Check Availability
+          </button>
+          <p class="text-center text-gray-400 text-xs">
+            <i class="fas fa-lock mr-1"></i> No payment required
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ===== HERO C: Minimal + City Tags ===== -->
+  <div id="hero-c" class="variant-label"><i class="fas fa-wind mr-2"></i> Hero C — Minimal Centered + City Tags</div>
+  <section
+    class="relative w-full min-h-[80vh] bg-cover bg-center flex items-center justify-center overflow-hidden"
+    style="background-image: url('https://images.unsplash.com/photo-1497366216548-37526070297c?w=1600&q=80')"
+  >
+    <div class="absolute inset-0 bg-gradient-to-br from-black/60 via-black/40 to-accent-900/40"></div>
+
+    <div class="relative z-10 w-full max-w-[700px] mx-auto px-6 text-center">
+      <div class="inline-flex items-center bg-white/15 text-white/90 text-xs font-medium px-4 py-1.5 rounded-full mb-5 border border-white/20 backdrop-blur-sm">
+        <i class="fas fa-map-marker-alt text-accent-300 mr-2"></i>
+        Pikk tn 36, Old Tallinn
+      </div>
+
+      <h1 class="text-5xl md:text-6xl font-bold text-white mb-4 drop-shadow-lg leading-tight">
+        Tere tulemast!
+      </h1>
+      <p class="text-lg text-white/85 mb-10 drop-shadow max-w-[500px] mx-auto">
+        Your creative space awaits — choose a city and start exploring
+      </p>
+
+      <!-- City selection as big pills -->
+      <div class="flex flex-wrap justify-center gap-3 mb-8">
+        <button class="bg-white text-gray-800 px-6 py-3 rounded-2xl font-semibold shadow-lg hover:shadow-xl hover:-translate-y-0.5 transition-all text-sm flex items-center gap-2 border-2 border-accent">
+          <i class="fas fa-map-pin text-accent"></i>
+          Tallinn
+          <i class="fas fa-check text-accent text-xs"></i>
+        </button>
+        <button class="bg-white/15 text-white px-6 py-3 rounded-2xl font-medium backdrop-blur-sm border border-white/25 hover:bg-white/25 hover:-translate-y-0.5 transition-all text-sm flex items-center gap-2">
+          <i class="fas fa-map-pin text-white/60"></i>
+          Tartu
+        </button>
+        <button class="bg-white/15 text-white px-6 py-3 rounded-2xl font-medium backdrop-blur-sm border border-white/25 hover:bg-white/25 hover:-translate-y-0.5 transition-all text-sm flex items-center gap-2">
+          <i class="fas fa-map-pin text-white/60"></i>
+          Pärnu
+        </button>
+        <button class="bg-white/15 text-white px-6 py-3 rounded-2xl font-medium backdrop-blur-sm border border-white/25 hover:bg-white/25 hover:-translate-y-0.5 transition-all text-sm flex items-center gap-2">
+          <i class="fas fa-map-pin text-white/60"></i>
+          Narva
+        </button>
+      </div>
+
+      <!-- Action buttons -->
+      <div class="flex justify-center gap-4">
+        <a href="#" class="bg-accent hover:bg-accent-hover text-white px-8 py-3.5 rounded-xl font-semibold transition-all hover:shadow-lg no-underline text-sm">
+          <i class="fas fa-door-open mr-2"></i>Browse Rooms
+        </a>
+        <a href="#" class="bg-white/15 hover:bg-white/25 text-white px-8 py-3.5 rounded-xl font-semibold backdrop-blur-sm border border-white/25 transition-all no-underline text-sm">
+          <i class="fas fa-info-circle mr-2"></i>About Us
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <div class="h-20"></div>
+
+  <script>
+    function selectCity(el, name) {
+      document.getElementById('hero-city-label').textContent = name;
+      document.getElementById('hero-city-dd').classList.remove('open');
+      // Update selected state
+      el.closest('.city-dropdown').querySelectorAll('.city-option').forEach(o => o.classList.remove('selected'));
+      el.classList.add('selected');
+    }
+
+    // Close dropdowns on outside click
+    document.addEventListener('click', (e) => {
+      if (!e.target.closest('#hero-city-wrap')) {
+        document.getElementById('hero-city-dd')?.classList.remove('open');
+      }
+      if (!e.target.closest('#booking-city-wrap')) {
+        document.getElementById('booking-city-dd')?.classList.remove('open');
+      }
+    });
+  </script>
+
+</body>
+</html>
