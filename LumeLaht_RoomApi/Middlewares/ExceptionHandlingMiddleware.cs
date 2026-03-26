@@ -41,9 +41,12 @@ namespace LumeLaht_RoomApi.Middlewares
             var statusCode = exception switch
             {
                 NotFoundException => StatusCodes.Status404NotFound,
+                KeyNotFoundException => StatusCodes.Status404NotFound,
                 ValidationException => StatusCodes.Status400BadRequest,
+                InvalidOperationException => StatusCodes.Status400BadRequest,
+                UnauthorizedAccessException => StatusCodes.Status401Unauthorized,
                 ConflictException => StatusCodes.Status409Conflict,
-                _ => StatusCodes.Status500InternalServerError 
+                _ => StatusCodes.Status500InternalServerError
             };
 
             context.Response.StatusCode = statusCode;

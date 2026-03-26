@@ -1,0 +1,55 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: LumeLaht_Anticafe/Dockerfile
+    ports:
+      - "3000:8080"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+      - ASPNETCORE_URLS=http://+:8080
+      - ConnectionStrings__DefaultConnection=Server=db;Database=LumeLaht_Monolith;User Id=sa;Password=LumeLaht_Pass123!;TrustServerCertificate=True
+      - Jwt__SecretKey=LumeLaht-Anticafe-Super-Secret-Key-For-JWT-2026!
+      - Jwt__Issuer=LumeLaht
+      - Jwt__Audience=LumeLaht-Client
+      - Jwt__ExpirationMinutes=60
+    depends_on:
+      db:
+        condition: service_healthy
+    deploy:
+      resources:
+        limits:
+          cpus: "2"
+          memory: 4G
+    networks:
+      - monolith-net
+
+  db:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    environment:
+      - ACCEPT_EULA=Y
+      - MSSQL_SA_PASSWORD=LumeLaht_Pass123!
+    ports:
+      - "1435:1433"
+    volumes:
+      - monolith-db-data:/var/opt/mssql
+    healthcheck:
+      test: /opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P "LumeLaht_Pass123!" -C -Q "SELECT 1" || exit 1
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+    deploy:
+      resources:
+        limits:
+          cpus: "2"
+          memory: 2G
+    networks:
+      - monolith-net
+
+networks:
+  monolith-net:
+    driver: bridge
+
+volumes:
+  monolith-db-data:

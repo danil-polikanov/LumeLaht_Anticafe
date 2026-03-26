@@ -86,6 +86,14 @@ namespace LumeLaht_RoomApi
                 });
             });
             var app = builder.Build();
+
+            // Auto-apply migrations in Docker/Production
+            using (var scope = app.Services.CreateScope())
+            {
+                var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+                db.Database.Migrate();
+            }
+
             app.UseCors("AllowReactApp");
             app.UseCustomMiddlewares();
             if (app.Environment.IsDevelopment())

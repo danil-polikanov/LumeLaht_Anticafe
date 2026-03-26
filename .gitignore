@@ -11,6 +11,7 @@
 *.sln.docstates
 
 LumeLaht_RoomApi/appsettings.Local.json
+LumeLaht_Anticafe/appsettings.Local.json
 
 # Claude Code local settings (personal permissions, not for sharing)
 .claude/settings.local.json
