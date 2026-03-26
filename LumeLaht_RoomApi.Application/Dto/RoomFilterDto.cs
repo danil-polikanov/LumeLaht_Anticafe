@@ -30,6 +30,8 @@ namespace LumeLaht_RoomApi.Application.Dto
                     { "Region",roomOptionDTO.Region},
                     { "MinPrice", roomOptionDTO.MinPrice },
                     { "MaxPrice", roomOptionDTO.MaxPrice },
+                    { "MinCapacity", roomOptionDTO.MinCapacity },
+                    { "MaxCapacity", roomOptionDTO.MaxCapacity },
                     { "ActivitiesIds", roomOptionDTO.ActivitiesIds }
                 }
             };

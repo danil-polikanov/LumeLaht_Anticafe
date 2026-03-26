@@ -14,6 +14,8 @@ const initialState: RoomsState = {
     region: '',
     minPrice: 0,
     maxPrice: 10000,
+    minCapacity: 0,
+    maxCapacity: 100,
     activitiesIds: [],
     status: '',
   },

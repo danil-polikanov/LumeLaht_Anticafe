@@ -1,9 +1,6 @@
 import React, { useState } from 'react';
 import { setPagination } from '@/entities/room/model';
-import {
-  useGetRoomsByFiltersQuery,
-  useGetRoomByIdQuery,
-} from '@/entities/room';
+import { useGetRoomsByFiltersQuery, useGetRoomByIdQuery } from '@/entities/room';
 import { selectFilters, selectSorting, selectPagination } from '@/entities/room/model';
 import { RoomFilters } from '@/widgets/room-filters/ui';
 import { RoomSortingAndPagination } from '@/widgets/room-sortPaggination/ui';
@@ -34,7 +31,7 @@ export const RoomList: React.FC = () => {
   });
 
   // RTK Query: room by id — only fetches when selectedRoomId is set
-  const { data: selectedRoom } = useGetRoomByIdQuery(selectedRoomId!, {
+  const { data: selectedRoom } = useGetRoomByIdQuery(selectedRoomId ?? '', {
     skip: !selectedRoomId,
   });
 
@@ -106,7 +103,7 @@ export const RoomList: React.FC = () => {
             </div>
             <button
               className="bg-green-500 text-white px-3 py-1.5 rounded hover:bg-green-600 border-none cursor-pointer"
-              onClick={() => console.log('Add new room')}
+              onClick={() => undefined}
             >
               <i className="fas fa-plus mr-1"></i>
               Add Room
@@ -159,9 +156,7 @@ export const RoomList: React.FC = () => {
           </div>
 
           {/* Room detail overlay */}
-          {selectedRoom && (
-            <RoomDetailOverlay room={selectedRoom} onClose={handleCloseDetail} />
-          )}
+          {selectedRoom && <RoomDetailOverlay room={selectedRoom} onClose={handleCloseDetail} />}
 
           <PaginationComponent />
         </div>

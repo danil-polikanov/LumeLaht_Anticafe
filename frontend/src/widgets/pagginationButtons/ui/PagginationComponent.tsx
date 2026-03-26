@@ -7,7 +7,6 @@ import { useAppDispatch, useAppSelector } from '@/shared/lib/hooks/useRedux';
 export const PaginationComponent: React.FC = () => {
   const dispatch = useAppDispatch();
   const pagination = useAppSelector(selectPagination);
-  console.log('Pagination:', pagination);
 
   const handlePageChange = (page: number) => {
     dispatch(setPage(page));
