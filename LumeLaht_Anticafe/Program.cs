@@ -13,7 +13,7 @@ using MapsterMapper;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
-
+using Prometheus;
 using Serilog;
 
 namespace LumeLaht_Anticafe
@@ -99,6 +99,7 @@ namespace LumeLaht_Anticafe
                 db.Database.Migrate();
             }
 
+            app.UseHttpMetrics();
             app.UseCustomMiddlewares();
 
             if (app.Environment.IsDevelopment())
@@ -106,8 +107,6 @@ namespace LumeLaht_Anticafe
                 app.UseSwagger();
                 app.UseSwaggerUI();
             }
-
-            app.UseHttpsRedirection();
 
             // Monolith: serve React SPA from wwwroot
             app.UseDefaultFiles();
@@ -117,6 +116,7 @@ namespace LumeLaht_Anticafe
             app.UseAuthorization();
 
             app.MapControllers();
+            app.MapMetrics();
 
             // SPA fallback: any non-API route returns index.html
             app.MapFallbackToFile("index.html");

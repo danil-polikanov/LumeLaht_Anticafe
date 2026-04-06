@@ -14,10 +14,7 @@ export const AboutContext = () => {
   }, []);
 
   return (
-    <div
-      ref={ref}
-      className={`${styles.wrapper} ${isVisible ? styles.visible : styles.hidden}`}
-    >
+    <div ref={ref} className={`${styles.wrapper} ${isVisible ? styles.visible : styles.hidden}`}>
       <span className={styles.badge}>
         <i className="fas fa-info-circle mr-1"></i>
         About us
@@ -28,9 +25,9 @@ export const AboutContext = () => {
       </h2>
 
       <p className={styles.description}>
-        A modern anti-cafe in the heart of Tallinn, where guests pay for time — not for
-        drinks and snacks. We provide a comfortable space for work, study, meetings, and
-        relaxation with unlimited beverages, snacks, and entertainment included.
+        A modern anti-cafe in the heart of Tallinn, where guests pay for time — not for drinks and
+        snacks. We provide a comfortable space for work, study, meetings, and relaxation with
+        unlimited beverages, snacks, and entertainment included.
       </p>
 
       <div className={styles.featureGrid}>
@@ -49,7 +46,9 @@ export const AboutContext = () => {
           </div>
           <div>
             <div className={styles.featureTitle}>Drinks & Snacks</div>
-            <div className={styles.featureText}>Unlimited coffee, tea, and light snacks included</div>
+            <div className={styles.featureText}>
+              Unlimited coffee, tea, and light snacks included
+            </div>
           </div>
         </div>
         <div className={styles.featureCard}>

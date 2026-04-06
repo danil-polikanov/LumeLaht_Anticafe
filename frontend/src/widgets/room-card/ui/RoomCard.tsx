@@ -23,8 +23,12 @@ export const RoomCard: React.FC<RoomCardProps> = ({ room, onRoomClick }) => {
     if (status === undefined) return null;
     const isActive = !!status;
     return (
-      <span className={`${styles.statusBadge} ${isActive ? styles.statusActive : styles.statusInactive}`}>
-        <span className={`${styles.statusDot} ${isActive ? styles.statusDotActive : styles.statusDotInactive}`} />
+      <span
+        className={`${styles.statusBadge} ${isActive ? styles.statusActive : styles.statusInactive}`}
+      >
+        <span
+          className={`${styles.statusDot} ${isActive ? styles.statusDotActive : styles.statusDotInactive}`}
+        />
         {isActive ? 'Active' : 'Closed'}
       </span>
     );
@@ -103,9 +107,7 @@ export const RoomCard: React.FC<RoomCardProps> = ({ room, onRoomClick }) => {
               <div>
                 {getActivityBadges(room.activity)}
                 {room.activity.length > 3 && (
-                  <span className={styles.activityOverflow}>
-                    +{room.activity.length - 3}
-                  </span>
+                  <span className={styles.activityOverflow}>+{room.activity.length - 3}</span>
                 )}
               </div>
             </div>

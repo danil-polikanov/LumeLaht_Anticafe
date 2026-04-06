@@ -17,10 +17,7 @@ export const Welcome = () => {
   };
 
   return (
-    <section
-      className={styles.hero}
-      style={{ backgroundImage: "url('/Test_LumeLaht_Image.jpg')" }}
-    >
+    <section className={styles.hero} style={{ backgroundImage: "url('/Test_LumeLaht_Image.jpg')" }}>
       <div className={styles.overlay} />
       <div className={styles.content}>
         <div className={styles.locationBadge}>
@@ -47,11 +44,7 @@ export const Welcome = () => {
                 <i className="fas fa-check text-accent text-xs"></i>
               </button>
             ) : (
-              <button
-                key={city}
-                className={styles.cityPill}
-                onClick={() => handleCityClick(city)}
-              >
+              <button key={city} className={styles.cityPill} onClick={() => handleCityClick(city)}>
                 <i className={`fas fa-map-pin ${styles.cityPillIcon}`}></i>
                 {city}
               </button>

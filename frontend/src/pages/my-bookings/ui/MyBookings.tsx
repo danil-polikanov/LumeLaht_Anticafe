@@ -40,13 +40,18 @@ export const MyBookings: React.FC = () => {
 
   const filtered = (bookings ?? []).filter((b) => {
     if (activeTab === 'cancelled') return b.status.toLowerCase() === 'cancelled';
-    if (activeTab === 'past') return new Date(b.startTime) < now && b.status.toLowerCase() !== 'cancelled';
+    if (activeTab === 'past')
+      return new Date(b.startTime) < now && b.status.toLowerCase() !== 'cancelled';
     return new Date(b.startTime) >= now && b.status.toLowerCase() !== 'cancelled';
   });
 
   const tabCounts = {
-    upcoming: (bookings ?? []).filter((b) => new Date(b.startTime) >= now && b.status.toLowerCase() !== 'cancelled').length,
-    past: (bookings ?? []).filter((b) => new Date(b.startTime) < now && b.status.toLowerCase() !== 'cancelled').length,
+    upcoming: (bookings ?? []).filter(
+      (b) => new Date(b.startTime) >= now && b.status.toLowerCase() !== 'cancelled',
+    ).length,
+    past: (bookings ?? []).filter(
+      (b) => new Date(b.startTime) < now && b.status.toLowerCase() !== 'cancelled',
+    ).length,
     cancelled: (bookings ?? []).filter((b) => b.status.toLowerCase() === 'cancelled').length,
   };
 
@@ -77,8 +82,12 @@ export const MyBookings: React.FC = () => {
         <div className="p-5">
           <div className="flex items-start justify-between mb-3">
             <div className="flex-1 min-w-0">
-              <h3 className="font-bold text-gray-800 text-lg mb-0.5 truncate">{booking.roomName}</h3>
-              <div className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium ${sc.bg} ${sc.text}`}>
+              <h3 className="font-bold text-gray-800 text-lg mb-0.5 truncate">
+                {booking.roomName}
+              </h3>
+              <div
+                className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium ${sc.bg} ${sc.text}`}
+              >
                 <i className={`fas ${sc.icon} text-[10px]`}></i>
                 {booking.status}
               </div>
@@ -96,7 +105,9 @@ export const MyBookings: React.FC = () => {
               </div>
               <div>
                 <div className="text-[10px] text-gray-400 uppercase">Date</div>
-                <div className="text-sm font-semibold text-gray-700">{formatDate(booking.startTime)}</div>
+                <div className="text-sm font-semibold text-gray-700">
+                  {formatDate(booking.startTime)}
+                </div>
               </div>
             </div>
             <div className="flex items-center gap-2">
@@ -159,9 +170,11 @@ export const MyBookings: React.FC = () => {
               <i className={`fas ${t.icon} text-xs`}></i>
               {t.label}
               {tabCounts[t.key] > 0 && (
-                <span className={`text-[10px] px-1.5 py-0.5 rounded-full font-bold ${
-                  activeTab === t.key ? 'bg-white/20 text-white' : 'bg-gray-200 text-gray-500'
-                }`}>
+                <span
+                  className={`text-[10px] px-1.5 py-0.5 rounded-full font-bold ${
+                    activeTab === t.key ? 'bg-white/20 text-white' : 'bg-gray-200 text-gray-500'
+                  }`}
+                >
                   {tabCounts[t.key]}
                 </span>
               )}
@@ -189,21 +202,27 @@ export const MyBookings: React.FC = () => {
         {!isLoading && !error && filtered.length === 0 && (
           <div className="text-center py-16">
             <div className="w-20 h-20 rounded-3xl bg-gray-100 flex items-center justify-center mx-auto mb-4">
-              <i className={`fas ${activeTab === 'upcoming' ? 'fa-calendar-plus' : activeTab === 'past' ? 'fa-history' : 'fa-ban'} fa-2x text-gray-300`}></i>
+              <i
+                className={`fas ${activeTab === 'upcoming' ? 'fa-calendar-plus' : activeTab === 'past' ? 'fa-history' : 'fa-ban'} fa-2x text-gray-300`}
+              ></i>
             </div>
             <p className="text-lg font-semibold text-gray-400 mb-1">
-              {activeTab === 'upcoming' ? 'No upcoming bookings' : activeTab === 'past' ? 'No past bookings' : 'No cancelled bookings'}
+              {activeTab === 'upcoming'
+                ? 'No upcoming bookings'
+                : activeTab === 'past'
+                  ? 'No past bookings'
+                  : 'No cancelled bookings'}
             </p>
             <p className="text-sm text-gray-300">
-              {activeTab === 'upcoming' ? 'Browse rooms and make your first booking!' : 'Nothing to show here yet.'}
+              {activeTab === 'upcoming'
+                ? 'Browse rooms and make your first booking!'
+                : 'Nothing to show here yet.'}
             </p>
           </div>
         )}
 
         {!isLoading && !error && filtered.length > 0 && (
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            {filtered.map(renderCard)}
-          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">{filtered.map(renderCard)}</div>
         )}
       </div>
     </div>

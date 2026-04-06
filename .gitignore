@@ -22,6 +22,10 @@ DIPLOMA_PLAN.md
 # Thesis document
 Polikanov_diploma_Reworked.docx
 
+# Local tooling / diploma scripts
+tools/
+Scripts/k6/test-results.md
+
 # Frontend build output
 frontend/dist/
 # User-specific files (MonoDevelop/Xamarin Studio)

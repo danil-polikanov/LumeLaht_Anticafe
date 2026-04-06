@@ -22,12 +22,10 @@ export const RoomDetailOverlay: React.FC<{
 
   const { data: roomBookings } = useGetRoomBookingsQuery(
     { roomId: room.roomId!, date: selectedDate },
-    { skip: !room.roomId }
+    { skip: !room.roomId },
   );
 
-  const bookedHours = new Set(
-    roomBookings?.map((b) => new Date(b.startTime).getHours()) ?? []
-  );
+  const bookedHours = new Set(roomBookings?.map((b) => new Date(b.startTime).getHours()) ?? []);
 
   const isToday = selectedDate === new Date().toISOString().split('T')[0];
   const currentHour = new Date().getHours();
@@ -50,7 +48,9 @@ export const RoomDetailOverlay: React.FC<{
       setSelectedHour(null);
     } catch (err: unknown) {
       const error = err as { data?: { message?: string; Message?: string } };
-      toast.error(error.data?.message || error.data?.Message || 'Failed to book. Please try again.');
+      toast.error(
+        error.data?.message || error.data?.Message || 'Failed to book. Please try again.',
+      );
     }
   };
 
@@ -111,10 +111,16 @@ export const RoomDetailOverlay: React.FC<{
                     />
                     {images.length > 1 && (
                       <>
-                        <button className={`${styles.navBtn} ${styles.navBtnLeft}`} onClick={prevImage}>
+                        <button
+                          className={`${styles.navBtn} ${styles.navBtnLeft}`}
+                          onClick={prevImage}
+                        >
                           <i className="fas fa-chevron-left text-sm"></i>
                         </button>
-                        <button className={`${styles.navBtn} ${styles.navBtnRight}`} onClick={nextImage}>
+                        <button
+                          className={`${styles.navBtn} ${styles.navBtnRight}`}
+                          onClick={nextImage}
+                        >
                           <i className="fas fa-chevron-right text-sm"></i>
                         </button>
                       </>
@@ -233,7 +239,9 @@ export const RoomDetailOverlay: React.FC<{
                 </div>
                 <div>
                   <p className="font-semibold text-sm mb-0.5">Room Unavailable</p>
-                  <p className="text-xs mb-0">This room is currently <strong>{room.status}</strong> and cannot be booked.</p>
+                  <p className="text-xs mb-0">
+                    This room is currently <strong>{room.status}</strong> and cannot be booked.
+                  </p>
                 </div>
               </div>
             ) : (
@@ -280,11 +288,21 @@ export const RoomDetailOverlay: React.FC<{
                                 : 'bg-white text-gray-700 border-gray-200 hover:border-accent hover:shadow-sm cursor-pointer'
                           }`}
                         >
-                          <i className={`fas ${isBooked ? 'fa-ban' : isSelected ? 'fa-check-circle' : 'fa-clock'} text-[10px] mb-1 ${
-                            isBooked ? 'text-gray-300' : isSelected ? 'text-white/80' : 'text-accent/50'
-                          }`}></i>
-                          <span className="font-bold text-sm">{String(hour).padStart(2, '0')}:00</span>
-                          <span className={`text-[10px] ${isSelected ? 'text-white/70' : 'text-gray-400'}`}>
+                          <i
+                            className={`fas ${isBooked ? 'fa-ban' : isSelected ? 'fa-check-circle' : 'fa-clock'} text-[10px] mb-1 ${
+                              isBooked
+                                ? 'text-gray-300'
+                                : isSelected
+                                  ? 'text-white/80'
+                                  : 'text-accent/50'
+                            }`}
+                          ></i>
+                          <span className="font-bold text-sm">
+                            {String(hour).padStart(2, '0')}:00
+                          </span>
+                          <span
+                            className={`text-[10px] ${isSelected ? 'text-white/70' : 'text-gray-400'}`}
+                          >
                             {String(hour).padStart(2, '0')}-{String(endHour).padStart(2, '0')}
                           </span>
                         </button>
@@ -296,13 +314,16 @@ export const RoomDetailOverlay: React.FC<{
                 {/* Legend */}
                 <div className="flex gap-4 mt-3 text-[10px] text-gray-400">
                   <span className="flex items-center gap-1">
-                    <span className="w-3 h-3 rounded border-2 border-gray-200 bg-white inline-block"></span> Available
+                    <span className="w-3 h-3 rounded border-2 border-gray-200 bg-white inline-block"></span>{' '}
+                    Available
                   </span>
                   <span className="flex items-center gap-1">
-                    <span className="w-3 h-3 rounded bg-gray-100 border-2 border-gray-100 inline-block"></span> Booked
+                    <span className="w-3 h-3 rounded bg-gray-100 border-2 border-gray-100 inline-block"></span>{' '}
+                    Booked
                   </span>
                   <span className="flex items-center gap-1">
-                    <span className="w-3 h-3 rounded bg-accent border-2 border-accent inline-block"></span> Selected
+                    <span className="w-3 h-3 rounded bg-accent border-2 border-accent inline-block"></span>{' '}
+                    Selected
                   </span>
                 </div>
               </div>
@@ -315,7 +336,13 @@ export const RoomDetailOverlay: React.FC<{
                 disabled={isBooking || room.status !== 'Available'}
               >
                 <i className={`fas ${isBooking ? 'fa-spinner fa-spin' : 'fa-calendar-plus'}`}></i>
-                {!token ? 'Sign in to Book' : isBooking ? 'Booking...' : selectedHour !== null ? `Book ${String(selectedHour).padStart(2, '0')}:00 — ${String(selectedHour + 1).padStart(2, '0')}:00` : 'Select a time slot'}
+                {!token
+                  ? 'Sign in to Book'
+                  : isBooking
+                    ? 'Booking...'
+                    : selectedHour !== null
+                      ? `Book ${String(selectedHour).padStart(2, '0')}:00 — ${String(selectedHour + 1).padStart(2, '0')}:00`
+                      : 'Select a time slot'}
               </button>
               <button className={styles.favBtn}>
                 <i className="fas fa-heart"></i>

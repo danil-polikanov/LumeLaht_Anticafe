@@ -9,7 +9,7 @@ const bookingDuration = new Trend('booking_duration', true);
 const roomsDuration = new Trend('rooms_duration', true);
 
 // Configuration — change BASE_URL per architecture
-const BASE_URL = __ENV.BASE_URL || 'https://localhost:7001';
+const BASE_URL = __ENV.BASE_URL || 'http://127.0.0.1:3000';
 
 // Load profiles — select via: k6 run --env PROFILE=constant load-test.js
 const profiles = {
