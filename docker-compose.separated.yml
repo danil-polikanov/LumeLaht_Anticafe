@@ -35,7 +35,7 @@ services:
       resources:
         limits:
           cpus: "2"
-          memory: 4G
+          memory: 1G
     networks:
       - separated-net
 
@@ -44,8 +44,6 @@ services:
     environment:
       - ACCEPT_EULA=Y
       - MSSQL_SA_PASSWORD=LumeLaht_Pass123!
-    ports:
-      - "1434:1433"
     volumes:
       - separated-db-data:/var/opt/mssql
     healthcheck:
@@ -62,9 +60,37 @@ services:
     networks:
       - separated-net
 
+  prometheus:
+    image: prom/prometheus:latest
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./prometheus/prometheus.separated.yml:/etc/prometheus/prometheus.yml
+    depends_on:
+      - api
+    networks:
+      - separated-net
+
+  grafana:
+    image: grafana/grafana:latest
+    ports:
+      - "3001:3000"
+    environment:
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+      - GF_AUTH_ANONYMOUS_ENABLED=true
+      - GF_AUTH_ANONYMOUS_ORG_ROLE=Viewer
+    volumes:
+      - grafana-separated-data:/var/lib/grafana
+    depends_on:
+      - prometheus
+    networks:
+      - separated-net
+
 networks:
   separated-net:
     driver: bridge
 
 volumes:
   separated-db-data:
+  grafana-separated-data:

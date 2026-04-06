@@ -49,9 +49,11 @@ export const UserNavMenu: React.FC<UserNavMenuProps> = ({ isScrolled = false }) 
             <div className="w-9 h-9 rounded-full bg-gradient-to-br from-accent to-accent-hover flex items-center justify-center text-white font-bold text-sm shadow-md">
               {initials}
             </div>
-            <i className={`fas fa-chevron-down text-xs transition-transform ${showDropdown ? 'rotate-180' : ''} ${
-              isScrolled ? 'text-gray-500' : 'text-white/70'
-            }`}></i>
+            <i
+              className={`fas fa-chevron-down text-xs transition-transform ${showDropdown ? 'rotate-180' : ''} ${
+                isScrolled ? 'text-gray-500' : 'text-white/70'
+              }`}
+            ></i>
           </button>
 
           {showDropdown && (

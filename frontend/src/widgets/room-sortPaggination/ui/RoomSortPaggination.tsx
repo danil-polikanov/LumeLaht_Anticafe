@@ -38,15 +38,27 @@ export const RoomSortingAndPagination: React.FC = () => {
           Sort by:
         </span>
         <div className={styles.btnGroup}>
-          <button type="button" className={btnClass('name', 'first')} onClick={() => handleSortChange('name')}>
+          <button
+            type="button"
+            className={btnClass('name', 'first')}
+            onClick={() => handleSortChange('name')}
+          >
             <i className={`${getSortIcon('name')} mr-1`}></i>
             Name
           </button>
-          <button type="button" className={btnClass('pricePerHour', 'middle')} onClick={() => handleSortChange('pricePerHour')}>
+          <button
+            type="button"
+            className={btnClass('pricePerHour', 'middle')}
+            onClick={() => handleSortChange('pricePerHour')}
+          >
             <i className={`${getSortIcon('pricePerHour')} mr-1`}></i>
             Price
           </button>
-          <button type="button" className={btnClass('city', 'last')} onClick={() => handleSortChange('city')}>
+          <button
+            type="button"
+            className={btnClass('city', 'last')}
+            onClick={() => handleSortChange('city')}
+          >
             <i className={`${getSortIcon('city')} mr-1`}></i>
             City
           </button>

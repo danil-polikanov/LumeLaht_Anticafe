@@ -13,6 +13,7 @@ using MapsterMapper;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using Prometheus;
 using Serilog;
 
 namespace LumeLaht_RoomApi
@@ -95,6 +96,7 @@ namespace LumeLaht_RoomApi
             }
 
             app.UseCors("AllowReactApp");
+            app.UseHttpMetrics();
             app.UseCustomMiddlewares();
             if (app.Environment.IsDevelopment())
             {
@@ -102,12 +104,16 @@ namespace LumeLaht_RoomApi
                 app.UseSwaggerUI();
             }
 
-            app.UseHttpsRedirection();
+            if (app.Environment.IsDevelopment())
+            {
+                app.UseHttpsRedirection();
+            }
 
             app.UseAuthentication();
             app.UseAuthorization();
 
             app.MapControllers();
+            app.MapMetrics();
 
             app.Run();
         }

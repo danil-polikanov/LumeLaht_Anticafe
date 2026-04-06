@@ -92,8 +92,11 @@ export const RoomFilters: React.FC = () => {
     filters.activitiesIds.includes(a.activityId ?? ''),
   );
   const hasActiveFilters =
-    filters.search || filters.city || filters.region ||
-    filters.minPrice > 0 || (filters.maxPrice < 10000 && filters.maxPrice > 0) ||
+    filters.search ||
+    filters.city ||
+    filters.region ||
+    filters.minPrice > 0 ||
+    (filters.maxPrice < 10000 && filters.maxPrice > 0) ||
     filters.activitiesIds.length > 0;
 
   // Cities/Regions — collected from known values
@@ -154,21 +157,20 @@ export const RoomFilters: React.FC = () => {
                 className={`${styles.selectItem} ${filters.city === city ? styles.selectItemSelected : ''}`}
                 onClick={() => handleCitySelect(city)}
               >
-                <i className={`fas fa-map-pin ${styles.selectItemIcon} ${filters.city === city ? 'text-accent' : 'text-gray-300'}`}></i>
+                <i
+                  className={`fas fa-map-pin ${styles.selectItemIcon} ${filters.city === city ? 'text-accent' : 'text-gray-300'}`}
+                ></i>
                 <span>{city}</span>
-                {filters.city === city && <i className={`fas fa-check ${styles.selectItemCheck}`}></i>}
+                {filters.city === city && (
+                  <i className={`fas fa-check ${styles.selectItemCheck}`}></i>
+                )}
               </div>
             ))}
           </div>
         </FilterPill>
 
         {/* Region */}
-        <FilterPill
-          icon="fas fa-globe"
-          label="Region"
-          value={filters.region}
-          popoverWidth={200}
-        >
+        <FilterPill icon="fas fa-globe" label="Region" value={filters.region} popoverWidth={200}>
           <div className={styles.selectSearch}>
             <div className={styles.selectSearchInner}>
               <i className={`fas fa-search ${styles.selectSearchIcon}`}></i>
@@ -189,7 +191,9 @@ export const RoomFilters: React.FC = () => {
                 onClick={() => handleRegionSelect(region)}
               >
                 <span>{region}</span>
-                {filters.region === region && <i className={`fas fa-check ${styles.selectItemCheck}`}></i>}
+                {filters.region === region && (
+                  <i className={`fas fa-check ${styles.selectItemCheck}`}></i>
+                )}
               </div>
             ))}
           </div>
@@ -209,7 +213,9 @@ export const RoomFilters: React.FC = () => {
           <div className={styles.pricePopover}>
             <div className={styles.priceHeader}>
               <span className={styles.priceLabel}>Price per hour</span>
-              <span className={styles.priceValue}>{priceRange[0]}€ — {priceRange[1]}€</span>
+              <span className={styles.priceValue}>
+                {priceRange[0]}€ — {priceRange[1]}€
+              </span>
             </div>
             <Slider.Root
               className={styles.sliderRoot}

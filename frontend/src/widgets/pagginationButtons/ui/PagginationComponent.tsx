@@ -18,10 +18,7 @@ export const PaginationComponent: React.FC = () => {
     const totalPages = pagination.totalPages;
 
     items.push(
-      <li
-        key="prev"
-        className={`${styles.item} ${currentPage === 1 ? styles.itemDisabled : ''}`}
-      >
+      <li key="prev" className={`${styles.item} ${currentPage === 1 ? styles.itemDisabled : ''}`}>
         <button
           className={styles.link}
           onClick={() => handlePageChange(currentPage - 1)}

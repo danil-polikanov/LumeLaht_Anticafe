@@ -58,10 +58,7 @@ export const RoomList: React.FC = () => {
       <PageHero
         title="Room Catalog"
         subtitle="Find the perfect space for your next event, meeting, or creative session"
-        breadcrumbs={[
-          { label: 'Home', to: '/' },
-          { label: 'Rooms' },
-        ]}
+        breadcrumbs={[{ label: 'Home', to: '/' }, { label: 'Rooms' }]}
       />
       <div className={styles.page}>
         {/* Filters (horizontal pills + search) */}
@@ -92,11 +89,7 @@ export const RoomList: React.FC = () => {
             <ErrorState />
           ) : rooms.length > 0 ? (
             rooms.map((room) => (
-              <RoomCard
-                key={room.roomId}
-                room={room}
-                onRoomClick={(id) => setSelectedRoomId(id)}
-              />
+              <RoomCard key={room.roomId} room={room} onRoomClick={(id) => setSelectedRoomId(id)} />
             ))
           ) : (
             <EmptyState />

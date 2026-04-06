@@ -94,13 +94,17 @@ export const AuthModal: React.FC<AuthModalProps> = ({ onClose, initialTab = 'log
             <i className="fas fa-times text-sm"></i>
           </button>
           <div className="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-3">
-            <i className={`fas ${tab === 'login' ? 'fa-sign-in-alt' : 'fa-user-plus'} text-2xl`}></i>
+            <i
+              className={`fas ${tab === 'login' ? 'fa-sign-in-alt' : 'fa-user-plus'} text-2xl`}
+            ></i>
           </div>
           <h2 className="text-xl font-bold mb-1">
             {tab === 'login' ? 'Welcome Back' : 'Create Account'}
           </h2>
           <p className="text-white/70 text-sm">
-            {tab === 'login' ? 'Sign in to book your favourite rooms' : 'Join us and start booking today'}
+            {tab === 'login'
+              ? 'Sign in to book your favourite rooms'
+              : 'Join us and start booking today'}
           </p>
         </div>
 
@@ -135,7 +139,9 @@ export const AuthModal: React.FC<AuthModalProps> = ({ onClose, initialTab = 'log
           {tab === 'register' && (
             <div className="flex gap-3">
               <div className="flex-1">
-                <label className="block text-xs font-medium text-gray-500 mb-1.5 uppercase tracking-wide">First Name</label>
+                <label className="block text-xs font-medium text-gray-500 mb-1.5 uppercase tracking-wide">
+                  First Name
+                </label>
                 <input
                   type="text"
                   required
@@ -146,7 +152,9 @@ export const AuthModal: React.FC<AuthModalProps> = ({ onClose, initialTab = 'log
                 />
               </div>
               <div className="flex-1">
-                <label className="block text-xs font-medium text-gray-500 mb-1.5 uppercase tracking-wide">Last Name</label>
+                <label className="block text-xs font-medium text-gray-500 mb-1.5 uppercase tracking-wide">
+                  Last Name
+                </label>
                 <input
                   type="text"
                   required
@@ -161,7 +169,9 @@ export const AuthModal: React.FC<AuthModalProps> = ({ onClose, initialTab = 'log
 
           {tab === 'register' && (
             <div>
-              <label className="block text-xs font-medium text-gray-500 mb-1.5 uppercase tracking-wide">Phone (optional)</label>
+              <label className="block text-xs font-medium text-gray-500 mb-1.5 uppercase tracking-wide">
+                Phone (optional)
+              </label>
               <input
                 type="tel"
                 value={form.phone}
@@ -173,7 +183,9 @@ export const AuthModal: React.FC<AuthModalProps> = ({ onClose, initialTab = 'log
           )}
 
           <div>
-            <label className="block text-xs font-medium text-gray-500 mb-1.5 uppercase tracking-wide">Email</label>
+            <label className="block text-xs font-medium text-gray-500 mb-1.5 uppercase tracking-wide">
+              Email
+            </label>
             <div className="relative">
               <i className="fas fa-envelope absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400 text-sm"></i>
               <input
@@ -188,7 +200,9 @@ export const AuthModal: React.FC<AuthModalProps> = ({ onClose, initialTab = 'log
           </div>
 
           <div>
-            <label className="block text-xs font-medium text-gray-500 mb-1.5 uppercase tracking-wide">Password</label>
+            <label className="block text-xs font-medium text-gray-500 mb-1.5 uppercase tracking-wide">
+              Password
+            </label>
             <div className="relative">
               <i className="fas fa-lock absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400 text-sm"></i>
               <input
@@ -213,8 +227,10 @@ export const AuthModal: React.FC<AuthModalProps> = ({ onClose, initialTab = 'log
                 <i className="fas fa-spinner fa-spin"></i>
                 {tab === 'login' ? 'Signing in...' : 'Creating account...'}
               </span>
+            ) : tab === 'login' ? (
+              'Sign In'
             ) : (
-              tab === 'login' ? 'Sign In' : 'Create Account'
+              'Create Account'
             )}
           </button>
 
@@ -231,7 +247,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({ onClose, initialTab = 'log
         </form>
       </div>
     </div>,
-    document.body
+    document.body,
   );
 };
 

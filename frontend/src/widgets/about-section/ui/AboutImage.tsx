@@ -14,10 +14,7 @@ export const AboutImage = () => {
   }, []);
 
   return (
-    <div
-      ref={ref}
-      className={`${styles.wrapper} ${isVisible ? styles.visible : styles.hidden}`}
-    >
+    <div ref={ref} className={`${styles.wrapper} ${isVisible ? styles.visible : styles.hidden}`}>
       <div className={styles.imageContainer}>
         <img src="/AboutPhoto.jpg" alt="Inside LumeLaht Anticafe" className={styles.image} />
         <div className={styles.statsCard}>

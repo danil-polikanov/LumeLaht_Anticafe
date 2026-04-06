@@ -114,7 +114,9 @@ export const AuthPage: React.FC = () => {
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Phone (optional)</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Phone (optional)
+                  </label>
                   <input
                     type="tel"
                     value={form.phone}
@@ -161,8 +163,10 @@ export const AuthPage: React.FC = () => {
                   <i className="fas fa-spinner fa-spin"></i>
                   {tab === 'login' ? 'Signing in...' : 'Creating account...'}
                 </span>
+              ) : tab === 'login' ? (
+                'Sign In'
               ) : (
-                tab === 'login' ? 'Sign In' : 'Create Account'
+                'Create Account'
               )}
             </button>
           </form>
