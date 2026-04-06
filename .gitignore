@@ -11,12 +11,20 @@
 *.sln.docstates
 
 LumeLaht_RoomApi/appsettings.Local.json
+LumeLaht_Anticafe/appsettings.Local.json
 
 # Claude Code local settings (personal permissions, not for sharing)
 .claude/settings.local.json
 
 # Personal thesis planning document
 DIPLOMA_PLAN.md
+
+# Thesis document
+Polikanov_diploma_Reworked.docx
+
+# Local tooling / diploma scripts
+tools/
+Scripts/k6/test-results.md
 
 # Frontend build output
 frontend/dist/
@@ -371,3 +379,4 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+.claude/worktrees/

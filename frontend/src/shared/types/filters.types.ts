@@ -7,6 +7,8 @@ export interface RoomFilters {
   region: string;
   minPrice: number;
   maxPrice: number;
+  minCapacity: number;
+  maxCapacity: number;
   activitiesIds: string[];
   status: string;
 }
@@ -19,7 +21,7 @@ export interface RoomsPagination {
 }
 
 export interface RoomSorting {
-  field: 'name' | 'pricePerHour' | 'city';
+  field: 'name' | 'pricePerHour' | 'capacity' | 'city' | 'createdAt';
   direction: 'asc' | 'desc';
 }
 

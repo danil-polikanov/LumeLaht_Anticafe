@@ -68,13 +68,33 @@ namespace LumeLaht_RoomApi.Infrastructure.Repositories.Extensions
             return query;
         }
 
+        public static IQueryable<Room> ApplyCapacityFilter(this IQueryable<Room> query, FilterOptions options)
+        {
+            if (options.Filters.TryGetValue("MinCapacity", out var minCap)
+                && minCap is int minCapVal)
+            {
+                query = query.Where(r => r.Capacity >= minCapVal);
+            }
+
+            if (options.Filters.TryGetValue("MaxCapacity", out var maxCap)
+                && maxCap is int maxCapVal)
+            {
+                query = query.Where(r => r.Capacity <= maxCapVal);
+            }
+
+            return query;
+        }
+
         public static IQueryable<Room> ApplyActivityFilter(this IQueryable<Room> query, FilterOptions options)
         {
             if (options.Filters.TryGetValue("ActivitiesIds", out var activityIds)
                 && activityIds is List<Guid> ids && ids.Any())
             {
-                query = query.Where(r =>
-                    ids.All(id => r.RoomActivity.Any(ra => ra.ActivityId == id)));    
+                foreach (var id in ids)
+                {
+                    var capturedId = id;
+                    query = query.Where(r => r.RoomActivity.Any(ra => ra.ActivityId == capturedId));
+                }
             }
 
             return query;
@@ -90,9 +110,15 @@ namespace LumeLaht_RoomApi.Infrastructure.Repositories.Extensions
                 "name" => sortOptions.Direction == "desc"
                     ? query.OrderByDescending(r => r.Name)
                     : query.OrderBy(r => r.Name),
+                "capacity" => sortOptions.Direction == "desc"
+                    ? query.OrderByDescending(r => r.Capacity)
+                    : query.OrderBy(r => r.Capacity),
                 "city" => sortOptions.Direction == "desc"
-            ? query.OrderByDescending(r => EF.Functions.Collate(r.Address.City, "Estonian_CI_AS"))
-            : query.OrderBy(r => EF.Functions.Collate(r.Address.City, "Estonian_CI_AS")),
+                    ? query.OrderByDescending(r => EF.Functions.Collate(r.Address.City, "Estonian_CI_AS"))
+                    : query.OrderBy(r => EF.Functions.Collate(r.Address.City, "Estonian_CI_AS")),
+                "createdAt" => sortOptions.Direction == "desc"
+                    ? query.OrderByDescending(r => r.CreatedAt)
+                    : query.OrderBy(r => r.CreatedAt),
                 _ => query.OrderBy(r => r.Name)
             };
         }

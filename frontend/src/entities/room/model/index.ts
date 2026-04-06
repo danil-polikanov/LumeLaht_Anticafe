@@ -1,19 +1,5 @@
-// API‑клиент
-export { RoomClient, SwaggerException } from './roomClient';
-
-// Slice (редьюсер + экшены)
+// Slice (reducer + actions)
 export * from './roomSlice';
 
-// Селекторы
+// Selectors
 export * from './roomSelectors';
-
-// Thunks (асинхронные операции)
-export {
-  fetchRooms,
-  fetchRoomById,
-  createRoom,
-  updateRoom,
-  deleteRoom,
-  fetchActivities,
-  fetchRoomsByFilters,
-} from './roomThunks';

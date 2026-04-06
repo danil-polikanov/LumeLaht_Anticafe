@@ -1,37 +1,108 @@
-/* Global styles */
-body {
-  margin: 0;
-  font-size: 16px;
-  font-family:
-    -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell',
-    'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen,
+      Ubuntu, Cantarell, 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* Remove number input spinners */
+  input[type='number']::-webkit-inner-spin-button,
+  input[type='number']::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+  input[type='number'] {
+    -moz-appearance: textfield;
+    appearance: textfield;
+  }
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
-}
+@layer components {
+  /* Nav link underline animation via ::after */
+  .nav-link-animated {
+    @apply relative;
+  }
+  .nav-link-animated::after {
+    content: '';
+    @apply absolute left-1/2 -bottom-1 w-0 h-0.5 bg-white transition-all duration-300;
+    transform: translateX(-50%);
+  }
+  .nav-link-animated:hover::after,
+  .nav-link-animated.active::after {
+    @apply w-4/5;
+  }
 
-.App {
-  text-align: center;
-  min-height: 100vh;
-  color: white;
-}
+  /* Footer section shimmer hover effect */
+  .footer-section {
+    @apply relative overflow-hidden;
+  }
+  .footer-section::before {
+    content: '';
+    @apply absolute top-0 -left-full w-full h-full transition-all duration-500;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.05), transparent);
+  }
+  .footer-section:hover::before {
+    left: 100%;
+  }
 
-.App-link {
-  color: #61dafb;
-}
+  /* Social link flip + glow */
+  .social-link {
+    @apply relative overflow-hidden;
+    transition: transform 0.4s ease, box-shadow 0.4s ease;
+    transform-style: preserve-3d;
+    perspective: 600px;
+  }
+  .social-link:hover {
+    transform: translateY(-4px) rotateY(15deg);
+  }
 
-/* Remove spinner arrows in Chrome, Safari, Edge */
-input[type='number']::-webkit-inner-spin-button,
-input[type='number']::-webkit-outer-spin-button {
-  -webkit-appearance: none;
-  margin: 0;
-}
+  /* Icon box glow */
+  .icon-box {
+    @apply relative overflow-hidden;
+  }
+  .icon-box::before {
+    content: '';
+    @apply absolute inset-0;
+    background: inherit;
+    filter: blur(10px);
+    z-index: -1;
+  }
 
-/* Remove spinner arrows in Firefox */
-input[type='number'] {
-  -moz-appearance: textfield;
-  appearance: textfield;
+  /* User nav button underline */
+  .user-btn-animated {
+    @apply relative;
+  }
+  .user-btn-animated::after {
+    content: '';
+    @apply absolute bottom-[3px] left-1/2 w-0 h-0.5 bg-white opacity-0 transition-all duration-300;
+    transform: translateX(-50%);
+  }
+  .user-btn-animated:hover::after {
+    @apply opacity-100 w-3/5;
+  }
+
+  /* Collapse animation for filters */
+  .filter-collapse {
+    overflow: hidden;
+    transition: max-height 0.4s ease, opacity 0.4s ease;
+    max-height: 0;
+    opacity: 0;
+  }
+  .filter-collapse.open {
+    max-height: 999px;
+    opacity: 1;
+  }
+
+  /* Skeleton shimmer */
+  .skeleton {
+    @apply rounded;
+    background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.5s ease-in-out infinite;
+  }
 }

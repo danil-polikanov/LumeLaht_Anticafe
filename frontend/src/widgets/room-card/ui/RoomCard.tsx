@@ -21,9 +21,15 @@ export const RoomCard: React.FC<RoomCardProps> = ({ room, onRoomClick }) => {
 
   const getStatusBadge = (status: string | undefined) => {
     if (status === undefined) return null;
+    const isActive = !!status;
     return (
-      <span className={`badge ${status ? 'bg-success' : 'bg-danger'}`}>
-        {status ? 'Active' : 'Closed'}
+      <span
+        className={`${styles.statusBadge} ${isActive ? styles.statusActive : styles.statusInactive}`}
+      >
+        <span
+          className={`${styles.statusDot} ${isActive ? styles.statusDotActive : styles.statusDotInactive}`}
+        />
+        {isActive ? 'Active' : 'Closed'}
       </span>
     );
   };
@@ -40,7 +46,7 @@ export const RoomCard: React.FC<RoomCardProps> = ({ room, onRoomClick }) => {
   const getActivityBadges = (activities: ActivityResponse[] | undefined) => {
     if (!activities || activities.length === 0) return null;
     return activities.slice(0, 3).map((activity, index) => (
-      <span key={activity.activityId || index} className="badge bg-info me-1">
+      <span key={activity.activityId || index} className={styles.activityBadge}>
         {activity.name}
       </span>
     ));
@@ -50,36 +56,32 @@ export const RoomCard: React.FC<RoomCardProps> = ({ room, onRoomClick }) => {
     if (room.images && room.images.length > 0) {
       const mainImage = room.images.find((r) => r.isMain) ?? room.images[0];
       return mainImage?.url ? (
-        <img src={mainImage.url} className={styles.room_image} alt="Room photo" />
+        <img src={mainImage.url} className={styles.image} alt="Room photo" />
       ) : (
-        <div>Image unavailable</div>
+        <div className={styles.imagePlaceholder}>
+          <i className="fas fa-image fa-2x"></i>
+        </div>
       );
     }
-    return <div>No images</div>;
+    return (
+      <div className={styles.imagePlaceholder}>
+        <i className="fas fa-image fa-2x"></i>
+      </div>
+    );
   };
 
   return (
-    <div className="col-md-6 col-lg-4 mb-4">
-      <div className={`card h-100 shadow-sm ${styles.room_card}`} onClick={handleCardClick}>
-        {/* Room image */}
-        <div
-          className="card-img-top bg-light d-flex align-items-center justify-content-center"
-          style={{ height: '200px', cursor: 'pointer' }}
-        >
-          <div className="text-center text-muted">{renderImage()}</div>
-        </div>
+    <div className={styles.wrapper}>
+      <div className={styles.card} onClick={handleCardClick}>
+        <div className={styles.imageWrap}>{renderImage()}</div>
 
-        <div className="card-body d-flex flex-column">
-          {/* Title and status */}
-          <div className="d-flex justify-content-between align-items-start mb-2">
-            <h5 className="card-title mb-0" style={{ cursor: 'pointer' }}>
-              {room.name || 'Untitled'}
-            </h5>
+        <div className={styles.body}>
+          <div className={styles.titleRow}>
+            <h5 className={styles.title}>{room.name || 'Untitled'}</h5>
             {getStatusBadge(room.status)}
           </div>
 
-          {/* Description */}
-          <p className="card-text text-muted small mb-3">
+          <p className={styles.description}>
             {room.description
               ? room.description.length > 100
                 ? `${room.description.substring(0, 100)}...`
@@ -87,45 +89,41 @@ export const RoomCard: React.FC<RoomCardProps> = ({ room, onRoomClick }) => {
               : 'No description'}
           </p>
 
-          {/* Address */}
           <div className="mb-3">
-            <div className="d-flex align-items-center text-muted small">
-              <i className="fas fa-map-marker-alt me-2"></i>
+            <div className={styles.addressRow}>
+              <i className={`fas fa-map-marker-alt ${styles.addressIcon}`}></i>
               <span>{formatAddress(room.address)}</span>
             </div>
             {room.address?.phoneNumber && (
-              <div className="d-flex align-items-center text-muted small mt-1">
-                <i className="fas fa-phone me-2"></i>
+              <div className={`${styles.addressRow} mt-1`}>
+                <i className={`fas fa-phone ${styles.addressIcon}`}></i>
                 <span>{room.address.phoneNumber}</span>
               </div>
             )}
           </div>
 
-          {/* Activities */}
           {room.activity && room.activity.length > 0 && (
             <div className="mb-3">
-              <div className="small text-muted mb-1">Available activities:</div>
               <div>
                 {getActivityBadges(room.activity)}
                 {room.activity.length > 3 && (
-                  <span className="badge bg-secondary">+{room.activity.length - 3}</span>
+                  <span className={styles.activityOverflow}>+{room.activity.length - 3}</span>
                 )}
               </div>
             </div>
           )}
 
-          {/* Price and button */}
-          <div className="mt-auto">
-            <div className="d-flex justify-content-between align-items-center">
-              <div className="text-primary fw-bold">{formatPrice(room.pricePerHour)}</div>
+          <div className={styles.footer}>
+            <div className={styles.footerInner}>
+              <div className={styles.price}>{formatPrice(room.pricePerHour)}</div>
               <button
-                className="btn btn-primary btn-sm"
+                className={styles.readMoreBtn}
                 onClick={(e) => {
                   e.stopPropagation();
                   handleCardClick();
                 }}
               >
-                <i className="fas fa-eye me-1"></i>
+                <i className="fas fa-eye mr-1.5"></i>
                 Read More
               </button>
             </div>

@@ -1,68 +1,64 @@
-﻿using LumeLaht_RoomApi.Application.Dto;
+using LumeLaht_RoomApi.Application.Dto;
 using LumeLaht_RoomApi.Core_.Entities;
-using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace LumeLaht_RoomApi.Tests.Helpers
 {
-    /// <summary>
-    /// Фабрика для создания тестовых данных
-    /// </summary>
     public static class TestDataFactory
     {
         public static Address CreateAddress(
-            string city = "Narva",
-            string region = "Ida-Virumaa")
+            string city = "Tallinn",
+            string region = "Harju")
         {
             return new Address
             {
                 AddressId = Guid.NewGuid(),
-                AddressName = $"ул. Тестовая, {Random.Shared.Next(1, 100)}",
+                AddressName = $"Test Street {Random.Shared.Next(1, 100)}",
                 City = city,
                 Region = region,
-                PostalCode = Random.Shared.Next(100000, 999999).ToString(),
+                PostalCode = Random.Shared.Next(10000, 99999).ToString(),
                 Country = "Estonia",
-                PhoneNumber = $"+7900{Random.Shared.Next(1000000, 9999999)}"
+                PhoneNumber = $"+3725550{Random.Shared.Next(1000, 9999)}"
             };
         }
 
         public static Activity CreateActivity(
-            string name = "Тестовая активность")
+            string name = "Test Activity",
+            string category = "Board Game")
         {
             return new Activity
             {
                 ActivityId = Guid.NewGuid(),
                 Name = name,
-                Description = "Описание активности"
+                Description = "Test activity description",
+                Category = category
             };
         }
 
         public static Room CreateRoom(
-            string name = "Тестовый зал",
-            decimal price = 1000,
+            string name = "Test Room",
+            decimal price = 10,
+            int capacity = 6,
             string status = "Available",
             Address? address = null,
-            string addressId=null,
             List<Activity>? activities = null)
         {
             var room = new Room
             {
                 RoomId = Guid.NewGuid(),
                 Name = name,
-                Description = "Описание зала",
+                Description = "Test room description",
                 PricePerHour = price,
+                Capacity = capacity,
                 Status = status,
-                Address = address?? CreateAddress(),
+                CreatedAt = DateTime.UtcNow,
+                UpdatedAt = DateTime.UtcNow,
+                Address = address ?? CreateAddress(),
                 Images = new List<RoomImage>
                 {
                     new RoomImage
                     {
-                        ImageId = Guid.NewGuid(),                  
-                        Url = "test.jpg",
+                        ImageId = Guid.NewGuid(),
+                        Url = "https://example.com/test.jpg",
                         IsMain = true
                     }
                 },
@@ -87,44 +83,32 @@ namespace LumeLaht_RoomApi.Tests.Helpers
 
             return room;
         }
-        #region Helper Methods
 
         public static List<Room> CreateTestRooms()
         {
-            var activity1 = new Activity
-            {
-                ActivityId = Guid.NewGuid(),
-                Name = "Йога",
-                Description = "Занятия йогой"
-            };
-
-            var activity2 = new Activity
-            {
-                ActivityId = Guid.NewGuid(),
-                Name = "Фитнес",
-                Description = "Силовые тренировки"
-            };
+            var activity1 = CreateActivity("Monopoly", "Board Game");
+            var activity2 = CreateActivity("Billiards", "Sport Game");
 
             var address1 = new Address
             {
                 AddressId = Guid.NewGuid(),
-                AddressName = "ул. Gagarini, 10",
+                AddressName = "Viru 15",
                 City = "Tallinn",
-                Region = "Tallinn reg",
-                PostalCode = "123456",
+                Region = "Harju",
+                PostalCode = "10140",
                 Country = "Estonia",
-                PhoneNumber = "+38001234567"
+                PhoneNumber = "+37255501001"
             };
 
             var address2 = new Address
             {
                 AddressId = Guid.NewGuid(),
-                AddressName = "пр. Мира, 25",
+                AddressName = "Pushkini 20",
                 City = "Narva",
                 Region = "Ida-Virumaa",
-                PostalCode = "654321",
+                PostalCode = "20309",
                 Country = "Estonia",
-                PhoneNumber = "+372009876543"
+                PhoneNumber = "+37255503001"
             };
 
             var room1Id = Guid.NewGuid();
@@ -133,15 +117,18 @@ namespace LumeLaht_RoomApi.Tests.Helpers
             var room1 = new Room
             {
                 RoomId = room1Id,
-                Name = "Зал А",
-                Description = "Просторный зал для йоги",
-                PricePerHour = 1000,
+                Name = "Cozy Corner",
+                Description = "A warm space with board games",
+                PricePerHour = 5,
+                Capacity = 6,
                 Status = "Available",
+                CreatedAt = DateTime.UtcNow,
+                UpdatedAt = DateTime.UtcNow,
                 AddressId = address1.AddressId,
                 Address = address1,
                 Images = new List<RoomImage>
                 {
-                    new RoomImage { ImageId = Guid.NewGuid(), Url = "image1.jpg", IsMain = true }
+                    new RoomImage { ImageId = Guid.NewGuid(), Url = "https://example.com/room1.jpg", IsMain = true }
                 },
                 RoomActivity = new List<RoomActivity>
                 {
@@ -152,15 +139,18 @@ namespace LumeLaht_RoomApi.Tests.Helpers
             var room2 = new Room
             {
                 RoomId = room2Id,
-                Name = "Зал B",
-                Description = "Зал для фитнеса",
-                PricePerHour = 1500,
+                Name = "Game Hub",
+                Description = "Main gaming zone with billiards",
+                PricePerHour = 12,
+                Capacity = 12,
                 Status = "Occupied",
+                CreatedAt = DateTime.UtcNow,
+                UpdatedAt = DateTime.UtcNow,
                 AddressId = address2.AddressId,
                 Address = address2,
                 Images = new List<RoomImage>
                 {
-                    new RoomImage { ImageId = Guid.NewGuid(), Url = "image2.jpg", IsMain = true }
+                    new RoomImage { ImageId = Guid.NewGuid(), Url = "https://example.com/room2.jpg", IsMain = true }
                 },
                 RoomActivity = new List<RoomActivity>
                 {
@@ -170,20 +160,19 @@ namespace LumeLaht_RoomApi.Tests.Helpers
 
             return new List<Room> { room1, room2 };
         }
-        public static CreateRoomRequest CreateRoomRequest(List<ActivityResponse> activities = null)
+
+        public static CreateRoomRequest CreateRoomRequest(List<Guid>? activityIds = null)
         {
             return new CreateRoomRequest
             {
                 Name = "Test Room",
                 Description = "Test Description",
-                PricePerHour = 100,
+                PricePerHour = 10,
+                Capacity = 6,
                 Status = "Available",
                 AddressId = Guid.NewGuid(),
-                Activities = activities
+                ActivityIds = activityIds
             };
         }
-
-
-        #endregion
     }
 }

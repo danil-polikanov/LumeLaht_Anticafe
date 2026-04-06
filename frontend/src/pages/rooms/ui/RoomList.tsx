@@ -1,158 +1,152 @@
-import React, { useEffect } from 'react';
-import { useSelector } from 'react-redux';
-import { clearSelectedRoom } from '@/entities/room/model';
-import { fetchRoomsByFilters, fetchActivities } from '@/entities/room/model';
-import {
-  selectRooms,
-  selectSelectedRoom,
-  selectLoading,
-  selectError,
-  selectFilters,
-  selectSorting,
-  selectPagination,
-} from '@/entities/room/model';
-import { fetchRoomById } from '@/entities/room/model';
+import React, { useEffect, useRef, useState } from 'react';
+import toast from 'react-hot-toast';
+import { setPagination } from '@/entities/room/model';
+import { useGetRoomsByFiltersQuery, useGetRoomByIdQuery } from '@/entities/room';
+import { selectFilters, selectSorting, selectPagination } from '@/entities/room/model';
 import { RoomFilters } from '@/widgets/room-filters/ui';
 import { RoomSortingAndPagination } from '@/widgets/room-sortPaggination/ui';
 import { RoomCard } from '@/widgets/room-card/ui';
 import { PaginationComponent } from '@/widgets/pagginationButtons/ui';
 import { RoomDetailOverlay } from '@/widgets/room-details/ui';
+import { RoomCardSkeletonGrid } from '@/shared/ui/RoomCardSkeleton';
+import { PageHero } from '@/shared/ui/PageHero';
 import { useAppDispatch, useAppSelector } from '@/shared/lib/hooks/useRedux';
+import styles from './RoomList.module.css';
+
 export const RoomList: React.FC = () => {
   const dispatch = useAppDispatch();
-  const rooms = useAppSelector(selectRooms);
   const filters = useAppSelector(selectFilters);
   const sorting = useAppSelector(selectSorting);
   const pagination = useAppSelector(selectPagination);
-  const loading = useSelector(selectLoading);
-  const error = useSelector(selectError);
-  const selectedRoomDetail = useAppSelector(selectSelectedRoom);
-  // Load activities on mount
-  useEffect(() => {
-    dispatch(fetchActivities());
-  }, [dispatch]);
-  //console.log('Filters in List: 1', filters, sorting, pagination, rooms);
-  useEffect(() => {
-    dispatch(fetchRoomsByFilters());
-  }, [dispatch, filters, sorting, pagination.currentPage, pagination.pageSize]);
-  const handleRoomClick = (roomId: string) => {
-    dispatch(fetchRoomById(roomId));
-    // Navigation to room detail page can be added here
-    // e.g. using React Router
-    console.log('Navigate to room detail:', roomId);
-  };
-  const handleCloseDetail = () => {
-    dispatch(clearSelectedRoom());
-  };
+  const prevErrorRef = useRef(false);
 
-  if (loading && rooms.length === 0) {
-    return (
-      <div className="container-fluid py-4">
-        <div
-          className="d-flex justify-content-center align-items-center"
-          style={{ minHeight: '400px' }}
-        >
-          <div className="text-center">
-            <div className="spinner-border text-primary" role="status">
-              <span className="visually-hidden">Loading...</span>
-            </div>
-            <div className="mt-3 text-muted">Room loading...</div>
-          </div>
-        </div>
-      </div>
-    );
-  }
+  const [selectedRoomId, setSelectedRoomId] = useState<string | null>(null);
 
-  if (error) {
-    return (
-      <div className="container-fluid py-4">
-        <div className="alert alert-danger d-flex align-items-center" role="alert">
-          <i className="fas fa-exclamation-triangle me-2"></i>
-          <div>
-            <strong>Loading error!</strong> {error}
-          </div>
-        </div>
-      </div>
-    );
-  }
+  const {
+    data: roomsData,
+    isLoading,
+    isFetching,
+    error: roomsError,
+  } = useGetRoomsByFiltersQuery({
+    filters,
+    sorting,
+    currentPage: pagination.currentPage,
+    pageSize: pagination.pageSize,
+  });
+
+  const { data: selectedRoom } = useGetRoomByIdQuery(selectedRoomId ?? '', {
+    skip: !selectedRoomId,
+  });
+
+  useEffect(() => {
+    if (roomsData?.pagination) {
+      dispatch(setPagination(roomsData.pagination));
+    }
+  }, [roomsData?.pagination, dispatch]);
+
+  useEffect(() => {
+    if (roomsError && !prevErrorRef.current) {
+      toast.error('Could not load rooms. Please check your connection.');
+    }
+    prevErrorRef.current = !!roomsError;
+  }, [roomsError]);
+
+  const rooms = roomsData?.items ?? [];
 
   return (
-    <div className="container-fluid py-4">
-      {/* Header */}
-      <div className="row mb-4">
-        <div className="col-12">
-          <div className="d-flex justify-content-between align-items-center">
-            <h2 className="mb-0 text-black">
-              <i className="fas fa-building me-2 text-primary"></i>
-              Room catalog
-            </h2>
-            {/* Sorting and info */}
-            <div className="row mb-0">
-              <div className="col-12">
-                <RoomSortingAndPagination />
-              </div>
-            </div>
-            <button className="btn btn-success" onClick={() => console.log('Add new room')}>
-              <i className="fas fa-plus me-1"></i>
-              Add Room
-            </button>
-          </div>
+    <>
+      <PageHero
+        title="Room Catalog"
+        subtitle="Find the perfect space for your next event, meeting, or creative session"
+        breadcrumbs={[{ label: 'Home', to: '/' }, { label: 'Rooms' }]}
+      />
+      <div className={styles.page}>
+        {/* Filters (horizontal pills + search) */}
+        <RoomFilters />
+
+        {/* Sort row */}
+        <div className={styles.headerRow}>
+          <h2 className={styles.pageTitle}>
+            <i className="fas fa-building mr-2 text-accent"></i>
+            Room catalog
+          </h2>
+          <RoomSortingAndPagination />
         </div>
-      </div>
-      {/* Filters */}
-      <div className="row">
-        <div className="col-3">
-          <div className="row mb-4">
-            <div className="col-12">
-              <RoomFilters />
-            </div>
+
+        {/* Loading indicator */}
+        {isFetching && !isLoading && (
+          <div className={styles.updatingIndicator}>
+            <div className={styles.spinner} role="status" />
+            <span className={styles.updatingText}>Updating...</span>
           </div>
-          {/* Loading indicator while filtering */}
-          {loading && (
-            <div className="row mb-3">
-              <div className="col-12">
-                <div className="d-flex justify-content-center">
-                  <div className="spinner-border spinner-border-sm text-primary me-2" role="status">
-                    <span className="visually-hidden">Loading...</span>
-                  </div>
-                  <span className="text-muted">Updating results...</span>
-                </div>
-              </div>
-            </div>
+        )}
+
+        {/* Room grid (full-width) */}
+        <div className={styles.roomGrid}>
+          {isLoading ? (
+            <RoomCardSkeletonGrid count={6} />
+          ) : roomsError ? (
+            <ErrorState />
+          ) : rooms.length > 0 ? (
+            rooms.map((room) => (
+              <RoomCard key={room.roomId} room={room} onRoomClick={(id) => setSelectedRoomId(id)} />
+            ))
+          ) : (
+            <EmptyState />
           )}
         </div>
-        {/* Room list */}
-        <div className="col-9">
-          <div className="row">
-            {rooms.length > 0 ? (
-              rooms.map((room) => (
-                <RoomCard key={room.roomId} room={room} onRoomClick={handleRoomClick} />
-              ))
-            ) : (
-              <div className="col-12">
-                <div className="text-center py-5">
-                  <div className="text-muted">
-                    <i className="fas fa-search fa-3x mb-3"></i>
-                    <h4>Rooms can't be found</h4>
-                    <p>Try changing the filter settings or clear all filters</p>
-                  </div>
-                </div>
-              </div>
-            )}
-          </div>
-          {/* Room detail overlay */}
-          {selectedRoomDetail && (
-            <RoomDetailOverlay
-              room={selectedRoomDetail || selectedRoomDetail}
-              onClose={handleCloseDetail}
-            />
-          )}
-          {/* Additional info <AdditionalInfo></AdditionalInfo> */}
-          <PaginationComponent></PaginationComponent>
-        </div>
+
+        {selectedRoomId && selectedRoom && (
+          <RoomDetailOverlay room={selectedRoom} onClose={() => setSelectedRoomId(null)} />
+        )}
+
+        {!isLoading && !roomsError && <PaginationComponent />}
       </div>
-    </div>
+    </>
   );
 };
+
+const ErrorState: React.FC = () => (
+  <div className={styles.stateContainer}>
+    <div className={styles.stateInner}>
+      <div className={`${styles.stateIcon} text-accent-300`}>
+        <i className="fas fa-cloud-sun-rain text-6xl"></i>
+      </div>
+      <h4 className={styles.stateTitle}>Oops, something went wrong</h4>
+      <p className={styles.stateText}>
+        We couldn&apos;t load the rooms right now. This might be a temporary issue &mdash; try
+        refreshing the page in a moment.
+      </p>
+      <p className="text-gray-300 text-sm mt-4">
+        <i className="fas fa-sync-alt mr-1"></i>
+        <a
+          href="#"
+          className={styles.refreshLink}
+          onClick={(e) => {
+            e.preventDefault();
+            window.location.reload();
+          }}
+        >
+          Refresh page
+        </a>
+      </p>
+    </div>
+  </div>
+);
+
+const EmptyState: React.FC = () => (
+  <div className={styles.stateContainer}>
+    <div className={styles.stateInner}>
+      <div className={`${styles.stateIcon} text-accent-200`}>
+        <i className="fas fa-couch text-6xl"></i>
+      </div>
+      <h4 className={styles.stateTitle}>Rooms are taking a nap...</h4>
+      <p className={styles.stateText}>
+        No rooms match your current filters. Try adjusting the filters or clearing them to see all
+        available rooms.
+      </p>
+    </div>
+  </div>
+);
 
 export default RoomList;

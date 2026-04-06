@@ -1,45 +1,52 @@
-.room_card {
-  transition:
-    transform 0.2s ease-in-out,
-    box-shadow 0.2s ease-in-out;
-  cursor: pointer;
-}
-.room_card:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15) !important;
-}
-.collapse_filter_rooms .collapse {
-  overflow: hidden;
-  transition:
-    max-height 0.4s ease,
-    opacity 0.4s ease;
-  max-height: 0;
-  opacity: 0;
+.page {
+  @apply w-full py-6 max-w-[1200px] mx-auto px-4;
 }
 
-.collapse_filter_rooms .collapse.show {
-  max-height: 999px; /* достаточно большое значение, которое точно вмещает контент */
-  opacity: 1;
-}
-/* Remove spinner arrows in Chrome, Safari, Edge */
-input[type='number']::-webkit-inner-spin-button,
-input[type='number']::-webkit-outer-spin-button {
-  -webkit-appearance: none;
-  margin: 0;
+.headerRow {
+  @apply flex justify-between items-center mb-6;
 }
 
-/* Remove spinner arrows in Firefox */
-input[type='number'] {
-  -moz-appearance: textfield;
+.pageTitle {
+  @apply mb-0 text-gray-900 text-2xl font-bold;
 }
 
-/* Standard appearance property for broader compatibility */
-input[type='number'] {
-  appearance: textfield;
+.roomGrid {
+  @apply flex flex-wrap -mx-2;
 }
-img.room_image {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
+
+.updatingIndicator {
+  @apply flex justify-center items-center py-2 mb-4;
+}
+
+.spinner {
+  @apply w-4 h-4 border-2 border-accent border-t-transparent rounded-full animate-spin mr-2;
+}
+
+.updatingText {
+  @apply text-gray-400 text-sm;
+}
+
+/* Error / Empty states */
+.stateContainer {
+  @apply w-full;
+}
+
+.stateInner {
+  @apply text-center py-16 animate-fade-in;
+}
+
+.stateIcon {
+  @apply mb-4;
+}
+
+.stateTitle {
+  @apply text-gray-700 font-semibold mb-2;
+}
+
+.stateText {
+  @apply text-gray-400 max-w-md mx-auto;
+}
+
+.refreshLink {
+  @apply text-accent-500 hover:text-accent-700 no-underline transition-colors;
 }

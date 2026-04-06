@@ -1,22 +1,16 @@
-// index.ts — единая точка входа для модели "rooms"
-
-// API‑клиент
-export { RoomClient, SwaggerException } from './model/roomClient';
-
-// Slice (редьюсер + экшены)
+// Slice (reducer + actions)
 export * from './model/roomSlice';
 
-// Селекторы
+// Selectors
 export * from './model/roomSelectors';
 
-// Thunks (асинхронные операции)
+// RTK Query API
 export {
-  fetchRooms,
-  fetchRoomById,
-  createRoom,
-  updateRoom,
-  deleteRoom,
-  fetchActivities,
-  fetchRoomsByFilters,
-} from './model/roomThunks';
-export { RoomApi } from './api/roomApi';
+  roomApi,
+  useGetRoomsByFiltersQuery,
+  useGetRoomByIdQuery,
+  useGetActivitiesQuery,
+  useCreateRoomMutation,
+  useUpdateRoomMutation,
+  useDeleteRoomMutation,
+} from './api/roomApi';

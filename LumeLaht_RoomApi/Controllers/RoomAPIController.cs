@@ -1,4 +1,4 @@
-﻿using AutoMapper;
+﻿using MapsterMapper;
 using Azure.Core;
 using LumeLaht_RoomApi.Application.Dto;
 using LumeLaht_RoomApi.Application.IServices;
@@ -80,7 +80,7 @@ namespace LumaCove_RoomApi.Controllers
             return Ok(updated); // или NoContent() если не возвращаешь ничего
         }
 
-        [HttpDelete("{id:int}")]
+        [HttpDelete("{id:guid}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         public async Task<ActionResult> Delete(Guid id, CancellationToken cancellationToken)
         {

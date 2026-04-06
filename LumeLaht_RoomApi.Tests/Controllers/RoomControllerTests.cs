@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using Mapster;
+using MapsterMapper;
 using LumaCove_RoomApi.Controllers;
 using LumeLaht_RoomApi.Application.Dto;
 using LumeLaht_RoomApi.Application.IServices;
@@ -43,11 +44,9 @@ namespace LumeLaht_RoomApi.Tests.Controllers
             _activityServiceMock = new Mock<IActivityService>();
             _loggerMock = new Mock<ILogger<RoomController>>();
 
-            var config = new MapperConfiguration(cfg =>
-            {
-                cfg.AddProfile<RoomProfile>();
-            });
-            _mapper = config.CreateMapper();
+            var config = new TypeAdapterConfig();
+            new RoomProfile().Register(config);
+            _mapper = new Mapper(config);
 
             _controller = new RoomController(
                 _mapper,

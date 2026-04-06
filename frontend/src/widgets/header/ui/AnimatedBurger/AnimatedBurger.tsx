@@ -1,28 +1,40 @@
 import React from 'react';
-import styles from './AnimatedBurger.module.css';
 
 interface AnimatedBurgerProps {
   isOpen: boolean;
   onClick: () => void;
-  className?: string;
+  isScrolled?: boolean;
 }
 
 export const AnimatedBurger: React.FC<AnimatedBurgerProps> = ({
   isOpen,
   onClick,
-  className = '',
+  isScrolled = false,
 }) => {
+  const lineColor = isScrolled ? 'bg-accent-800' : 'bg-white';
+
   return (
     <button
-      className={`navbar-toggler ${isOpen ? styles.active : ''} ${className}`}
       onClick={onClick}
-      type="button"
-      aria-label="Toggle navigation"
+      className="border-none outline-none relative w-10 h-10 p-0 flex items-center justify-center bg-transparent rounded cursor-pointer transition-all duration-300 hover:bg-black/5 focus:shadow-none"
+      aria-label="Toggle menu"
     >
-      <div className={styles.burgerIcon}>
-        <div className={styles.burgerLine}></div>
-        <div className={styles.burgerLine}></div>
-        <div className={styles.burgerLine}></div>
+      <div className="relative w-6 h-[18px] flex flex-col justify-between cursor-pointer">
+        <span
+          className={`w-full h-[3px] ${lineColor} rounded-sm transition-all duration-300 origin-center ${
+            isOpen ? 'rotate-45 translate-x-1 translate-y-[7px]' : ''
+          }`}
+        />
+        <span
+          className={`w-full h-[3px] ${lineColor} rounded-sm transition-all duration-300 ${
+            isOpen ? 'opacity-0' : ''
+          }`}
+        />
+        <span
+          className={`w-full h-[3px] ${lineColor} rounded-sm transition-all duration-300 origin-center ${
+            isOpen ? '-rotate-45 translate-x-[5px] -translate-y-[7px]' : ''
+          }`}
+        />
       </div>
     </button>
   );

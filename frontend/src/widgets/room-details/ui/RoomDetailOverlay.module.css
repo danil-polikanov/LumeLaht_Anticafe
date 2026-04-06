@@ -1,0 +1,111 @@
+.backdrop {
+  @apply fixed inset-0 flex justify-center items-center bg-black/70 z-[1050] animate-fade-in p-4;
+}
+
+.modal {
+  @apply bg-white rounded-2xl shadow-2xl flex flex-col max-w-[800px] w-full max-h-[90vh] animate-scale-in;
+}
+
+.header {
+  @apply bg-gradient-to-r from-accent to-accent-hover text-white p-4 rounded-t-2xl flex justify-between items-center;
+}
+
+.headerTitle {
+  @apply mb-0 text-base font-semibold;
+}
+
+.closeBtn {
+  @apply w-8 h-8 rounded-full flex items-center justify-center text-white hover:bg-white/20 bg-white/10 border-none cursor-pointer transition-colors;
+}
+
+.body {
+  @apply p-5 overflow-auto flex-1;
+}
+
+.twoCol {
+  @apply flex flex-wrap -mx-2;
+}
+
+.colLeft {
+  @apply w-full md:w-1/2 px-2 mb-3;
+}
+
+.colRight {
+  @apply w-full md:w-1/2 px-2;
+}
+
+.imageContainer {
+  @apply relative rounded-xl overflow-hidden;
+}
+
+.mainImage {
+  @apply max-w-full w-full h-[280px] object-cover;
+}
+
+.navBtn {
+  @apply absolute top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-black/50 text-white flex items-center justify-center hover:bg-black/70 border-none cursor-pointer transition-colors;
+}
+
+.navBtnLeft {
+  @apply left-2;
+}
+
+.navBtnRight {
+  @apply right-2;
+}
+
+.imageCounter {
+  @apply absolute bottom-2 right-2;
+}
+
+.imageCounterBadge {
+  @apply bg-black/60 text-white px-2.5 py-1 rounded-full text-xs backdrop-blur-sm;
+}
+
+.imagePlaceholder {
+  @apply bg-accent-50 rounded-xl flex items-center justify-center text-accent-300 h-[280px];
+}
+
+.sectionLabel {
+  @apply text-sm font-semibold text-gray-400 uppercase tracking-wide mb-1;
+}
+
+.sectionLabelSpaced {
+  @apply text-sm font-semibold text-gray-400 uppercase tracking-wide mb-2;
+}
+
+.descriptionText {
+  @apply mb-0 text-gray-700 leading-relaxed;
+}
+
+.priceValue {
+  @apply text-3xl font-bold text-accent-700;
+}
+
+.priceUnit {
+  @apply text-gray-400;
+}
+
+.addressCard {
+  @apply bg-accent-50/50 p-4 rounded-xl border border-accent-100;
+}
+
+.activityCard {
+  @apply border border-accent-200 rounded-xl bg-accent-50/30 p-3 h-full;
+}
+
+.actions {
+  @apply flex gap-2 mt-4 pt-4 border-t border-gray-100;
+}
+
+.bookBtn {
+  @apply bg-accent text-white px-5 py-2.5 rounded-lg hover:bg-accent-hover border-none cursor-pointer transition-all hover:shadow-md font-medium;
+}
+
+.favBtn {
+  @apply border border-accent-300 text-accent-700 px-5 py-2.5 rounded-lg hover:bg-accent-50 bg-transparent cursor-pointer transition-colors font-medium;
+}
+
+.shareBtn {
+  @apply border border-gray-300 text-gray-600 px-5 py-2.5 rounded-lg hover:bg-gray-50 bg-transparent cursor-pointer transition-colors font-medium;
+}

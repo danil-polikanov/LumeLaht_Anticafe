@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Filters — Final (Radix Popover Style)</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            accent: {
+              DEFAULT: '#CE9857', hover: '#b8863f', light: '#e8c48a', dark: '#a07235',
+              50: '#fdf6ec', 100: '#f9e6cc', 200: '#f0cc99', 300: '#e4ae66',
+              400: '#d9994d', 500: '#CE9857', 600: '#b8863f', 700: '#a07235',
+              800: '#7d5a2a', 900: '#5e4320',
+            },
+          },
+        },
+      },
+    };
+  </script>
+  <style>
+    body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
+
+    /* ===== POPOVER ===== */
+    .popover-content {
+      position: absolute;
+      top: calc(100% + 8px);
+      left: 50%;
+      transform: translateX(-50%) scale(0.96);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.2s ease, transform 0.2s ease;
+      z-index: 100;
+    }
+    .popover-wrapper.open .popover-content {
+      opacity: 1;
+      transform: translateX(-50%) scale(1);
+      pointer-events: auto;
+    }
+    /* Arrow */
+    .popover-arrow {
+      position: absolute;
+      top: -6px;
+      left: 50%;
+      transform: translateX(-50%) rotate(45deg);
+      width: 12px; height: 12px;
+      background: white;
+      border-top: 1px solid #e5e7eb;
+      border-left: 1px solid #e5e7eb;
+    }
+
+    /* ===== DUAL RANGE SLIDER ===== */
+    .slider-track {
+      position: relative;
+      height: 6px;
+      background: #e5e7eb;
+      border-radius: 999px;
+    }
+    .slider-fill {
+      position: absolute;
+      height: 100%;
+      background: linear-gradient(90deg, #CE9857, #b8863f);
+      border-radius: 999px;
+      transition: left 0.15s, right 0.15s;
+    }
+    .slider-thumb {
+      position: absolute;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      width: 20px; height: 20px;
+      background: white;
+      border: 3px solid #CE9857;
+      border-radius: 50%;
+      cursor: grab;
+      box-shadow: 0 2px 8px rgba(206,152,87,0.25);
+      transition: box-shadow 0.2s, transform 0.2s;
+      z-index: 2;
+    }
+    .slider-thumb:hover, .slider-thumb:active {
+      box-shadow: 0 4px 16px rgba(206,152,87,0.45);
+      transform: translate(-50%, -50%) scale(1.15);
+    }
+    .slider-thumb:active { cursor: grabbing; }
+    .slider-value-bubble {
+      position: absolute;
+      top: -32px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #CE9857;
+      color: white;
+      font-size: 11px;
+      font-weight: 600;
+      padding: 2px 8px;
+      border-radius: 6px;
+      white-space: nowrap;
+      opacity: 0;
+      transition: opacity 0.2s;
+    }
+    .slider-thumb:hover .slider-value-bubble,
+    .slider-thumb:active .slider-value-bubble {
+      opacity: 1;
+    }
+
+    /* ===== ACTIVITY TOGGLE ===== */
+    .act-toggle {
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+      cursor: pointer;
+      user-select: none;
+    }
+    .act-toggle:hover { transform: translateY(-1px); }
+    .act-toggle.on {
+      background: linear-gradient(135deg, #CE9857, #b8863f);
+      color: white;
+      border-color: transparent;
+      box-shadow: 0 3px 12px rgba(206,152,87,0.3);
+    }
+    .act-toggle.on .act-icon { background: rgba(255,255,255,0.2); color: white; }
+    .act-toggle.on .act-check { background: white; border-color: white; color: #CE9857; }
+    .act-toggle .act-check {
+      width: 16px; height: 16px;
+      border: 2px solid #d1d5db;
+      border-radius: 4px;
+      display: flex; align-items: center; justify-content: center;
+      transition: all 0.15s;
+      flex-shrink: 0;
+      font-size: 9px;
+    }
+
+    /* ===== PILL BUTTON ===== */
+    .filter-pill {
+      transition: all 0.2s;
+    }
+    .filter-pill:hover {
+      border-color: #CE9857;
+      background: #fdf6ec;
+    }
+    .filter-pill.has-value {
+      border-color: #CE9857;
+      background: #fdf6ec;
+    }
+
+    /* ===== SELECT ITEM ===== */
+    .select-item {
+      transition: background 0.1s;
+    }
+    .select-item:hover {
+      background: #fdf6ec;
+    }
+    .select-item.selected {
+      background: #f9e6cc;
+    }
+
+    /* ===== LIVE DOT ===== */
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.4; }
+    }
+    .live-dot {
+      width: 6px; height: 6px;
+      background: #10b981;
+      border-radius: 50%;
+      animation: pulse 2s infinite;
+    }
+  </style>
+</head>
+<body class="bg-gray-50">
+
+  <header class="bg-gray-900 text-white text-center py-5">
+    <h1 class="text-2xl font-bold">Final Filter Design — Radix Popover Style</h1>
+    <p class="text-gray-400 mt-1 text-sm">Based on @radix-ui/react-popover + @radix-ui/react-slider + @radix-ui/react-select</p>
+  </header>
+
+  <section class="max-w-[1200px] mx-auto pt-8 px-4">
+
+    <!-- ===== SEARCH BAR ===== -->
+    <div class="flex items-center bg-white rounded-2xl border border-gray-200 px-4 py-3 mb-5 transition-all focus-within:border-accent focus-within:shadow-[0_0_0_3px_rgba(206,152,87,0.12)]">
+      <i class="fas fa-search text-accent mr-3 text-lg"></i>
+      <input
+        type="text"
+        placeholder="Search rooms by name or description..."
+        class="flex-1 text-gray-700 bg-transparent outline-none text-sm placeholder:text-gray-400"
+      />
+      <div class="flex items-center gap-1.5 ml-3 pl-3 border-l border-gray-200">
+        <div class="live-dot"></div>
+        <span class="text-xs text-gray-400">Live</span>
+      </div>
+    </div>
+
+    <!-- ===== FILTER PILLS ROW ===== -->
+    <div class="flex items-center gap-3 mb-5 flex-wrap">
+
+      <!-- PILL: City (Radix Select style) -->
+      <div class="popover-wrapper relative" id="pw-city">
+        <button
+          class="filter-pill has-value flex items-center gap-2 px-4 py-2.5 rounded-xl border border-gray-200 text-sm bg-white"
+          onclick="togglePopover('pw-city')"
+        >
+          <i class="fas fa-map-marker-alt text-accent text-xs"></i>
+          <span class="font-medium text-gray-700">Tallinn</span>
+          <i class="fas fa-chevron-down text-[10px] text-gray-400 ml-0.5"></i>
+        </button>
+        <div class="popover-content w-[220px] bg-white rounded-xl shadow-xl border border-gray-200 overflow-hidden">
+          <div class="popover-arrow"></div>
+          <!-- Search inside select -->
+          <div class="p-2 border-b border-gray-100">
+            <div class="flex items-center bg-gray-50 rounded-lg px-2.5 py-2">
+              <i class="fas fa-search text-gray-400 text-xs mr-2"></i>
+              <input type="text" placeholder="Search city..." class="bg-transparent outline-none text-sm text-gray-700 w-full placeholder:text-gray-400" />
+            </div>
+          </div>
+          <!-- Options -->
+          <div class="py-1 max-h-[200px] overflow-y-auto">
+            <div class="select-item selected px-3 py-2.5 flex items-center justify-between cursor-pointer">
+              <div class="flex items-center gap-2">
+                <i class="fas fa-map-pin text-accent text-xs"></i>
+                <span class="text-sm font-medium text-gray-800">Tallinn</span>
+              </div>
+              <i class="fas fa-check text-accent text-xs"></i>
+            </div>
+            <div class="select-item px-3 py-2.5 flex items-center gap-2 cursor-pointer">
+              <i class="fas fa-map-pin text-gray-300 text-xs"></i>
+              <span class="text-sm text-gray-600">Tartu</span>
+            </div>
+            <div class="select-item px-3 py-2.5 flex items-center gap-2 cursor-pointer">
+              <i class="fas fa-map-pin text-gray-300 text-xs"></i>
+              <span class="text-sm text-gray-600">Pärnu</span>
+            </div>
+            <div class="select-item px-3 py-2.5 flex items-center gap-2 cursor-pointer">
+              <i class="fas fa-map-pin text-gray-300 text-xs"></i>
+              <span class="text-sm text-gray-600">Narva</span>
+            </div>
+            <div class="select-item px-3 py-2.5 flex items-center gap-2 cursor-pointer">
+              <i class="fas fa-map-pin text-gray-300 text-xs"></i>
+              <span class="text-sm text-gray-600">Viljandi</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PILL: Region (Radix Select style) -->
+      <div class="popover-wrapper relative" id="pw-region">
+        <button
+          class="filter-pill flex items-center gap-2 px-4 py-2.5 rounded-xl border border-gray-200 text-sm bg-white"
+          onclick="togglePopover('pw-region')"
+        >
+          <i class="fas fa-globe text-accent text-xs"></i>
+          <span class="text-gray-500">Region</span>
+          <i class="fas fa-chevron-down text-[10px] text-gray-400 ml-0.5"></i>
+        </button>
+        <div class="popover-content w-[200px] bg-white rounded-xl shadow-xl border border-gray-200 overflow-hidden">
+          <div class="popover-arrow"></div>
+          <div class="py-1">
+            <div class="select-item px-3 py-2.5 flex items-center gap-2 cursor-pointer">
+              <span class="text-sm text-gray-600">Harju</span>
+            </div>
+            <div class="select-item px-3 py-2.5 flex items-center gap-2 cursor-pointer">
+              <span class="text-sm text-gray-600">Tartu</span>
+            </div>
+            <div class="select-item px-3 py-2.5 flex items-center gap-2 cursor-pointer">
+              <span class="text-sm text-gray-600">Pärnu</span>
+            </div>
+            <div class="select-item px-3 py-2.5 flex items-center gap-2 cursor-pointer">
+              <span class="text-sm text-gray-600">Ida-Viru</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PILL: Price (Radix Slider popover) -->
+      <div class="popover-wrapper relative" id="pw-price">
+        <button
+          class="filter-pill has-value flex items-center gap-2 px-4 py-2.5 rounded-xl border border-gray-200 text-sm bg-white"
+          onclick="togglePopover('pw-price')"
+        >
+          <i class="fas fa-euro-sign text-accent text-xs"></i>
+          <span class="font-medium text-gray-700">5 — 25 €/h</span>
+          <i class="fas fa-chevron-down text-[10px] text-gray-400 ml-0.5"></i>
+        </button>
+        <div class="popover-content w-[300px] bg-white rounded-xl shadow-xl border border-gray-200 p-5">
+          <div class="popover-arrow"></div>
+          <div class="flex justify-between items-center mb-4">
+            <span class="text-sm font-medium text-gray-700">Price per hour</span>
+            <span class="text-sm font-bold text-accent-700">5€ — 25€</span>
+          </div>
+          <!-- Dual range slider -->
+          <div class="px-2 pt-6 pb-2">
+            <div class="slider-track">
+              <div class="slider-fill" style="left:10%; right:50%"></div>
+              <div class="slider-thumb" style="left:10%">
+                <div class="slider-value-bubble">5€</div>
+              </div>
+              <div class="slider-thumb" style="left:50%">
+                <div class="slider-value-bubble">25€</div>
+              </div>
+            </div>
+          </div>
+          <div class="flex justify-between text-xs text-gray-400 mt-2 px-1">
+            <span>0€</span>
+            <span>50€</span>
+          </div>
+          <!-- Min/max inputs as secondary -->
+          <div class="flex gap-3 mt-4">
+            <div class="flex-1">
+              <label class="text-[10px] text-gray-400 uppercase tracking-wide font-medium">Min</label>
+              <div class="flex items-center border border-gray-200 rounded-lg px-2.5 py-1.5 mt-1 focus-within:border-accent">
+                <span class="text-xs text-gray-400 mr-1">€</span>
+                <input type="number" value="5" class="w-full bg-transparent outline-none text-sm text-gray-700" />
+              </div>
+            </div>
+            <div class="flex items-end pb-1.5 text-gray-300">—</div>
+            <div class="flex-1">
+              <label class="text-[10px] text-gray-400 uppercase tracking-wide font-medium">Max</label>
+              <div class="flex items-center border border-gray-200 rounded-lg px-2.5 py-1.5 mt-1 focus-within:border-accent">
+                <span class="text-xs text-gray-400 mr-1">€</span>
+                <input type="number" value="25" class="w-full bg-transparent outline-none text-sm text-gray-700" />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PILL: Activities (Popover with grid) -->
+      <div class="popover-wrapper relative" id="pw-activities">
+        <button
+          class="filter-pill has-value flex items-center gap-2 px-4 py-2.5 rounded-xl border border-gray-200 text-sm bg-white"
+          onclick="togglePopover('pw-activities')"
+        >
+          <i class="fas fa-gamepad text-accent text-xs"></i>
+          <span class="font-medium text-gray-700">Activities</span>
+          <span class="bg-accent text-white text-[10px] font-bold w-5 h-5 rounded-full flex items-center justify-center">2</span>
+          <i class="fas fa-chevron-down text-[10px] text-gray-400 ml-0.5"></i>
+        </button>
+        <div class="popover-content w-[380px] bg-white rounded-xl shadow-xl border border-gray-200 p-4">
+          <div class="popover-arrow"></div>
+          <div class="flex items-center justify-between mb-3">
+            <span class="text-sm font-medium text-gray-700">Select activities</span>
+            <button class="text-xs text-gray-400 hover:text-accent transition">Clear</button>
+          </div>
+          <div class="grid grid-cols-2 gap-2">
+            <div class="act-toggle on flex items-center gap-2.5 px-3 py-2.5 rounded-xl border border-gray-200 text-sm" onclick="this.classList.toggle('on')">
+              <div class="act-icon w-7 h-7 rounded-lg bg-accent-100 flex items-center justify-center text-accent text-xs">
+                <i class="fas fa-chess"></i>
+              </div>
+              <span class="flex-1 font-medium text-sm">Board Games</span>
+              <div class="act-check"><i class="fas fa-check"></i></div>
+            </div>
+            <div class="act-toggle flex items-center gap-2.5 px-3 py-2.5 rounded-xl border border-gray-200 text-sm" onclick="this.classList.toggle('on')">
+              <div class="act-icon w-7 h-7 rounded-lg bg-blue-100 flex items-center justify-center text-blue-600 text-xs">
+                <i class="fas fa-laptop"></i>
+              </div>
+              <span class="flex-1 font-medium text-sm">Coworking</span>
+              <div class="act-check"><i class="fas fa-check"></i></div>
+            </div>
+            <div class="act-toggle on flex items-center gap-2.5 px-3 py-2.5 rounded-xl border border-gray-200 text-sm" onclick="this.classList.toggle('on')">
+              <div class="act-icon w-7 h-7 rounded-lg bg-purple-100 flex items-center justify-center text-purple-600 text-xs">
+                <i class="fas fa-film"></i>
+              </div>
+              <span class="flex-1 font-medium text-sm">Movie Night</span>
+              <div class="act-check"><i class="fas fa-check"></i></div>
+            </div>
+            <div class="act-toggle flex items-center gap-2.5 px-3 py-2.5 rounded-xl border border-gray-200 text-sm" onclick="this.classList.toggle('on')">
+              <div class="act-icon w-7 h-7 rounded-lg bg-pink-100 flex items-center justify-center text-pink-600 text-xs">
+                <i class="fas fa-glass-cheers"></i>
+              </div>
+              <span class="flex-1 font-medium text-sm">Events</span>
+              <div class="act-check"><i class="fas fa-check"></i></div>
+            </div>
+            <div class="act-toggle flex items-center gap-2.5 px-3 py-2.5 rounded-xl border border-gray-200 text-sm" onclick="this.classList.toggle('on')">
+              <div class="act-icon w-7 h-7 rounded-lg bg-green-100 flex items-center justify-center text-green-600 text-xs">
+                <i class="fas fa-users"></i>
+              </div>
+              <span class="flex-1 font-medium text-sm">Meetings</span>
+              <div class="act-check"><i class="fas fa-check"></i></div>
+            </div>
+            <div class="act-toggle flex items-center gap-2.5 px-3 py-2.5 rounded-xl border border-gray-200 text-sm" onclick="this.classList.toggle('on')">
+              <div class="act-icon w-7 h-7 rounded-lg bg-yellow-100 flex items-center justify-center text-yellow-600 text-xs">
+                <i class="fas fa-book"></i>
+              </div>
+              <span class="flex-1 font-medium text-sm">Study</span>
+              <div class="act-check"><i class="fas fa-check"></i></div>
+            </div>
+            <div class="act-toggle flex items-center gap-2.5 px-3 py-2.5 rounded-xl border border-gray-200 text-sm" onclick="this.classList.toggle('on')">
+              <div class="act-icon w-7 h-7 rounded-lg bg-red-100 flex items-center justify-center text-red-500 text-xs">
+                <i class="fas fa-music"></i>
+              </div>
+              <span class="flex-1 font-medium text-sm">Karaoke</span>
+              <div class="act-check"><i class="fas fa-check"></i></div>
+            </div>
+            <div class="act-toggle flex items-center gap-2.5 px-3 py-2.5 rounded-xl border border-gray-200 text-sm" onclick="this.classList.toggle('on')">
+              <div class="act-icon w-7 h-7 rounded-lg bg-teal-100 flex items-center justify-center text-teal-600 text-xs">
+                <i class="fas fa-mug-hot"></i>
+              </div>
+              <span class="flex-1 font-medium text-sm">Tea Ceremony</span>
+              <div class="act-check"><i class="fas fa-check"></i></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Clear all -->
+      <button class="flex items-center gap-1.5 px-3 py-2.5 text-gray-400 hover:text-red-500 transition text-sm rounded-xl hover:bg-red-50">
+        <i class="fas fa-times text-xs"></i>
+        <span>Clear all</span>
+      </button>
+
+      <!-- Spacer + Sort -->
+      <div class="flex-1"></div>
+      <div class="flex items-center gap-1.5">
+        <span class="text-xs text-gray-400 mr-1">Sort:</span>
+        <button class="bg-accent text-white px-3 py-1.5 rounded-lg text-xs font-medium border border-accent">
+          <i class="fas fa-sort-up mr-1"></i>Name
+        </button>
+        <button class="border border-gray-200 text-gray-500 px-3 py-1.5 rounded-lg text-xs hover:border-accent hover:text-accent transition">
+          Price
+        </button>
+        <button class="border border-gray-200 text-gray-500 px-3 py-1.5 rounded-lg text-xs hover:border-accent hover:text-accent transition">
+          City
+        </button>
+      </div>
+    </div>
+
+    <!-- ===== ACTIVE FILTERS STRIP ===== -->
+    <div class="flex items-center gap-2 mb-6 px-1">
+      <span class="text-xs text-gray-400"><i class="fas fa-filter mr-1"></i>Active:</span>
+      <span class="inline-flex items-center bg-accent-100 text-accent-800 text-xs px-2.5 py-1 rounded-full font-medium group">
+        <i class="fas fa-map-marker-alt mr-1 text-accent text-[10px]"></i>
+        Tallinn
+        <button class="ml-1.5 text-accent-400 hover:text-red-500 transition text-[10px] opacity-60 group-hover:opacity-100">&times;</button>
+      </span>
+      <span class="inline-flex items-center bg-accent-100 text-accent-800 text-xs px-2.5 py-1 rounded-full font-medium group">
+        <i class="fas fa-euro-sign mr-1 text-accent text-[10px]"></i>
+        5-25€
+        <button class="ml-1.5 text-accent-400 hover:text-red-500 transition text-[10px] opacity-60 group-hover:opacity-100">&times;</button>
+      </span>
+      <span class="inline-flex items-center bg-accent-100 text-accent-800 text-xs px-2.5 py-1 rounded-full font-medium group">
+        <i class="fas fa-chess mr-1 text-accent text-[10px]"></i>
+        Board Games
+        <button class="ml-1.5 text-accent-400 hover:text-red-500 transition text-[10px] opacity-60 group-hover:opacity-100">&times;</button>
+      </span>
+      <span class="inline-flex items-center bg-accent-100 text-accent-800 text-xs px-2.5 py-1 rounded-full font-medium group">
+        <i class="fas fa-film mr-1 text-accent text-[10px]"></i>
+        Movie Night
+        <button class="ml-1.5 text-accent-400 hover:text-red-500 transition text-[10px] opacity-60 group-hover:opacity-100">&times;</button>
+      </span>
+
+      <div class="flex-1"></div>
+      <span class="text-xs text-gray-400">
+        <span class="font-semibold text-gray-600">8</span> rooms found
+      </span>
+    </div>
+
+    <!-- ===== ROOM GRID ===== -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+      <div class="bg-white rounded-2xl border border-gray-100 h-[320px] flex items-center justify-center text-gray-200 hover:border-accent-200 hover:-translate-y-1 transition-all duration-300 hover:shadow-[0_8px_30px_rgba(206,152,87,0.12)] cursor-pointer">
+        <div class="text-center"><i class="fas fa-image fa-3x mb-3"></i><div class="text-xs text-gray-300">Room card</div></div>
+      </div>
+      <div class="bg-white rounded-2xl border border-gray-100 h-[320px] flex items-center justify-center text-gray-200 hover:border-accent-200 hover:-translate-y-1 transition-all duration-300 hover:shadow-[0_8px_30px_rgba(206,152,87,0.12)] cursor-pointer">
+        <div class="text-center"><i class="fas fa-image fa-3x mb-3"></i><div class="text-xs text-gray-300">Room card</div></div>
+      </div>
+      <div class="bg-white rounded-2xl border border-gray-100 h-[320px] flex items-center justify-center text-gray-200 hover:border-accent-200 hover:-translate-y-1 transition-all duration-300 hover:shadow-[0_8px_30px_rgba(206,152,87,0.12)] cursor-pointer">
+        <div class="text-center"><i class="fas fa-image fa-3x mb-3"></i><div class="text-xs text-gray-300">Room card</div></div>
+      </div>
+      <div class="bg-white rounded-2xl border border-gray-100 h-[320px] flex items-center justify-center text-gray-200 hover:border-accent-200 hover:-translate-y-1 transition-all duration-300 hover:shadow-[0_8px_30px_rgba(206,152,87,0.12)] cursor-pointer">
+        <div class="text-center"><i class="fas fa-image fa-3x mb-3"></i><div class="text-xs text-gray-300">Room card</div></div>
+      </div>
+      <div class="bg-white rounded-2xl border border-gray-100 h-[320px] flex items-center justify-center text-gray-200 hover:border-accent-200 hover:-translate-y-1 transition-all duration-300 hover:shadow-[0_8px_30px_rgba(206,152,87,0.12)] cursor-pointer">
+        <div class="text-center"><i class="fas fa-image fa-3x mb-3"></i><div class="text-xs text-gray-300">Room card</div></div>
+      </div>
+      <div class="bg-white rounded-2xl border border-gray-100 h-[320px] flex items-center justify-center text-gray-200 hover:border-accent-200 hover:-translate-y-1 transition-all duration-300 hover:shadow-[0_8px_30px_rgba(206,152,87,0.12)] cursor-pointer">
+        <div class="text-center"><i class="fas fa-image fa-3x mb-3"></i><div class="text-xs text-gray-300">Room card</div></div>
+      </div>
+    </div>
+
+    <!-- ===== PAGINATION ===== -->
+    <div class="flex justify-center mt-8 mb-12">
+      <div class="flex items-center gap-1.5">
+        <button class="w-9 h-9 rounded-xl border border-gray-200 flex items-center justify-center text-gray-400 hover:border-accent hover:text-accent transition text-sm">
+          <i class="fas fa-chevron-left text-xs"></i>
+        </button>
+        <button class="w-9 h-9 rounded-xl bg-accent text-white flex items-center justify-center text-sm font-medium shadow-sm">1</button>
+        <button class="w-9 h-9 rounded-xl border border-gray-200 flex items-center justify-center text-gray-600 hover:border-accent hover:text-accent transition text-sm">2</button>
+        <button class="w-9 h-9 rounded-xl border border-gray-200 flex items-center justify-center text-gray-600 hover:border-accent hover:text-accent transition text-sm">3</button>
+        <span class="w-9 h-9 flex items-center justify-center text-gray-400 text-sm">...</span>
+        <button class="w-9 h-9 rounded-xl border border-gray-200 flex items-center justify-center text-gray-600 hover:border-accent hover:text-accent transition text-sm">7</button>
+        <button class="w-9 h-9 rounded-xl border border-gray-200 flex items-center justify-center text-gray-400 hover:border-accent hover:text-accent transition text-sm">
+          <i class="fas fa-chevron-right text-xs"></i>
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <script>
+    // Simple popover toggle — in React this will be Radix Popover with AnimatePresence
+    function togglePopover(id) {
+      const el = document.getElementById(id);
+      const wasOpen = el.classList.contains('open');
+
+      // Close all
+      document.querySelectorAll('.popover-wrapper.open').forEach(pw => pw.classList.remove('open'));
+
+      // Toggle this one
+      if (!wasOpen) el.classList.add('open');
+    }
+
+    // Close on outside click
+    document.addEventListener('click', (e) => {
+      if (!e.target.closest('.popover-wrapper')) {
+        document.querySelectorAll('.popover-wrapper.open').forEach(pw => pw.classList.remove('open'));
+      }
+    });
+  </script>
+
+</body>
+</html>

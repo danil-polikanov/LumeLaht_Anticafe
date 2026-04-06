@@ -17,7 +17,7 @@ namespace LumeLaht_RoomApi.Infrastructure.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "9.0.4")
+                .HasAnnotation("ProductVersion", "10.0.5")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -27,6 +27,11 @@ namespace LumeLaht_RoomApi.Infrastructure.Migrations
                     b.Property<Guid>("ActivityId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Category")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<string>("Description")
                         .IsRequired()
@@ -46,74 +51,114 @@ namespace LumeLaht_RoomApi.Infrastructure.Migrations
                         new
                         {
                             ActivityId = new Guid("43000001-0000-0000-0000-000000000000"),
-                            Description = "Table Game",
-                            Name = "Monopolia"
+                            Category = "Board Game",
+                            Description = "Classic property trading board game",
+                            Name = "Monopoly"
                         },
                         new
                         {
                             ActivityId = new Guid("43000002-0000-0000-0000-000000000000"),
-                            Description = "Table Game",
+                            Category = "Board Game",
+                            Description = "Fast-paced card matching game",
                             Name = "Uno"
                         },
                         new
                         {
                             ActivityId = new Guid("43000003-0000-0000-0000-000000000000"),
-                            Description = "Table Game",
+                            Category = "Board Game",
+                            Description = "Classic strategy game for two players",
                             Name = "Chess"
                         },
                         new
                         {
                             ActivityId = new Guid("43000004-0000-0000-0000-000000000000"),
-                            Description = "Table Game",
+                            Category = "Board Game",
+                            Description = "Word-building board game",
                             Name = "Scrabble"
                         },
                         new
                         {
                             ActivityId = new Guid("43000005-0000-0000-0000-000000000000"),
-                            Description = "Sport Game",
-                            Name = "Ping Pong"
+                            Category = "Board Game",
+                            Description = "Resource trading and settlement building game",
+                            Name = "Catan"
                         },
                         new
                         {
                             ActivityId = new Guid("43000006-0000-0000-0000-000000000000"),
-                            Description = "Sport Game",
-                            Name = "Foosball"
+                            Category = "Board Game",
+                            Description = "Tabletop role-playing adventure game",
+                            Name = "Dungeons & Dragons"
                         },
                         new
                         {
                             ActivityId = new Guid("43000007-0000-0000-0000-000000000000"),
-                            Description = "Sport Game",
-                            Name = "Billiards"
+                            Category = "Board Game",
+                            Description = "Creative storytelling card game",
+                            Name = "Dixit"
                         },
                         new
                         {
                             ActivityId = new Guid("43000008-0000-0000-0000-000000000000"),
-                            Description = "Sport Game",
-                            Name = "Darts"
+                            Category = "Board Game",
+                            Description = "Railway route-building board game",
+                            Name = "Ticket to Ride"
                         },
                         new
                         {
                             ActivityId = new Guid("43000009-0000-0000-0000-000000000000"),
-                            Description = "Sport Game",
+                            Category = "Card Game",
+                            Description = "Classic bluffing and betting card game",
                             Name = "Poker"
                         },
                         new
                         {
                             ActivityId = new Guid("43000010-0000-0000-0000-000000000000"),
-                            Description = "Sport Game",
-                            Name = "Blackjack"
+                            Category = "Card Game",
+                            Description = "Social deduction party game",
+                            Name = "Mafia"
                         },
                         new
                         {
                             ActivityId = new Guid("43000011-0000-0000-0000-000000000000"),
-                            Description = "Sport Game",
-                            Name = "Bowling"
+                            Category = "Sport Game",
+                            Description = "Classic cue sport on a felt-covered table",
+                            Name = "Billiards"
                         },
                         new
                         {
                             ActivityId = new Guid("43000012-0000-0000-0000-000000000000"),
-                            Description = "Sport Game",
-                            Name = "Table Tennis"
+                            Category = "Sport Game",
+                            Description = "Table football for two or four players",
+                            Name = "Foosball"
+                        },
+                        new
+                        {
+                            ActivityId = new Guid("43000013-0000-0000-0000-000000000000"),
+                            Category = "Console",
+                            Description = "Sony gaming console with popular titles",
+                            Name = "PlayStation"
+                        },
+                        new
+                        {
+                            ActivityId = new Guid("43000014-0000-0000-0000-000000000000"),
+                            Category = "Console",
+                            Description = "Portable gaming console for group play",
+                            Name = "Nintendo Switch"
+                        },
+                        new
+                        {
+                            ActivityId = new Guid("43000015-0000-0000-0000-000000000000"),
+                            Category = "Entertainment",
+                            Description = "Sing along with music and lyrics on screen",
+                            Name = "Karaoke"
+                        },
+                        new
+                        {
+                            ActivityId = new Guid("43000016-0000-0000-0000-000000000000"),
+                            Category = "Entertainment",
+                            Description = "Watch films on a big screen with surround sound",
+                            Name = "Movie Screening"
                         });
                 });
 
@@ -160,63 +205,111 @@ namespace LumeLaht_RoomApi.Infrastructure.Migrations
                         new
                         {
                             AddressId = new Guid("42000001-0000-0000-0000-000000000000"),
-                            AddressName = "Gagarini 11",
-                            City = "Narva",
+                            AddressName = "Viru 15",
+                            City = "Tallinn",
                             Country = "Estonia",
-                            PhoneNumber = "+37254356533",
-                            PostalCode = "12341",
-                            Region = "Ida-Virumaa"
+                            PhoneNumber = "+37255501001",
+                            PostalCode = "10140",
+                            Region = "Harju"
                         },
                         new
                         {
                             AddressId = new Guid("42000002-0000-0000-0000-000000000000"),
-                            AddressName = "Narva mnt 32",
-                            City = "Narva",
+                            AddressName = "Telliskivi 60a",
+                            City = "Tallinn",
                             Country = "Estonia",
-                            PhoneNumber = "+37254351534",
-                            PostalCode = "12342",
-                            Region = "Ida-Virumaa"
+                            PhoneNumber = "+37255501002",
+                            PostalCode = "10412",
+                            Region = "Harju"
                         },
                         new
                         {
                             AddressId = new Guid("42000003-0000-0000-0000-000000000000"),
-                            AddressName = "Taamsaare 24",
-                            City = "Jõhvi",
+                            AddressName = "Riia 2",
+                            City = "Tartu",
                             Country = "Estonia",
-                            PhoneNumber = "+37254326535",
-                            PostalCode = "12343",
-                            Region = "Ida-Virumaa"
+                            PhoneNumber = "+37255502001",
+                            PostalCode = "51004",
+                            Region = "Tartu"
                         },
                         new
                         {
                             AddressId = new Guid("42000004-0000-0000-0000-000000000000"),
-                            AddressName = "Vaba mnt 105",
-                            City = "Narva",
+                            AddressName = "Küüni 5b",
+                            City = "Tartu",
                             Country = "Estonia",
-                            PhoneNumber = "+37254365536",
-                            PostalCode = "12344",
-                            Region = "Ida-Virumaa"
+                            PhoneNumber = "+37255502002",
+                            PostalCode = "51003",
+                            Region = "Tartu"
                         },
                         new
                         {
                             AddressId = new Guid("42000005-0000-0000-0000-000000000000"),
-                            AddressName = "Tallina mnt 25",
-                            City = "Tallinn",
+                            AddressName = "Pushkini 20",
+                            City = "Narva",
                             Country = "Estonia",
-                            PhoneNumber = "+37254356537",
-                            PostalCode = "12345",
-                            Region = "Tallinn"
+                            PhoneNumber = "+37255503001",
+                            PostalCode = "20309",
+                            Region = "Ida-Virumaa"
                         },
                         new
                         {
                             AddressId = new Guid("42000006-0000-0000-0000-000000000000"),
-                            AddressName = "Tallina mnt 23",
-                            City = "Tallinn",
+                            AddressName = "Rüütli 40",
+                            City = "Pärnu",
                             Country = "Estonia",
-                            PhoneNumber = "+37254356538",
-                            PostalCode = "12346",
-                            Region = "Tallinn"
+                            PhoneNumber = "+37255504001",
+                            PostalCode = "80011",
+                            Region = "Pärnu"
+                        },
+                        new
+                        {
+                            AddressId = new Guid("42000007-0000-0000-0000-000000000000"),
+                            AddressName = "Keskväljak 4",
+                            City = "Jõhvi",
+                            Country = "Estonia",
+                            PhoneNumber = "+37255505001",
+                            PostalCode = "41531",
+                            Region = "Ida-Virumaa"
                         });
+                });
+
+            modelBuilder.Entity("LumeLaht_RoomApi.Core_.Entities.Booking", b =>
+                {
+                    b.Property<Guid>("BookingId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("EndTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("RoomId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("StartTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.Property<decimal>("TotalPrice")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("BookingId");
+
+                    b.HasIndex("RoomId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Bookings");
                 });
 
             modelBuilder.Entity("LumeLaht_RoomApi.Core_.Entities.Room", b =>
@@ -227,6 +320,12 @@ namespace LumeLaht_RoomApi.Infrastructure.Migrations
 
                     b.Property<Guid>("AddressId")
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("Capacity")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("Description")
                         .IsRequired()
@@ -245,6 +344,9 @@ namespace LumeLaht_RoomApi.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
                     b.HasKey("RoomId");
 
                     b.HasIndex("AddressId");
@@ -256,55 +358,181 @@ namespace LumeLaht_RoomApi.Infrastructure.Migrations
                         {
                             RoomId = new Guid("46000001-0000-0000-0000-000000000000"),
                             AddressId = new Guid("42000001-0000-0000-0000-000000000000"),
-                            Description = "Description A",
-                            Name = "Room A",
-                            PricePerHour = 25.5m,
-                            Status = "Available"
+                            Capacity = 6,
+                            CreatedAt = new DateTime(2025, 12, 15, 12, 0, 0, 0, DateTimeKind.Utc),
+                            Description = "A warm space with board games and soft sofas for quiet evenings",
+                            Name = "Cozy Corner",
+                            PricePerHour = 5.00m,
+                            Status = "Available",
+                            UpdatedAt = new DateTime(2025, 12, 15, 12, 0, 0, 0, DateTimeKind.Utc)
                         },
                         new
                         {
                             RoomId = new Guid("46000002-0000-0000-0000-000000000000"),
-                            AddressId = new Guid("42000002-0000-0000-0000-000000000000"),
-                            Description = "Description B",
-                            Name = "Room B",
-                            PricePerHour = 30m,
-                            Status = "Available"
+                            AddressId = new Guid("42000001-0000-0000-0000-000000000000"),
+                            Capacity = 12,
+                            CreatedAt = new DateTime(2025, 12, 15, 12, 0, 0, 0, DateTimeKind.Utc),
+                            Description = "Main gaming zone with billiards, foosball and board games",
+                            Name = "Game Hub",
+                            PricePerHour = 12.00m,
+                            Status = "Available",
+                            UpdatedAt = new DateTime(2025, 12, 15, 12, 0, 0, 0, DateTimeKind.Utc)
                         },
                         new
                         {
                             RoomId = new Guid("46000003-0000-0000-0000-000000000000"),
-                            AddressId = new Guid("42000003-0000-0000-0000-000000000000"),
-                            Description = "Description C",
-                            Name = "Room C",
-                            PricePerHour = 35m,
-                            Status = "Available"
+                            AddressId = new Guid("42000002-0000-0000-0000-000000000000"),
+                            Capacity = 8,
+                            CreatedAt = new DateTime(2025, 12, 15, 12, 0, 0, 0, DateTimeKind.Utc),
+                            Description = "Premium private room with projector, sound system and exclusive atmosphere",
+                            Name = "VIP Lounge",
+                            PricePerHour = 25.00m,
+                            Status = "Available",
+                            UpdatedAt = new DateTime(2025, 12, 15, 12, 0, 0, 0, DateTimeKind.Utc)
                         },
                         new
                         {
                             RoomId = new Guid("46000004-0000-0000-0000-000000000000"),
-                            AddressId = new Guid("42000004-0000-0000-0000-000000000000"),
-                            Description = "Description D",
-                            Name = "Room D",
-                            PricePerHour = 40m,
-                            Status = "Maintenance"
+                            AddressId = new Guid("42000002-0000-0000-0000-000000000000"),
+                            Capacity = 10,
+                            CreatedAt = new DateTime(2025, 12, 15, 12, 0, 0, 0, DateTimeKind.Utc),
+                            Description = "Cozy room with a big screen for watching movies and series together",
+                            Name = "Cinema Room",
+                            PricePerHour = 15.00m,
+                            Status = "Occupied",
+                            UpdatedAt = new DateTime(2025, 12, 15, 12, 0, 0, 0, DateTimeKind.Utc)
                         },
                         new
                         {
                             RoomId = new Guid("46000005-0000-0000-0000-000000000000"),
-                            AddressId = new Guid("42000005-0000-0000-0000-000000000000"),
-                            Description = "Description E",
-                            Name = "Room E",
-                            PricePerHour = 45m,
-                            Status = "Available"
+                            AddressId = new Guid("42000002-0000-0000-0000-000000000000"),
+                            Capacity = 6,
+                            CreatedAt = new DateTime(2025, 12, 15, 12, 0, 0, 0, DateTimeKind.Utc),
+                            Description = "PlayStation and Nintendo Switch with comfortable seating",
+                            Name = "Console Corner",
+                            PricePerHour = 10.00m,
+                            Status = "Available",
+                            UpdatedAt = new DateTime(2025, 12, 15, 12, 0, 0, 0, DateTimeKind.Utc)
                         },
                         new
                         {
                             RoomId = new Guid("46000006-0000-0000-0000-000000000000"),
+                            AddressId = new Guid("42000003-0000-0000-0000-000000000000"),
+                            Capacity = 8,
+                            CreatedAt = new DateTime(2025, 12, 15, 12, 0, 0, 0, DateTimeKind.Utc),
+                            Description = "A collection of 100+ board games in a cozy setting",
+                            Name = "Board Game Vault",
+                            PricePerHour = 6.00m,
+                            Status = "Available",
+                            UpdatedAt = new DateTime(2025, 12, 15, 12, 0, 0, 0, DateTimeKind.Utc)
+                        },
+                        new
+                        {
+                            RoomId = new Guid("46000007-0000-0000-0000-000000000000"),
+                            AddressId = new Guid("42000003-0000-0000-0000-000000000000"),
+                            Capacity = 15,
+                            CreatedAt = new DateTime(2025, 12, 15, 12, 0, 0, 0, DateTimeKind.Utc),
+                            Description = "Spacious room for workshops, drawing and creative meetups",
+                            Name = "Creative Space",
+                            PricePerHour = 8.00m,
+                            Status = "Available",
+                            UpdatedAt = new DateTime(2025, 12, 15, 12, 0, 0, 0, DateTimeKind.Utc)
+                        },
+                        new
+                        {
+                            RoomId = new Guid("46000008-0000-0000-0000-000000000000"),
+                            AddressId = new Guid("42000004-0000-0000-0000-000000000000"),
+                            Capacity = 6,
+                            CreatedAt = new DateTime(2025, 12, 15, 12, 0, 0, 0, DateTimeKind.Utc),
+                            Description = "Quiet zone for studying and remote work with fast Wi-Fi",
+                            Name = "Study Lounge",
+                            PricePerHour = 4.00m,
+                            Status = "Available",
+                            UpdatedAt = new DateTime(2025, 12, 15, 12, 0, 0, 0, DateTimeKind.Utc)
+                        },
+                        new
+                        {
+                            RoomId = new Guid("46000009-0000-0000-0000-000000000000"),
+                            AddressId = new Guid("42000004-0000-0000-0000-000000000000"),
+                            Capacity = 8,
+                            CreatedAt = new DateTime(2025, 12, 15, 12, 0, 0, 0, DateTimeKind.Utc),
+                            Description = "Bean bags, soft cushions and calm atmosphere for reading and relaxation",
+                            Name = "Chill Zone",
+                            PricePerHour = 5.00m,
+                            Status = "Maintenance",
+                            UpdatedAt = new DateTime(2025, 12, 15, 12, 0, 0, 0, DateTimeKind.Utc)
+                        },
+                        new
+                        {
+                            RoomId = new Guid("46000010-0000-0000-0000-000000000000"),
+                            AddressId = new Guid("42000005-0000-0000-0000-000000000000"),
+                            Capacity = 25,
+                            CreatedAt = new DateTime(2025, 12, 15, 12, 0, 0, 0, DateTimeKind.Utc),
+                            Description = "Large hall for birthdays, celebrations and group events",
+                            Name = "Party Room",
+                            PricePerHour = 20.00m,
+                            Status = "Available",
+                            UpdatedAt = new DateTime(2025, 12, 15, 12, 0, 0, 0, DateTimeKind.Utc)
+                        },
+                        new
+                        {
+                            RoomId = new Guid("46000011-0000-0000-0000-000000000000"),
+                            AddressId = new Guid("42000005-0000-0000-0000-000000000000"),
+                            Capacity = 10,
+                            CreatedAt = new DateTime(2025, 12, 15, 12, 0, 0, 0, DateTimeKind.Utc),
+                            Description = "Room for family fun with games suitable for all ages",
+                            Name = "Family Room",
+                            PricePerHour = 7.00m,
+                            Status = "Occupied",
+                            UpdatedAt = new DateTime(2025, 12, 15, 12, 0, 0, 0, DateTimeKind.Utc)
+                        },
+                        new
+                        {
+                            RoomId = new Guid("46000012-0000-0000-0000-000000000000"),
+                            AddressId = new Guid("42000005-0000-0000-0000-000000000000"),
+                            Capacity = 10,
+                            CreatedAt = new DateTime(2025, 12, 15, 12, 0, 0, 0, DateTimeKind.Utc),
+                            Description = "Active zone with billiards, foosball and darts",
+                            Name = "Sport Arena",
+                            PricePerHour = 10.00m,
+                            Status = "Available",
+                            UpdatedAt = new DateTime(2025, 12, 15, 12, 0, 0, 0, DateTimeKind.Utc)
+                        },
+                        new
+                        {
+                            RoomId = new Guid("46000013-0000-0000-0000-000000000000"),
                             AddressId = new Guid("42000006-0000-0000-0000-000000000000"),
-                            Description = "Description F",
-                            Name = "Room F",
-                            PricePerHour = 50m,
-                            Status = "Available"
+                            Capacity = 12,
+                            CreatedAt = new DateTime(2025, 12, 15, 12, 0, 0, 0, DateTimeKind.Utc),
+                            Description = "Spacious upper-floor area with board games and card games",
+                            Name = "Loft Space",
+                            PricePerHour = 8.00m,
+                            Status = "Available",
+                            UpdatedAt = new DateTime(2025, 12, 15, 12, 0, 0, 0, DateTimeKind.Utc)
+                        },
+                        new
+                        {
+                            RoomId = new Guid("46000014-0000-0000-0000-000000000000"),
+                            AddressId = new Guid("42000006-0000-0000-0000-000000000000"),
+                            Capacity = 6,
+                            CreatedAt = new DateTime(2025, 12, 15, 12, 0, 0, 0, DateTimeKind.Utc),
+                            Description = "Room filled with live plants and a calm atmosphere",
+                            Name = "Green Room",
+                            PricePerHour = 6.00m,
+                            Status = "Maintenance",
+                            UpdatedAt = new DateTime(2025, 12, 15, 12, 0, 0, 0, DateTimeKind.Utc)
+                        },
+                        new
+                        {
+                            RoomId = new Guid("46000015-0000-0000-0000-000000000000"),
+                            AddressId = new Guid("42000007-0000-0000-0000-000000000000"),
+                            Capacity = 10,
+                            CreatedAt = new DateTime(2025, 12, 15, 12, 0, 0, 0, DateTimeKind.Utc),
+                            Description = "Drawing, clay modeling and DIY projects with all materials included",
+                            Name = "Workshop Studio",
+                            PricePerHour = 9.00m,
+                            Status = "Available",
+                            UpdatedAt = new DateTime(2025, 12, 15, 12, 0, 0, 0, DateTimeKind.Utc)
                         });
                 });
 
@@ -335,53 +563,208 @@ namespace LumeLaht_RoomApi.Infrastructure.Migrations
                         },
                         new
                         {
+                            RoomId = new Guid("46000001-0000-0000-0000-000000000000"),
+                            ActivityId = new Guid("43000007-0000-0000-0000-000000000000")
+                        },
+                        new
+                        {
+                            RoomId = new Guid("46000002-0000-0000-0000-000000000000"),
+                            ActivityId = new Guid("43000011-0000-0000-0000-000000000000")
+                        },
+                        new
+                        {
+                            RoomId = new Guid("46000002-0000-0000-0000-000000000000"),
+                            ActivityId = new Guid("43000012-0000-0000-0000-000000000000")
+                        },
+                        new
+                        {
+                            RoomId = new Guid("46000002-0000-0000-0000-000000000000"),
+                            ActivityId = new Guid("43000001-0000-0000-0000-000000000000")
+                        },
+                        new
+                        {
                             RoomId = new Guid("46000002-0000-0000-0000-000000000000"),
                             ActivityId = new Guid("43000003-0000-0000-0000-000000000000")
                         },
                         new
                         {
-                            RoomId = new Guid("46000002-0000-0000-0000-000000000000"),
-                            ActivityId = new Guid("43000004-0000-0000-0000-000000000000")
+                            RoomId = new Guid("46000003-0000-0000-0000-000000000000"),
+                            ActivityId = new Guid("43000015-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             RoomId = new Guid("46000003-0000-0000-0000-000000000000"),
-                            ActivityId = new Guid("43000005-0000-0000-0000-000000000000")
+                            ActivityId = new Guid("43000016-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             RoomId = new Guid("46000003-0000-0000-0000-000000000000"),
-                            ActivityId = new Guid("43000006-0000-0000-0000-000000000000")
-                        },
-                        new
-                        {
-                            RoomId = new Guid("46000004-0000-0000-0000-000000000000"),
-                            ActivityId = new Guid("43000007-0000-0000-0000-000000000000")
-                        },
-                        new
-                        {
-                            RoomId = new Guid("46000004-0000-0000-0000-000000000000"),
-                            ActivityId = new Guid("43000008-0000-0000-0000-000000000000")
-                        },
-                        new
-                        {
-                            RoomId = new Guid("46000005-0000-0000-0000-000000000000"),
                             ActivityId = new Guid("43000009-0000-0000-0000-000000000000")
                         },
                         new
                         {
+                            RoomId = new Guid("46000004-0000-0000-0000-000000000000"),
+                            ActivityId = new Guid("43000016-0000-0000-0000-000000000000")
+                        },
+                        new
+                        {
+                            RoomId = new Guid("46000004-0000-0000-0000-000000000000"),
+                            ActivityId = new Guid("43000013-0000-0000-0000-000000000000")
+                        },
+                        new
+                        {
                             RoomId = new Guid("46000005-0000-0000-0000-000000000000"),
+                            ActivityId = new Guid("43000013-0000-0000-0000-000000000000")
+                        },
+                        new
+                        {
+                            RoomId = new Guid("46000005-0000-0000-0000-000000000000"),
+                            ActivityId = new Guid("43000014-0000-0000-0000-000000000000")
+                        },
+                        new
+                        {
+                            RoomId = new Guid("46000006-0000-0000-0000-000000000000"),
+                            ActivityId = new Guid("43000001-0000-0000-0000-000000000000")
+                        },
+                        new
+                        {
+                            RoomId = new Guid("46000006-0000-0000-0000-000000000000"),
+                            ActivityId = new Guid("43000003-0000-0000-0000-000000000000")
+                        },
+                        new
+                        {
+                            RoomId = new Guid("46000006-0000-0000-0000-000000000000"),
+                            ActivityId = new Guid("43000004-0000-0000-0000-000000000000")
+                        },
+                        new
+                        {
+                            RoomId = new Guid("46000006-0000-0000-0000-000000000000"),
+                            ActivityId = new Guid("43000005-0000-0000-0000-000000000000")
+                        },
+                        new
+                        {
+                            RoomId = new Guid("46000006-0000-0000-0000-000000000000"),
+                            ActivityId = new Guid("43000006-0000-0000-0000-000000000000")
+                        },
+                        new
+                        {
+                            RoomId = new Guid("46000006-0000-0000-0000-000000000000"),
+                            ActivityId = new Guid("43000008-0000-0000-0000-000000000000")
+                        },
+                        new
+                        {
+                            RoomId = new Guid("46000007-0000-0000-0000-000000000000"),
+                            ActivityId = new Guid("43000007-0000-0000-0000-000000000000")
+                        },
+                        new
+                        {
+                            RoomId = new Guid("46000007-0000-0000-0000-000000000000"),
                             ActivityId = new Guid("43000010-0000-0000-0000-000000000000")
                         },
                         new
                         {
-                            RoomId = new Guid("46000006-0000-0000-0000-000000000000"),
+                            RoomId = new Guid("46000008-0000-0000-0000-000000000000"),
+                            ActivityId = new Guid("43000003-0000-0000-0000-000000000000")
+                        },
+                        new
+                        {
+                            RoomId = new Guid("46000008-0000-0000-0000-000000000000"),
+                            ActivityId = new Guid("43000004-0000-0000-0000-000000000000")
+                        },
+                        new
+                        {
+                            RoomId = new Guid("46000009-0000-0000-0000-000000000000"),
+                            ActivityId = new Guid("43000002-0000-0000-0000-000000000000")
+                        },
+                        new
+                        {
+                            RoomId = new Guid("46000009-0000-0000-0000-000000000000"),
+                            ActivityId = new Guid("43000007-0000-0000-0000-000000000000")
+                        },
+                        new
+                        {
+                            RoomId = new Guid("46000010-0000-0000-0000-000000000000"),
+                            ActivityId = new Guid("43000010-0000-0000-0000-000000000000")
+                        },
+                        new
+                        {
+                            RoomId = new Guid("46000010-0000-0000-0000-000000000000"),
+                            ActivityId = new Guid("43000015-0000-0000-0000-000000000000")
+                        },
+                        new
+                        {
+                            RoomId = new Guid("46000010-0000-0000-0000-000000000000"),
+                            ActivityId = new Guid("43000009-0000-0000-0000-000000000000")
+                        },
+                        new
+                        {
+                            RoomId = new Guid("46000010-0000-0000-0000-000000000000"),
+                            ActivityId = new Guid("43000002-0000-0000-0000-000000000000")
+                        },
+                        new
+                        {
+                            RoomId = new Guid("46000011-0000-0000-0000-000000000000"),
+                            ActivityId = new Guid("43000001-0000-0000-0000-000000000000")
+                        },
+                        new
+                        {
+                            RoomId = new Guid("46000011-0000-0000-0000-000000000000"),
+                            ActivityId = new Guid("43000002-0000-0000-0000-000000000000")
+                        },
+                        new
+                        {
+                            RoomId = new Guid("46000011-0000-0000-0000-000000000000"),
+                            ActivityId = new Guid("43000014-0000-0000-0000-000000000000")
+                        },
+                        new
+                        {
+                            RoomId = new Guid("46000011-0000-0000-0000-000000000000"),
+                            ActivityId = new Guid("43000008-0000-0000-0000-000000000000")
+                        },
+                        new
+                        {
+                            RoomId = new Guid("46000012-0000-0000-0000-000000000000"),
                             ActivityId = new Guid("43000011-0000-0000-0000-000000000000")
                         },
                         new
                         {
-                            RoomId = new Guid("46000006-0000-0000-0000-000000000000"),
+                            RoomId = new Guid("46000012-0000-0000-0000-000000000000"),
                             ActivityId = new Guid("43000012-0000-0000-0000-000000000000")
+                        },
+                        new
+                        {
+                            RoomId = new Guid("46000013-0000-0000-0000-000000000000"),
+                            ActivityId = new Guid("43000005-0000-0000-0000-000000000000")
+                        },
+                        new
+                        {
+                            RoomId = new Guid("46000013-0000-0000-0000-000000000000"),
+                            ActivityId = new Guid("43000006-0000-0000-0000-000000000000")
+                        },
+                        new
+                        {
+                            RoomId = new Guid("46000013-0000-0000-0000-000000000000"),
+                            ActivityId = new Guid("43000009-0000-0000-0000-000000000000")
+                        },
+                        new
+                        {
+                            RoomId = new Guid("46000014-0000-0000-0000-000000000000"),
+                            ActivityId = new Guid("43000003-0000-0000-0000-000000000000")
+                        },
+                        new
+                        {
+                            RoomId = new Guid("46000014-0000-0000-0000-000000000000"),
+                            ActivityId = new Guid("43000007-0000-0000-0000-000000000000")
+                        },
+                        new
+                        {
+                            RoomId = new Guid("46000015-0000-0000-0000-000000000000"),
+                            ActivityId = new Guid("43000007-0000-0000-0000-000000000000")
+                        },
+                        new
+                        {
+                            RoomId = new Guid("46000015-0000-0000-0000-000000000000"),
+                            ActivityId = new Guid("43000010-0000-0000-0000-000000000000")
                         });
                 });
 
@@ -390,6 +773,10 @@ namespace LumeLaht_RoomApi.Infrastructure.Migrations
                     b.Property<Guid>("ImageId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("CloudinaryPublicId")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
 
                     b.Property<bool>("IsMain")
                         .HasColumnType("bit");
@@ -411,129 +798,307 @@ namespace LumeLaht_RoomApi.Infrastructure.Migrations
                         new
                         {
                             ImageId = new Guid("44000001-0000-0000-0000-000000000000"),
+                            CloudinaryPublicId = "home/LumeLaht/qpjpigt9nqnnwigx2we3",
                             IsMain = true,
                             RoomId = new Guid("46000001-0000-0000-0000-000000000000"),
-                            Url = "https://edef6.pcloud.com/DLZWFU6B6ZErvSOj7ZOjDfZZyHl10kZNVZZQYVZZn7M7ZzRZN4ZXLZaRIc8C2DvgjCj7EOMDkcnu0LrCFy/chairs-2181980_1920.jpg"
+                            Url = "https://res.cloudinary.com/dw8apd46g/image/upload/v1774482586/home/LumeLaht/qpjpigt9nqnnwigx2we3.jpg"
                         },
                         new
                         {
                             ImageId = new Guid("44000002-0000-0000-0000-000000000000"),
-                            IsMain = true,
-                            RoomId = new Guid("46000002-0000-0000-0000-000000000000"),
-                            Url = "https://edef10.pcloud.com/cfZGzI1DZt6wfOj7ZOjDfZZTHl10kZNVZZQYVZZvRpCZwHZPZc7ZEHZoZQFZZx7Zp7Z7LZTVZe7ZWLZ4kZJ0xXJLg2QHRU1NeDLwgBCFGb5AY7/inter-er-restorana.jpg"
+                            CloudinaryPublicId = "home/LumeLaht/pgwxgmmghfsc7ngiahxb",
+                            IsMain = false,
+                            RoomId = new Guid("46000001-0000-0000-0000-000000000000"),
+                            Url = "https://res.cloudinary.com/dw8apd46g/image/upload/v1774482590/home/LumeLaht/pgwxgmmghfsc7ngiahxb.jpg"
                         },
                         new
                         {
                             ImageId = new Guid("44000003-0000-0000-0000-000000000000"),
+                            CloudinaryPublicId = "home/LumeLaht/gwhzr9ytxlrquih6m5at",
                             IsMain = true,
-                            RoomId = new Guid("46000003-0000-0000-0000-000000000000"),
-                            Url = "https://edef10.pcloud.com/cfZv1PIsZzxwfOj7ZOjDfZZwzl10kZNVZZQYVZZExBtZRXZ0RZcLZD7Zk5ZU7ZS7Z0zZL7ZTkZDVZ2Z3kZKFZSMQ4xFQQzF495zWLLGbSyHWUq2WV/inter-er-vystrel-iz-kafe-so-stul-ami-vozle-bara-s-derevannymi-stolami.jpg"
+                            RoomId = new Guid("46000002-0000-0000-0000-000000000000"),
+                            Url = "https://res.cloudinary.com/dw8apd46g/image/upload/v1774482803/home/LumeLaht/gwhzr9ytxlrquih6m5at.jpg"
                         },
                         new
                         {
                             ImageId = new Guid("44000004-0000-0000-0000-000000000000"),
-                            IsMain = true,
-                            RoomId = new Guid("46000004-0000-0000-0000-000000000000"),
-                            Url = "https://edef10.pcloud.com/DLZUTPOB6ZSgifOj7ZOjDfZZJRl10kZNVZZQYVZZvwBZCRZNRZT8ZeLyDsVPx5FhSJdO3T1lkfY2PaiwX/photo-1497366811353-6870744d04b2.jpg"
+                            CloudinaryPublicId = "home/LumeLaht/hvv7upflpq1cgjk15gh3",
+                            IsMain = false,
+                            RoomId = new Guid("46000002-0000-0000-0000-000000000000"),
+                            Url = "https://res.cloudinary.com/dw8apd46g/image/upload/v1774482604/home/LumeLaht/hvv7upflpq1cgjk15gh3.jpg"
                         },
                         new
                         {
                             ImageId = new Guid("44000005-0000-0000-0000-000000000000"),
+                            CloudinaryPublicId = "home/LumeLaht/ysv9byftiovr4d4rjgfu",
                             IsMain = true,
-                            RoomId = new Guid("46000005-0000-0000-0000-000000000000"),
-                            Url = "https://edef8.pcloud.com/DLZu0sOB6Zq6wfOj7ZOjDfZZPRl10kZNVZZQYVZZhOE7ZdLZi5ZE8Z7I5tNY0r9qVPGtCmfXBDPmca9Osk/vintage-aesthetic-7131604_1920.jpg"
+                            RoomId = new Guid("46000003-0000-0000-0000-000000000000"),
+                            Url = "https://res.cloudinary.com/dw8apd46g/image/upload/v1774482767/home/LumeLaht/ysv9byftiovr4d4rjgfu.jpg"
                         },
                         new
                         {
                             ImageId = new Guid("44000006-0000-0000-0000-000000000000"),
-                            IsMain = true,
-                            RoomId = new Guid("46000006-0000-0000-0000-000000000000"),
-                            Url = "https://edef4.pcloud.com/DLZzMPOB6ZjMifOj7ZOjDfZZrRl10kZNVZZQYVZZTUmZzJZg8ZA4Z2Ko1Jk2Ac8hX3jSG8WtmwkFK20v7/photo-1497366216548-37526070297c.jpg"
+                            CloudinaryPublicId = "home/LumeLaht/ancef5r4tiybxbemcria",
+                            IsMain = false,
+                            RoomId = new Guid("46000003-0000-0000-0000-000000000000"),
+                            Url = "https://res.cloudinary.com/dw8apd46g/image/upload/v1774482791/home/LumeLaht/ancef5r4tiybxbemcria.jpg"
                         },
                         new
                         {
                             ImageId = new Guid("44000007-0000-0000-0000-000000000000"),
-                            IsMain = false,
-                            RoomId = new Guid("46000001-0000-0000-0000-000000000000"),
-                            Url = "https://edef11.pcloud.com/DLZTTPOB6Z2gifOj7ZOjDfZZSLl10kZNVZZQYVZZ0DjZzzZH4Z44ZxUM7yrRl9X4uS0QPdocoem0EWnik/photo-1497366754035-f200968a6e72.jpg"
+                            CloudinaryPublicId = "home/LumeLaht/bqelx6s1kxpr0phuajl5",
+                            IsMain = true,
+                            RoomId = new Guid("46000004-0000-0000-0000-000000000000"),
+                            Url = "https://res.cloudinary.com/dw8apd46g/image/upload/v1774482699/home/LumeLaht/bqelx6s1kxpr0phuajl5.jpg"
                         },
                         new
                         {
                             ImageId = new Guid("44000008-0000-0000-0000-000000000000"),
+                            CloudinaryPublicId = "home/LumeLaht/hjdaotzh7ks8vtdw5qni",
                             IsMain = false,
-                            RoomId = new Guid("46000001-0000-0000-0000-000000000000"),
-                            Url = "https://edef10.pcloud.com/DLZUTPOB6ZSgifOj7ZOjDfZZz4l10kZNVZZQYVZZvwBZCRZT8ZNRZuWuQtIxC4JyR37GkGAycnjp68Gfy/photo-1497366811353-6870744d04b2.jpg"
+                            RoomId = new Guid("46000004-0000-0000-0000-000000000000"),
+                            Url = "https://res.cloudinary.com/dw8apd46g/image/upload/v1774482704/home/LumeLaht/hjdaotzh7ks8vtdw5qni.jpg"
                         },
                         new
                         {
                             ImageId = new Guid("44000009-0000-0000-0000-000000000000"),
-                            IsMain = false,
-                            RoomId = new Guid("46000002-0000-0000-0000-000000000000"),
-                            Url = "https://edef11.pcloud.com/DLZTTPOB6Z2gifOj7ZOjDfZZLsl10kZNVZZQYVZZ0DjZH4ZzzZ44ZqmYhXTdU6l5cOmHyJpPBe0tIXs7k/photo-1497366754035-f200968a6e72.jpg"
+                            CloudinaryPublicId = "home/LumeLaht/msc2bmhotims1emimplv",
+                            IsMain = true,
+                            RoomId = new Guid("46000005-0000-0000-0000-000000000000"),
+                            Url = "https://res.cloudinary.com/dw8apd46g/image/upload/v1774482613/home/LumeLaht/msc2bmhotims1emimplv.jpg"
                         },
                         new
                         {
                             ImageId = new Guid("44000010-0000-0000-0000-000000000000"),
+                            CloudinaryPublicId = "home/LumeLaht/r6vocb2tofb58wzrbutm",
                             IsMain = false,
-                            RoomId = new Guid("46000002-0000-0000-0000-000000000000"),
-                            Url = "https://edef10.pcloud.com/DLZUTPOB6ZSgifOj7ZOjDfZZisl10kZNVZZQYVZZvwBZCRZT8ZNRZVIJlV2Lv1qQDm8LQHxofDBv02GDX/photo-1497366811353-6870744d04b2.jpg"
+                            RoomId = new Guid("46000005-0000-0000-0000-000000000000"),
+                            Url = "https://res.cloudinary.com/dw8apd46g/image/upload/v1774482783/home/LumeLaht/r6vocb2tofb58wzrbutm.jpg"
                         },
                         new
                         {
                             ImageId = new Guid("44000011-0000-0000-0000-000000000000"),
-                            IsMain = false,
-                            RoomId = new Guid("46000003-0000-0000-0000-000000000000"),
-                            Url = "https://edef11.pcloud.com/DLZTTPOB6Z2gifOj7ZOjDfZZqDl10kZNVZZQYVZZ0DjZ44ZH4ZzzZEkzylnQCisBKyhTJUaMP6jxozogX/photo-1497366754035-f200968a6e72.jpg"
+                            CloudinaryPublicId = "home/LumeLaht/yqimpvuynmvft8ge1xb1",
+                            IsMain = true,
+                            RoomId = new Guid("46000006-0000-0000-0000-000000000000"),
+                            Url = "https://res.cloudinary.com/dw8apd46g/image/upload/v1774482600/home/LumeLaht/yqimpvuynmvft8ge1xb1.jpg"
                         },
                         new
                         {
                             ImageId = new Guid("44000012-0000-0000-0000-000000000000"),
+                            CloudinaryPublicId = "home/LumeLaht/e0fggn0wdjnncsfzu5ph",
                             IsMain = false,
-                            RoomId = new Guid("46000003-0000-0000-0000-000000000000"),
-                            Url = "https://edef10.pcloud.com/DLZUTPOB6ZSgifOj7ZOjDfZZH1l10kZNVZZQYVZZvwBZCRZNRZT8Zbc0hNNc8KdjJFtTJ3hyUwp3xeAbX/photo-1497366811353-6870744d04b2.jpg"
+                            RoomId = new Guid("46000006-0000-0000-0000-000000000000"),
+                            Url = "https://res.cloudinary.com/dw8apd46g/image/upload/v1774482797/home/LumeLaht/e0fggn0wdjnncsfzu5ph.jpg"
                         },
                         new
                         {
                             ImageId = new Guid("44000013-0000-0000-0000-000000000000"),
-                            IsMain = false,
-                            RoomId = new Guid("46000004-0000-0000-0000-000000000000"),
-                            Url = "https://edef11.pcloud.com/DLZTTPOB6Z2gifOj7ZOjDfZZC1l10kZNVZZQYVZZ0DjZH4Z44ZzzZ4df3TUten8yDWnGx26XlCmeS10yk/photo-1497366754035-f200968a6e72.jpg"
+                            CloudinaryPublicId = "home/LumeLaht/kvn5gcm4ykrxr94xhjpg",
+                            IsMain = true,
+                            RoomId = new Guid("46000007-0000-0000-0000-000000000000"),
+                            Url = "https://res.cloudinary.com/dw8apd46g/image/upload/v1774482754/home/LumeLaht/kvn5gcm4ykrxr94xhjpg.jpg"
                         },
                         new
                         {
                             ImageId = new Guid("44000014-0000-0000-0000-000000000000"),
+                            CloudinaryPublicId = "home/LumeLaht/lu3g8tbm51681draqqsk",
                             IsMain = false,
-                            RoomId = new Guid("46000004-0000-0000-0000-000000000000"),
-                            Url = "https://edef10.pcloud.com/DLZUTPOB6ZSgifOj7ZOjDfZZH1l10kZNVZZQYVZZvwBZCRZNRZT8Zbc0hNNc8KdjJFtTJ3hyUwp3xeAbX/photo-1497366811353-6870744d04b2.jpg"
+                            RoomId = new Guid("46000007-0000-0000-0000-000000000000"),
+                            Url = "https://res.cloudinary.com/dw8apd46g/image/upload/v1774482758/home/LumeLaht/lu3g8tbm51681draqqsk.jpg"
                         },
                         new
                         {
                             ImageId = new Guid("44000015-0000-0000-0000-000000000000"),
-                            IsMain = false,
-                            RoomId = new Guid("46000005-0000-0000-0000-000000000000"),
-                            Url = "https://edef11.pcloud.com/DLZTTPOB6Z2gifOj7ZOjDfZZC1l10kZNVZZQYVZZ0DjZH4Z44ZzzZ4df3TUten8yDWnGx26XlCmeS10yk/photo-1497366754035-f200968a6e72.jpg"
+                            CloudinaryPublicId = "home/LumeLaht/ossh3aqbxmlpowedshjy",
+                            IsMain = true,
+                            RoomId = new Guid("46000008-0000-0000-0000-000000000000"),
+                            Url = "https://res.cloudinary.com/dw8apd46g/image/upload/v1774482770/home/LumeLaht/ossh3aqbxmlpowedshjy.jpg"
                         },
                         new
                         {
                             ImageId = new Guid("44000016-0000-0000-0000-000000000000"),
+                            CloudinaryPublicId = "home/LumeLaht/tqhyz03tx9h8prrhotbc",
                             IsMain = false,
-                            RoomId = new Guid("46000005-0000-0000-0000-000000000000"),
-                            Url = "https://edef10.pcloud.com/DLZUTPOB6ZSgifOj7ZOjDfZZH1l10kZNVZZQYVZZvwBZCRZNRZT8Zbc0hNNc8KdjJFtTJ3hyUwp3xeAbX/photo-1497366811353-6870744d04b2.jpg"
+                            RoomId = new Guid("46000008-0000-0000-0000-000000000000"),
+                            Url = "https://res.cloudinary.com/dw8apd46g/image/upload/v1774482788/home/LumeLaht/tqhyz03tx9h8prrhotbc.jpg"
                         },
                         new
                         {
                             ImageId = new Guid("44000017-0000-0000-0000-000000000000"),
-                            IsMain = false,
-                            RoomId = new Guid("46000006-0000-0000-0000-000000000000"),
-                            Url = "https://edef11.pcloud.com/DLZTTPOB6Z2gifOj7ZOjDfZZC1l10kZNVZZQYVZZ0DjZH4Z44ZzzZ4df3TUten8yDWnGx26XlCmeS10yk/photo-1497366754035-f200968a6e72.jpg"
+                            CloudinaryPublicId = "home/LumeLaht/jikegxhcjgjimghpceou",
+                            IsMain = true,
+                            RoomId = new Guid("46000009-0000-0000-0000-000000000000"),
+                            Url = "https://res.cloudinary.com/dw8apd46g/image/upload/v1774482619/home/LumeLaht/jikegxhcjgjimghpceou.jpg"
                         },
                         new
                         {
                             ImageId = new Guid("44000018-0000-0000-0000-000000000000"),
+                            CloudinaryPublicId = "home/LumeLaht/ktf5vq0dnyt1fhugwgja",
                             IsMain = false,
-                            RoomId = new Guid("46000006-0000-0000-0000-000000000000"),
-                            Url = "https://edef10.pcloud.com/DLZUTPOB6ZSgifOj7ZOjDfZZH1l10kZNVZZQYVZZvwBZCRZNRZT8Zbc0hNNc8KdjJFtTJ3hyUwp3xeAbX/photo-1497366811353-6870744d04b2.jpg"
+                            RoomId = new Guid("46000009-0000-0000-0000-000000000000"),
+                            Url = "https://res.cloudinary.com/dw8apd46g/image/upload/v1774482774/home/LumeLaht/ktf5vq0dnyt1fhugwgja.jpg"
+                        },
+                        new
+                        {
+                            ImageId = new Guid("44000019-0000-0000-0000-000000000000"),
+                            CloudinaryPublicId = "home/LumeLaht/wxvbynaa8r2nydcsvi6n",
+                            IsMain = true,
+                            RoomId = new Guid("46000010-0000-0000-0000-000000000000"),
+                            Url = "https://res.cloudinary.com/dw8apd46g/image/upload/v1774482752/home/LumeLaht/wxvbynaa8r2nydcsvi6n.jpg"
+                        },
+                        new
+                        {
+                            ImageId = new Guid("44000020-0000-0000-0000-000000000000"),
+                            CloudinaryPublicId = "home/LumeLaht/eiohgfhu3tyw3ywbyrat",
+                            IsMain = false,
+                            RoomId = new Guid("46000010-0000-0000-0000-000000000000"),
+                            Url = "https://res.cloudinary.com/dw8apd46g/image/upload/v1774482777/home/LumeLaht/eiohgfhu3tyw3ywbyrat.jpg"
+                        },
+                        new
+                        {
+                            ImageId = new Guid("44000021-0000-0000-0000-000000000000"),
+                            CloudinaryPublicId = "home/LumeLaht/e6ey92ny3mlqjojfkdvd",
+                            IsMain = true,
+                            RoomId = new Guid("46000011-0000-0000-0000-000000000000"),
+                            Url = "https://res.cloudinary.com/dw8apd46g/image/upload/v1774482595/home/LumeLaht/e6ey92ny3mlqjojfkdvd.jpg"
+                        },
+                        new
+                        {
+                            ImageId = new Guid("44000022-0000-0000-0000-000000000000"),
+                            CloudinaryPublicId = "home/LumeLaht/kwl77thrfdqoxt6sq9be",
+                            IsMain = false,
+                            RoomId = new Guid("46000011-0000-0000-0000-000000000000"),
+                            Url = "https://res.cloudinary.com/dw8apd46g/image/upload/v1774482761/home/LumeLaht/kwl77thrfdqoxt6sq9be.jpg"
+                        },
+                        new
+                        {
+                            ImageId = new Guid("44000023-0000-0000-0000-000000000000"),
+                            CloudinaryPublicId = "home/LumeLaht/gwhzr9ytxlrquih6m5at",
+                            IsMain = true,
+                            RoomId = new Guid("46000012-0000-0000-0000-000000000000"),
+                            Url = "https://res.cloudinary.com/dw8apd46g/image/upload/v1774482803/home/LumeLaht/gwhzr9ytxlrquih6m5at.jpg"
+                        },
+                        new
+                        {
+                            ImageId = new Guid("44000024-0000-0000-0000-000000000000"),
+                            CloudinaryPublicId = "home/LumeLaht/hvv7upflpq1cgjk15gh3",
+                            IsMain = false,
+                            RoomId = new Guid("46000012-0000-0000-0000-000000000000"),
+                            Url = "https://res.cloudinary.com/dw8apd46g/image/upload/v1774482604/home/LumeLaht/hvv7upflpq1cgjk15gh3.jpg"
+                        },
+                        new
+                        {
+                            ImageId = new Guid("44000025-0000-0000-0000-000000000000"),
+                            CloudinaryPublicId = "home/LumeLaht/eiohgfhu3tyw3ywbyrat",
+                            IsMain = true,
+                            RoomId = new Guid("46000013-0000-0000-0000-000000000000"),
+                            Url = "https://res.cloudinary.com/dw8apd46g/image/upload/v1774482777/home/LumeLaht/eiohgfhu3tyw3ywbyrat.jpg"
+                        },
+                        new
+                        {
+                            ImageId = new Guid("44000026-0000-0000-0000-000000000000"),
+                            CloudinaryPublicId = "home/LumeLaht/e0fggn0wdjnncsfzu5ph",
+                            IsMain = false,
+                            RoomId = new Guid("46000013-0000-0000-0000-000000000000"),
+                            Url = "https://res.cloudinary.com/dw8apd46g/image/upload/v1774482797/home/LumeLaht/e0fggn0wdjnncsfzu5ph.jpg"
+                        },
+                        new
+                        {
+                            ImageId = new Guid("44000027-0000-0000-0000-000000000000"),
+                            CloudinaryPublicId = "home/LumeLaht/ktf5vq0dnyt1fhugwgja",
+                            IsMain = true,
+                            RoomId = new Guid("46000014-0000-0000-0000-000000000000"),
+                            Url = "https://res.cloudinary.com/dw8apd46g/image/upload/v1774482774/home/LumeLaht/ktf5vq0dnyt1fhugwgja.jpg"
+                        },
+                        new
+                        {
+                            ImageId = new Guid("44000028-0000-0000-0000-000000000000"),
+                            CloudinaryPublicId = "home/LumeLaht/sqqbapuwso9etgppxwrw",
+                            IsMain = false,
+                            RoomId = new Guid("46000014-0000-0000-0000-000000000000"),
+                            Url = "https://res.cloudinary.com/dw8apd46g/image/upload/v1774482794/home/LumeLaht/sqqbapuwso9etgppxwrw.jpg"
+                        },
+                        new
+                        {
+                            ImageId = new Guid("44000029-0000-0000-0000-000000000000"),
+                            CloudinaryPublicId = "home/LumeLaht/lu3g8tbm51681draqqsk",
+                            IsMain = true,
+                            RoomId = new Guid("46000015-0000-0000-0000-000000000000"),
+                            Url = "https://res.cloudinary.com/dw8apd46g/image/upload/v1774482758/home/LumeLaht/lu3g8tbm51681draqqsk.jpg"
+                        },
+                        new
+                        {
+                            ImageId = new Guid("44000030-0000-0000-0000-000000000000"),
+                            CloudinaryPublicId = "home/LumeLaht/frd5jjvloef3ura6hppd",
+                            IsMain = false,
+                            RoomId = new Guid("46000015-0000-0000-0000-000000000000"),
+                            Url = "https://res.cloudinary.com/dw8apd46g/image/upload/v1774482765/home/LumeLaht/frd5jjvloef3ura6hppd.jpg"
                         });
+                });
+
+            modelBuilder.Entity("LumeLaht_RoomApi.Core_.Entities.User.User", b =>
+                {
+                    b.Property<Guid>("UserId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<string>("FirstName")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("LastName")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("PasswordHash")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Phone")
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.Property<string>("Role")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.HasKey("UserId");
+
+                    b.HasIndex("Email")
+                        .IsUnique();
+
+                    b.ToTable("Users");
+                });
+
+            modelBuilder.Entity("LumeLaht_RoomApi.Core_.Entities.Booking", b =>
+                {
+                    b.HasOne("LumeLaht_RoomApi.Core_.Entities.Room", "Room")
+                        .WithMany("Bookings")
+                        .HasForeignKey("RoomId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("LumeLaht_RoomApi.Core_.Entities.User.User", "User")
+                        .WithMany("Bookings")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Room");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("LumeLaht_RoomApi.Core_.Entities.Room", b =>
@@ -589,9 +1154,16 @@ namespace LumeLaht_RoomApi.Infrastructure.Migrations
 
             modelBuilder.Entity("LumeLaht_RoomApi.Core_.Entities.Room", b =>
                 {
+                    b.Navigation("Bookings");
+
                     b.Navigation("Images");
 
                     b.Navigation("RoomActivity");
+                });
+
+            modelBuilder.Entity("LumeLaht_RoomApi.Core_.Entities.User.User", b =>
+                {
+                    b.Navigation("Bookings");
                 });
 #pragma warning restore 612, 618
         }
