@@ -1,4 +1,5 @@
 ﻿using LumeLaht_RoomApi.Core_.Entities;
+using LumeLaht_RoomApi.Core_.Entities.User;
 using LumeLaht_RoomApi.Infrastructure.Data;
 using LumeLaht_RoomApi.Infrastructure.Repositories;
 using LumeLaht_RoomApi.Tests.Helpers;
@@ -24,13 +25,17 @@ namespace LumeLaht_RoomApi.Tests.Repositories
             var addressRepository = new Repository<Address>(_context);
             var activityRepository = new Repository<Activity>(_context);
             var roomImageRepository = new Repository<RoomImage>(_context);
+            var userRepository = new Repository<User>(_context);
+            var bookingRepository = new Repository<Booking>(_context);
 
             _unitOfWork = new UnitOfWork(
                 _context,
                 roomRepository,
                 addressRepository,
                 activityRepository,
-                roomImageRepository
+                roomImageRepository,
+                userRepository,
+                bookingRepository
             );
         }
 
