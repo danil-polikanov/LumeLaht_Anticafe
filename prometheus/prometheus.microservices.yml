@@ -1,0 +1,28 @@
+global:
+  scrape_interval: 5s
+  evaluation_interval: 5s
+
+scrape_configs:
+  - job_name: 'room-service'
+    metrics_path: /metrics
+    static_configs:
+      - targets: ['room-service:8080']
+        labels:
+          architecture: 'microservices'
+          service: 'room'
+
+  - job_name: 'user-service'
+    metrics_path: /metrics
+    static_configs:
+      - targets: ['user-service:8080']
+        labels:
+          architecture: 'microservices'
+          service: 'user'
+
+  - job_name: 'booking-service'
+    metrics_path: /metrics
+    static_configs:
+      - targets: ['booking-service:8080']
+        labels:
+          architecture: 'microservices'
+          service: 'booking'

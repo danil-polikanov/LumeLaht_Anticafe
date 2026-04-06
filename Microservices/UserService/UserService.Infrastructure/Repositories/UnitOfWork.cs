@@ -1,0 +1,27 @@
+using UserService.Core.Entities;
+using UserService.Core.Interfaces;
+using UserService.Infrastructure.Data;
+
+namespace UserService.Infrastructure.Repositories
+{
+    public class UnitOfWork : IUnitOfWork
+    {
+        private readonly UserDbContext _context;
+
+        public IRepository<User> Users { get; }
+
+        public UnitOfWork(UserDbContext context, IRepository<User> users)
+        {
+            _context = context;
+            Users = users;
+        }
+
+        public async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default) =>
+            await _context.SaveChangesAsync(cancellationToken);
+
+        public void Dispose()
+        {
+            _context.Dispose();
+        }
+    }
+}
