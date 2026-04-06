@@ -94,7 +94,7 @@ namespace UserService.API
             using (var scope = app.Services.CreateScope())
             {
                 var db = scope.ServiceProvider.GetRequiredService<UserDbContext>();
-                db.Database.Migrate();
+                db.Database.EnsureCreated();
             }
 
             app.UseCors("AllowReactApp");

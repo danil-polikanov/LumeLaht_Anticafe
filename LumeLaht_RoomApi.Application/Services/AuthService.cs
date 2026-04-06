@@ -30,8 +30,8 @@ namespace LumeLaht_RoomApi.Application.Services
 
         public async Task<AuthResponse> RegisterAsync(RegisterRequest request, CancellationToken cancellationToken)
         {
-            var existingUsers = await _unitOfWork.Users.GetAllAsync(cancellationToken);
-            if (existingUsers.Any(u => u.Email == request.Email))
+            var existing = await _unitOfWork.Users.FindByAsync(u => u.Email == request.Email, cancellationToken);
+            if (existing != null)
             {
                 throw new InvalidOperationException("User with this email already exists");
             }
@@ -62,8 +62,7 @@ namespace LumeLaht_RoomApi.Application.Services
 
         public async Task<AuthResponse> LoginAsync(LoginRequest request, CancellationToken cancellationToken)
         {
-            var users = await _unitOfWork.Users.GetAllAsync(cancellationToken);
-            var user = users.FirstOrDefault(u => u.Email == request.Email);
+            var user = await _unitOfWork.Users.FindByAsync(u => u.Email == request.Email, cancellationToken);
 
             if (user == null || !BCrypt.Net.BCrypt.Verify(request.Password, user.PasswordHash))
             {

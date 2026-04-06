@@ -31,6 +31,9 @@ namespace LumeLaht_RoomApi.Infrastructure.Repositories
             return await _dbSet.FindAsync(new object[] { id }, cancellationToken);
         }
 
+        public virtual async Task<T?> FindByAsync(Expression<Func<T, bool>> predicate, CancellationToken cancellationToken)
+            => await _dbSet.FirstOrDefaultAsync(predicate, cancellationToken);
+
         public virtual async Task<T> AddAsync(T entity, CancellationToken cancellationToken)
         {
             if (entity == null)
