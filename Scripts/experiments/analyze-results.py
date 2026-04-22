@@ -86,8 +86,11 @@ def extract_metrics(summary_path):
         "http_reqs_rate":           get("http_reqs.rate", 0),
         "error_rate":               get("errors.rate", 0) or get("http_req_failed.rate", 0),
         "login_duration_p95":       get("login_duration.p(95)") or get("login_duration.p95"),
+        "register_duration_p95":    get("register_duration.p(95)") or get("register_duration.p95"),
         "rooms_duration_p95":       get("rooms_duration.p(95)") or get("rooms_duration.p95"),
         "booking_duration_p95":     get("booking_duration.p(95)") or get("booking_duration.p95"),
+        "my_bookings_duration_p95": get("my_bookings_duration.p(95)") or get("my_bookings_duration.p95"),
+        "cancel_duration_p95":      get("cancel_duration.p(95)") or get("cancel_duration.p95"),
         "iteration_duration_avg":   get("iteration_duration.avg"),
     }
 
@@ -192,17 +195,21 @@ def build_report(by_arch):
 
         # Per-operation breakdown
         out.append("\n### Table: Response time by operation (p95, mean ± std)\n")
-        out.append("| Architecture | Login p95 | Rooms p95 | Booking p95 |")
-        out.append("|---|---|---|---|")
+        out.append("| Architecture | Register | Login | Rooms | Booking | My Bookings | Cancel |")
+        out.append("|---|---|---|---|---|---|---|")
         for arch in ARCHITECTURES:
             reps = by_arch[arch][profile]
             if not reps:
-                out.append(f"| {arch} | _no data_ | _no data_ | _no data_ |")
+                out.append(f"| {arch} | _no data_ | _no data_ | _no data_ | _no data_ | _no data_ | _no data_ |")
                 continue
+            reg = aggregate(reps, "register_duration_p95")
             login = aggregate(reps, "login_duration_p95")
             rooms = aggregate(reps, "rooms_duration_p95")
             booking = aggregate(reps, "booking_duration_p95")
-            out.append(f"| {arch} | {fmt_ms(login)} | {fmt_ms(rooms)} | {fmt_ms(booking)} |")
+            my_bk = aggregate(reps, "my_bookings_duration_p95")
+            cancel = aggregate(reps, "cancel_duration_p95")
+            out.append(f"| {arch} | {fmt_ms(reg)} | {fmt_ms(login)} | {fmt_ms(rooms)} | "
+                       f"{fmt_ms(booking)} | {fmt_ms(my_bk)} | {fmt_ms(cancel)} |")
 
         # ─── Pairwise statistical tests ────────────────────────────────────
         out.append("\n### Pairwise comparisons (Mann-Whitney U, Cliff's δ)\n")

@@ -25,8 +25,8 @@ namespace LumeLaht_RoomApi.Tests.Repositories
             var addressRepository = new Repository<Address>(_context);
             var activityRepository = new Repository<Activity>(_context);
             var roomImageRepository = new Repository<RoomImage>(_context);
-            var userRepository = new Repository<User>(_context);
-            var bookingRepository = new Repository<Booking>(_context);
+            var userRepository = new UserRepository(_context);
+            var bookingRepository = new BookingRepository(_context);
 
             _unitOfWork = new UnitOfWork(
                 _context,

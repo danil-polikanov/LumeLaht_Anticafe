@@ -59,10 +59,16 @@ namespace RoomService.API
             builder.Services.AddScoped<IImageService, ImageService>();
 
             // DbContext
-            builder.Services.AddDbContext<RoomDbContext>(option =>
+            var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+            if (!string.IsNullOrEmpty(connectionString) &&
+                !connectionString.Contains("Max Pool Size", StringComparison.OrdinalIgnoreCase))
             {
-                option.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"))
-                    .LogTo(Console.WriteLine, LogLevel.Information);
+                connectionString += ";Max Pool Size=100;Connection Timeout=10";
+            }
+            builder.Services.AddDbContextPool<RoomDbContext>(option =>
+            {
+                option.UseSqlServer(connectionString, sql =>
+                    sql.CommandTimeout(30).EnableRetryOnFailure(3));
             });
 
             builder.Services.AddControllers();

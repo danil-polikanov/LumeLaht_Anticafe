@@ -36,7 +36,7 @@ services:
       resources:
         limits:
           cpus: "1"
-          memory: 256M
+          memory: 512M
     networks:
       - microservices-net
 

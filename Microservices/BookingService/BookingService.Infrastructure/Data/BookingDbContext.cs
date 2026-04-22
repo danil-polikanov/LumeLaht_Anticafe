@@ -21,7 +21,8 @@ namespace BookingService.Infrastructure.Data
                 entity.Property(b => b.TotalPrice).HasColumnType("decimal(18,2)");
                 entity.Property(b => b.Status).HasMaxLength(20);
                 entity.HasIndex(b => b.UserId);
-                entity.HasIndex(b => new { b.RoomId, b.StartTime });
+                entity.HasIndex(b => new { b.RoomId, b.StartTime, b.EndTime })
+                      .HasDatabaseName("IX_Bookings_RoomId_StartTime_EndTime");
             });
         }
     }

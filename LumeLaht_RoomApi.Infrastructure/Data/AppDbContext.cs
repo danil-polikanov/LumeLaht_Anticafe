@@ -40,6 +40,10 @@ namespace LumeLaht_RoomApi.Infrastructure.Data
                 .Property(b => b.TotalPrice)
                 .HasColumnType("decimal(18,2)");
 
+            modelBuilder.Entity<Booking>()
+                .HasIndex(b => new { b.RoomId, b.StartTime, b.EndTime })
+                .HasDatabaseName("IX_Bookings_RoomId_StartTime_EndTime");
+
             // ── Addresses (7) ──
             var addr = Enumerable.Range(1, 7).ToDictionary(i => i, i => GenerateDeterministicGuid('B', i));
 

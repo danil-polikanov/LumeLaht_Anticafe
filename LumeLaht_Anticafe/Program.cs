@@ -49,6 +49,8 @@ namespace LumeLaht_Anticafe
 
             // Repositories
             builder.Services.AddScoped<IRoomRepository, RoomRepository>();
+            builder.Services.AddScoped<IUserRepository, UserRepository>();
+            builder.Services.AddScoped<IBookingRepository, BookingRepository>();
             builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
             builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
@@ -62,10 +64,16 @@ namespace LumeLaht_Anticafe
             builder.Services.AddScoped<IImageService, ImageService>();
 
             // Database
-            builder.Services.AddDbContext<AppDbContext>(option =>
+            var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+            if (!string.IsNullOrEmpty(connectionString) &&
+                !connectionString.Contains("Max Pool Size", StringComparison.OrdinalIgnoreCase))
             {
-                option.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"))
-                      .LogTo(Console.WriteLine, LogLevel.Information);
+                connectionString += ";Max Pool Size=100;Connection Timeout=10";
+            }
+            builder.Services.AddDbContextPool<AppDbContext>(option =>
+            {
+                option.UseSqlServer(connectionString, sql =>
+                    sql.CommandTimeout(30).EnableRetryOnFailure(3));
             });
 
             // JWT Authentication
