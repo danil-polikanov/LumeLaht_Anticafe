@@ -1,5 +1,5 @@
 #!/bin/bash
-# Master orchestrator: runs 5 repetitions × 2 profiles for each architecture.
+# Master orchestrator: runs 5 repetitions × 3 profiles for each architecture.
 # Usage: ./run-experiments.sh [all | monolith | separated | microservices]
 #
 # For each architecture:
@@ -11,7 +11,8 @@
 #   6. Warmup (2 min)
 #   7. 5 reps × constant profile (with reset between reps)
 #   8. 5 reps × rampup profile
-#   9. docker compose down -v
+#   9. 5 reps × spike profile
+#  10. docker compose down -v
 
 set -euo pipefail
 
@@ -22,7 +23,7 @@ RESULTS_DIR="${REPO_ROOT}/results"
 K6_SCRIPT="${REPO_ROOT}/Scripts/k6/load-test.js"
 BASE_URL="http://127.0.0.1:3000"
 N_REPS=5
-PROFILES=("constant" "rampup")
+PROFILES=("constant" "rampup" "spike")
 
 TARGET="${1:-all}"
 REPS_OVERRIDE="${2:-}"

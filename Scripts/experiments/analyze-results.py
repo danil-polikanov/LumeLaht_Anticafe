@@ -4,7 +4,7 @@ Post-hoc statistical analysis of k6 summary JSONs.
 
 Reads results/{arch}_{profile}_rep{N}_summary.json for:
   arch in {monolith, separated, microservices}
-  profile in {constant, rampup}
+  profile in {constant, rampup, spike}
   N in 1..5
 
 Computes:
@@ -38,7 +38,7 @@ except ImportError:
 
 
 ARCHITECTURES = ["monolith", "separated", "microservices"]
-PROFILES = ["constant", "rampup"]
+PROFILES = ["constant", "rampup", "spike"]
 
 
 def cliffs_delta(x, y):
