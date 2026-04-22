@@ -2,7 +2,7 @@
 
 **Purpose:** Self-contained context document so any Claude session can pick up work on this benchmark pipeline without prior conversation history. Show this file to Claude with a message like *"read Scripts/experiments/CONTEXT.md and let's continue"*.
 
-**Last updated:** 2026-04-22
+**Last updated:** 2026-04-22 (benchmark complete — all 30 experiments done)
 
 ---
 
@@ -32,11 +32,45 @@ Stack: .NET 10, React 19, SQL Server 2022, Docker Compose, k6 load testing, Prom
 - Full automation pipeline in [Scripts/experiments/](.) — see "Pipeline files" below
 - Russian draft of thesis text (newer than English, but English is canonical)
 - English `.docx` exists with full structure: Summary, Intro, ch.1–3, Kokkuvõte, References
+- **✅ BENCHMARK COMPLETE** — 3 arch × 2 profiles × 5 reps = 30 experiments run on Mac mini M2 (2026-04-22)
+- **✅ analysis.md and analysis.json generated** — full stats in `results/analysis.md`
 
-### ⏳ Pending — to do AFTER overnight run completes on Mac mini
+### ✅ Real benchmark results (from results/analysis.md)
 
-1. Execute pipeline on Mac (instructions: [README.md](README.md)) → produces `results/analysis.md`
-2. Update **English `.docx`** with real numbers in Tables 1–4 (currently empty headers)
+#### CONSTANT load (50 VU, steady)
+
+| Architecture | p95 latency | Throughput | CV p95 |
+|---|---|---|---|
+| Monolith | 4842 ± 381 ms | 11.15 ± 0.51 req/s | 7.87% |
+| Separated | 4684 ± 671 ms | 11.23 ± 0.61 req/s | 14.32% |
+| Microservices | 7662 ± 313 ms | 12.36 ± 0.38 req/s | 4.08% |
+
+Per-operation p95 (constant):
+- Monolith: Login=3464ms, Rooms=1379ms, Booking=6339ms
+- Separated: Login=3324ms, Rooms=1539ms, Booking=6262ms
+- Microservices: Login=10006ms, Rooms=**12ms**, Booking=**21ms**
+
+Statistical tests (constant):
+- Monolith vs Separated: p=0.84, δ=0.12 → **no difference** (negligible)
+- Monolith vs Microservices: p=0.0079, δ=-1.0 → **significant, large** — monolith FASTER overall
+- Separated vs Microservices: p=0.0079, δ=-1.0 → **significant, large** — separated FASTER overall
+
+**Key interpretation:** Microservices overall p95 is higher because UserService gets only 1 CPU → bcrypt saturates at ~50 RPS. But Rooms (12ms) and Booking (21ms) are dramatically faster than monolith (1379ms, 6339ms). CPU misallocation, not architecture, causes the overall slowness.
+
+#### RAMPUP load (0→200 VU over 10 min)
+
+| Architecture | p95 latency | Throughput | CV p95 |
+|---|---|---|---|
+| Monolith | 42002 ± 24647 ms | 7.11 ± 1.18 req/s | 58.68% |
+| Separated | **60001 ± 0.4 ms** | 2.33 ± 1.20 req/s | 0.0% |
+| Microservices | 24006 ± 20122 ms | 10.39 ± 1.08 req/s | 83.82% |
+
+Statistical tests (rampup): **no significant differences** — all p > 0.05. Very high CV (58–84%) means results are unstable under peak load. Separated completely collapses (60s timeouts every rep, CV=0 because always max).
+
+### ⏳ Pending — to do NOW (benchmark done, thesis writing phase)
+
+1. ~~Execute pipeline on Mac~~ ✅ DONE
+2. **Update English `.docx` with real numbers in Tables 1–4** — copy from results above
 3. Add explicit research questions (RQ1/RQ2/RQ3) to introduction
 4. Add explicit hypothesis to introduction
 5. Cite **Blinowski et al. (2022)** in references and Section 1.2 (mandatory — see "Known weaknesses" below)
@@ -138,12 +172,12 @@ Stack: .NET 10, React 19, SQL Server 2022, Docker Compose, k6 load testing, Prom
 
 ## Resume phrases for new Claude sessions
 
-After running pipeline on Mac, paste any of these to Claude (after sharing this file):
+The benchmark is complete. Use these phrases to continue thesis work:
 
-- *"read Scripts/experiments/CONTEXT.md and let's continue — overnight run done"*
-- *"smoke test failed with this output: [paste]"*
-- *"results/analysis.md is ready, help me update Tables 1–4 in the English .docx"*
-- *"need to draft 10 Estonian defense slides from updated thesis"*
+- *"read Scripts/experiments/CONTEXT.md and let's continue — update Tables 1–4 in the English .docx with real results"*
+- *"read Scripts/experiments/CONTEXT.md — help me add RQ1/RQ2/RQ3 and hypothesis to the introduction"*
+- *"read Scripts/experiments/CONTEXT.md — need to draft 10 Estonian defense slides"*
+- *"read Scripts/experiments/CONTEXT.md — fix Azure VM reference in Section 2.1 and cite Blinowski"*
 
 ---
 

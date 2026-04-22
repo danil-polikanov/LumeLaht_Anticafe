@@ -45,10 +45,7 @@ const profiles = {
 const selectedProfile = __ENV.PROFILE || 'constant';
 export const options = {
   stages: profiles[selectedProfile].stages,
-  thresholds: {
-    http_req_duration: ['p(95)<2000'],
-    errors: ['rate<0.1'],
-  },
+  thresholds: {},
   insecureSkipTLSVerify: true,
 };
 

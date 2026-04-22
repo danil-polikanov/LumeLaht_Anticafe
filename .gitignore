@@ -37,8 +37,10 @@ frontend/loputoode_struktuur.pdf
 frontend/loputoode_struktuur.txt
 frontend/loputoode_struktuur_utf8.txt
 
-# Experiment results (generated on Mac, should not be committed)
-results/
+# Experiment results (generated on Mac, raw data not committed)
+results/**
+!results/analysis.md
+!results/analysis.json
 
 # Frontend build output
 frontend/dist/
