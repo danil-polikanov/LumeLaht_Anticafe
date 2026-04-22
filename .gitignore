@@ -394,3 +394,5 @@ MigrationBackup/
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
 .claude/worktrees/
+# ignore uncompressed raw dumps (IDE sometimes decompresses .gz)
+results/*_raw.json
