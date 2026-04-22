@@ -49,9 +49,8 @@ const profiles = {
 const selectedProfile = __ENV.PROFILE || 'constant';
 export const options = {
   stages: profiles[selectedProfile].stages,
-  // SLA-style thresholds; generous enough that both `constant` and `rampup`
-  // pass on a healthy system. Threshold failures still produce a summary
-  // file, so analysis is unaffected — they are documentary, not gatekeeping.
+  // Thresholds are documentary — they show SLA violations in logs but never
+  // block result collection. Script treats exit code 99 (threshold fail) as OK.
   thresholds: {
     http_req_failed: ['rate<0.05'],
     errors: ['rate<0.05'],

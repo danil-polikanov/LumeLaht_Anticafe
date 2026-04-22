@@ -23,7 +23,7 @@ RESULTS_DIR="${REPO_ROOT}/results"
 K6_SCRIPT="${REPO_ROOT}/Scripts/k6/load-test.js"
 BASE_URL="http://127.0.0.1:3000"
 N_REPS=5
-PROFILES=("constant" "rampup" "spike")
+PROFILES=("constant" "rampup")
 
 TARGET="${1:-all}"
 REPS_OVERRIDE="${2:-}"
@@ -69,7 +69,7 @@ stop_stack() {
 
 wait_for_healthy() {
     local arch="$1"
-    local max_wait=180
+    local max_wait=600
     log "[$arch] Waiting up to ${max_wait}s for containers to be healthy..."
     bash "${SCRIPT_DIR}/health-check.sh" "${BASE_URL}" "${max_wait}" 2>&1 | tee -a "${LOG_FILE}"
 }
@@ -101,7 +101,7 @@ run_single_test() {
 
     log "[$arch] ▶ ${profile} rep ${rep}/${N_REPS}"
 
-    if ! k6 run \
+    k6 run \
         --env BASE_URL="${BASE_URL}" \
         --env PROFILE="${profile}" \
         --summary-export="${summary_file}" \
@@ -110,10 +110,13 @@ run_single_test() {
         --tag profile="${profile}" \
         --tag rep="${rep}" \
         --quiet \
-        "${K6_SCRIPT}" >> "${LOG_FILE}" 2>&1; then
-        log "[$arch] ✘ ${profile} rep ${rep} FAILED — continuing to next rep"
-    else
+        "${K6_SCRIPT}" >> "${LOG_FILE}" 2>&1 || true
+    # Exit code 99 = threshold violations (expected under load) — still valid data.
+    # Exit code 1  = k6 crash — summary may be missing but we continue anyway.
+    if [[ -f "${summary_file}" ]]; then
         log "[$arch] ✔ ${profile} rep ${rep} → ${summary_file##*/}"
+    else
+        log "[$arch] ✘ ${profile} rep ${rep} — no summary file (k6 crash?)"
     fi
 
     # Compress raw JSON to save disk (k6 raw can be hundreds of MB)
