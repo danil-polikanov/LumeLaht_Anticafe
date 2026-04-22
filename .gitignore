@@ -19,12 +19,26 @@ LumeLaht_Anticafe/appsettings.Local.json
 # Personal thesis planning document
 DIPLOMA_PLAN.md
 
-# Thesis document
+# Thesis documents (personal, not for repo)
+Polikanov_prediploma_2026.docx
 Polikanov_diploma_Reworked.docx
+Polikanov_prediploma_2026_RU.md
 
-# Local tooling / diploma scripts
+# Local tooling / diploma scripts (used only on author's machine)
 tools/
 Scripts/k6/test-results.md
+Scripts/add_license_authorship.py
+Scripts/add_sisukord.py
+Scripts/create_kokkuvote_resumee.py
+Scripts/update_chapter3_real_results.py
+
+# TalTech methodology PDF (third-party)
+frontend/loputoode_struktuur.pdf
+frontend/loputoode_struktuur.txt
+frontend/loputoode_struktuur_utf8.txt
+
+# Experiment results (generated on Mac, should not be committed)
+results/
 
 # Frontend build output
 frontend/dist/
