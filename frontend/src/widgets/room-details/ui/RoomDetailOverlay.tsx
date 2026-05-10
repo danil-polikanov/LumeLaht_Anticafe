@@ -25,10 +25,10 @@ export const RoomDetailOverlay: React.FC<{
     { skip: !room.roomId },
   );
 
-  const bookedHours = new Set(roomBookings?.map((b) => new Date(b.startTime).getHours()) ?? []);
+  const bookedHours = new Set(roomBookings?.map((b) => new Date(b.startTime).getUTCHours()) ?? []);
 
   const isToday = selectedDate === new Date().toISOString().split('T')[0];
-  const currentHour = new Date().getHours();
+  const currentHour = new Date().getUTCHours();
 
   const timeSlots = Array.from({ length: 13 }, (_, i) => i + 9); // 9:00–21:00
 
@@ -41,7 +41,7 @@ export const RoomDetailOverlay: React.FC<{
       toast.error('Please select a time slot');
       return;
     }
-    const startTimeStr = `${selectedDate}T${String(selectedHour).padStart(2, '0')}:00:00`;
+    const startTimeStr = `${selectedDate}T${String(selectedHour).padStart(2, '0')}:00:00.000Z`;
     try {
       await createBooking({ roomId: room.roomId!, startTime: startTimeStr }).unwrap();
       toast.success('Booking confirmed!');

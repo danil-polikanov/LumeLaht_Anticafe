@@ -52,7 +52,6 @@ namespace LumeLaht_RoomApi.Infrastructure.Repositories
                 .ApplyActivityFilter(filterOptions)
                 .ApplySorting(filterOptions.SortOptions);
 
-            // Пагинация
             var totalItems = await query.CountAsync(cancellationToken);
             var items = await query
                 .Skip((filterOptions.Page - 1) * filterOptions.PageSize)

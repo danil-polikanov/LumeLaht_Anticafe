@@ -19,8 +19,9 @@ while true; do
         exit 1
     fi
 
-    # Try to get rooms count; tolerate failures silently until timeout
-    COUNT=$(curl -sf --max-time 5 "${BASE_URL}/api/room" 2>/dev/null | jq '. | length' 2>/dev/null || echo "")
+    # Try to get rooms count; tolerate failures silently until timeout.
+    # Uses grep instead of jq for portability (Git Bash on Windows lacks jq).
+    COUNT=$(curl -sf --max-time 5 "${BASE_URL}/api/room" 2>/dev/null | grep -oE '"roomId"' | wc -l | tr -d ' \r\n' || echo "")
 
     if [[ "$COUNT" =~ ^[0-9]+$ ]] && (( COUNT >= MIN_ROOMS )); then
         echo "[health] ✔ API ready (${COUNT} rooms, ${ELAPSED}s)"

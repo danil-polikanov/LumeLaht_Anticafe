@@ -71,8 +71,8 @@ namespace LumeLaht_RoomApi.Tests.Services
             // Assert
             Assert.NotNull(result);
             Assert.Equal(2, result.Count);
-            Assert.Equal("Зал А", result[0].Name);
-            Assert.Equal("Зал B", result[1].Name);
+            Assert.Equal("Cozy Corner", result[0].Name);
+            Assert.Equal("Game Hub", result[1].Name);
             _roomRepositoryMock.Verify(r => r.GetAllAsync(It.IsAny<CancellationToken>()), Times.Once);
         }
 

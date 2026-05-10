@@ -4,7 +4,7 @@ using LumeLaht_RoomApi.Core_.Entities;
 using LumeLaht_RoomApi.Core_.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
-namespace LumaCove_RoomApi.Controllers;
+namespace LumeLaht_Anticafe.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
@@ -88,7 +88,6 @@ public class ImageController : ControllerBase
         if (afterUpload.StartsWith('v') && afterUpload.Contains('/'))
             afterUpload = afterUpload[(afterUpload.IndexOf('/') + 1)..];
 
-        // Remove file extension
         var dotIndex = afterUpload.LastIndexOf('.');
         return dotIndex > 0 ? afterUpload[..dotIndex] : afterUpload;
     }

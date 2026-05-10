@@ -23,7 +23,8 @@ DIPLOMA_PLAN.md
 Polikanov_prediploma_2026.docx
 Polikanov_diploma_Reworked.docx
 Polikanov_prediploma_2026_RU.md
-
+Presentation_script_ee_ru.md
+Presentation_speech_only.md
 # Local tooling / diploma scripts (used only on author's machine)
 tools/
 Scripts/k6/test-results.md
@@ -396,3 +397,5 @@ FodyWeavers.xsd
 .claude/worktrees/
 # ignore uncompressed raw dumps (IDE sometimes decompresses .gz)
 results/*_raw.json
+
+graphs

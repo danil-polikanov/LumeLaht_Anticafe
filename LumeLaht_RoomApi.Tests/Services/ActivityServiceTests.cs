@@ -6,9 +6,6 @@ using Xunit;
 
 namespace LumeLaht_RoomApi.Tests.Services
 {
-    /// <summary>
-    /// Тесты для ActivityService
-    /// </summary>
     public class ActivityServiceTests
     {
         private readonly Mock<IUnitOfWork> _unitOfWorkMock;

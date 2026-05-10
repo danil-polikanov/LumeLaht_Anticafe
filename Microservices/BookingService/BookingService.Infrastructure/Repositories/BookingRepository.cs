@@ -14,6 +14,7 @@ namespace BookingService.Infrastructure.Repositories
         public async Task<List<Booking>> GetByUserIdAsync(Guid userId, CancellationToken cancellationToken)
         {
             return await _dbSet
+                .AsNoTracking()
                 .Where(b => b.UserId == userId)
                 .ToListAsync(cancellationToken);
         }
@@ -25,10 +26,24 @@ namespace BookingService.Infrastructure.Repositories
             var dayEnd = dayStart.AddDays(1);
 
             return await _dbSet
+                .AsNoTracking()
                 .Where(b => b.RoomId == roomId &&
                             b.StartTime >= dayStart &&
                             b.StartTime < dayEnd)
                 .ToListAsync(cancellationToken);
+        }
+
+        public async Task<bool> HasConflictAsync(
+            Guid roomId, DateTime startTime, DateTime endTime, CancellationToken cancellationToken)
+        {
+            return await _dbSet
+                .AsNoTracking()
+                .AnyAsync(b =>
+                    b.RoomId == roomId &&
+                    b.Status == "Confirmed" &&
+                    b.StartTime < endTime &&
+                    b.EndTime > startTime,
+                    cancellationToken);
         }
     }
 }

@@ -23,7 +23,7 @@ RESULTS_DIR="${REPO_ROOT}/results"
 K6_SCRIPT="${REPO_ROOT}/Scripts/k6/load-test.js"
 BASE_URL="http://127.0.0.1:3000"
 N_REPS=5
-PROFILES=("constant" "rampup")
+PROFILES=("constant" "rampup" "spike")
 
 TARGET="${1:-all}"
 REPS_OVERRIDE="${2:-}"
@@ -91,6 +91,17 @@ reset_reps() {
     bash "${SCRIPT_DIR}/reset-between-reps.sh" "$arch" 2>&1 | tee -a "${LOG_FILE}"
 }
 
+# Sample docker stats every ~2 seconds while a benchmark rep is running.
+# One JSON object per container per sample, written line-delimited (jsonl)
+# so analyze-results.py can stream-parse without loading whole file.
+collect_docker_stats() {
+    local stats_file="$1"
+    while true; do
+        docker stats --no-stream --format '{{json .}}' >> "${stats_file}" 2>/dev/null || break
+        sleep 2
+    done
+}
+
 run_single_test() {
     local arch="$1"
     local profile="$2"
@@ -98,8 +109,14 @@ run_single_test() {
     local tag="${arch}_${profile}_rep${rep}"
     local summary_file="${RESULTS_DIR}/${tag}_summary.json"
     local raw_file="${RESULTS_DIR}/${tag}_raw.json"
+    local stats_file="${RESULTS_DIR}/${tag}_stats.jsonl"
 
     log "[$arch] ▶ ${profile} rep ${rep}/${N_REPS}"
+
+    # Start resource sampler in background — kills automatically when k6 finishes.
+    : > "${stats_file}"  # truncate stale file from prior partial run
+    collect_docker_stats "${stats_file}" &
+    local stats_pid=$!
 
     k6 run \
         --env BASE_URL="${BASE_URL}" \
@@ -113,6 +130,10 @@ run_single_test() {
         "${K6_SCRIPT}" >> "${LOG_FILE}" 2>&1 || true
     # Exit code 99 = threshold violations (expected under load) — still valid data.
     # Exit code 1  = k6 crash — summary may be missing but we continue anyway.
+
+    kill "${stats_pid}" 2>/dev/null || true
+    wait "${stats_pid}" 2>/dev/null || true
+
     if [[ -f "${summary_file}" ]]; then
         log "[$arch] ✔ ${profile} rep ${rep} → ${summary_file##*/}"
     else

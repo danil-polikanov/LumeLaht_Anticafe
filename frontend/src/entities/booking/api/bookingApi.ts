@@ -9,7 +9,10 @@ export const bookingApi = baseApi.injectEndpoints({
         method: 'POST',
         body: data,
       }),
-      invalidatesTags: [{ type: 'Booking', id: 'LIST' }],
+      invalidatesTags: [
+        { type: 'Booking', id: 'LIST' },
+        { type: 'Booking', id: 'ROOM' },
+      ],
     }),
 
     getMyBookings: builder.query<BookingResponse[], void>({
@@ -31,6 +34,7 @@ export const bookingApi = baseApi.injectEndpoints({
       invalidatesTags: (_result, _error, bookingId) => [
         { type: 'Booking', id: bookingId },
         { type: 'Booking', id: 'LIST' },
+        { type: 'Booking', id: 'ROOM' },
       ],
     }),
 

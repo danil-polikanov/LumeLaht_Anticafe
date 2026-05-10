@@ -21,6 +21,7 @@ Usage: python3 analyze-results.py [--results-dir results]
 """
 
 import json
+import re
 import argparse
 import sys
 from pathlib import Path
@@ -111,6 +112,138 @@ def load_all(results_dir):
     return by_arch
 
 
+# ─── Docker stats parsing ──────────────────────────────────────────────────────
+# `docker stats --format json` produces strings like "5.23%" for CPU and
+# "127.7MiB / 1GiB" for memory; we parse them to numbers so we can aggregate.
+
+# We only include containers belonging to the LumeLaht docker-compose stack;
+# unrelated containers running on the host (mcp-servers, side projects) get
+# rejected up front. Within the stack, monitoring sidecars are also excluded
+# because a hosting provider would not charge for them as part of the workload.
+INCLUDE_CONTAINER_PREFIX = "lumelaht_anticafe-"
+EXCLUDE_CONTAINER_PATTERNS = ("prometheus", "grafana")
+
+
+def _parse_pct(s):
+    if not s:
+        return 0.0
+    m = re.match(r"([0-9.]+)", s)
+    return float(m.group(1)) if m else 0.0
+
+
+_MEM_UNITS = {"B": 1 / (1024 ** 2), "KiB": 1 / 1024, "MiB": 1.0, "GiB": 1024.0,
+              "kB": 1 / 1024, "MB": 1.0, "GB": 1024.0}
+
+
+def _parse_mem_mib(s):
+    """Parse the left-hand side of '127.7MiB / 1GiB' into MiB."""
+    if not s:
+        return 0.0
+    left = s.split("/")[0].strip()
+    m = re.match(r"([0-9.]+)\s*([KMG]i?B)", left)
+    if not m:
+        return 0.0
+    value, unit = float(m.group(1)), m.group(2)
+    return value * _MEM_UNITS.get(unit, 1.0)
+
+
+def _is_excluded(container_name):
+    n = container_name.lower()
+    if not n.startswith(INCLUDE_CONTAINER_PREFIX):
+        return True
+    return any(p in n for p in EXCLUDE_CONTAINER_PATTERNS)
+
+
+def parse_stats_file(path):
+    """Aggregate one rep's docker stats jsonl into per-rep summary.
+
+    Returns dict with: peak_cpu_pct (sum across containers, peak sample),
+    peak_mem_mib (sum across containers, peak sample), avg_cpu_pct, avg_mem_mib,
+    plus per-container breakdown.
+    """
+    # Group samples by timestamp (each sample writes one line per container,
+    # so we re-bucket by sample number using the order of arrival).
+    # docker stats prints all containers in one batch per --no-stream call, so
+    # consecutive same-container names mark a new sample.
+    samples = []  # list of {container_name: {cpu, mem}}
+    seen_in_sample = set()
+    current = {}
+
+    with open(path, "r", encoding="utf-8", errors="ignore") as f:
+        for line in f:
+            line = line.strip()
+            if not line:
+                continue
+            try:
+                obj = json.loads(line)
+            except json.JSONDecodeError:
+                continue
+            name = obj.get("Name") or obj.get("Container") or ""
+            if not name or _is_excluded(name):
+                continue
+            if name in seen_in_sample:
+                # New sample begins
+                samples.append(current)
+                current = {}
+                seen_in_sample = set()
+            current[name] = {
+                "cpu_pct": _parse_pct(obj.get("CPUPerc", "0%")),
+                "mem_mib": _parse_mem_mib(obj.get("MemUsage", "0B / 0B")),
+            }
+            seen_in_sample.add(name)
+    if current:
+        samples.append(current)
+
+    if not samples:
+        return None
+
+    # Total per sample = sum across containers in that sample (the stack's
+    # total resource use at that moment).
+    total_cpu_per_sample = [sum(c["cpu_pct"] for c in s.values()) for s in samples]
+    total_mem_per_sample = [sum(c["mem_mib"] for c in s.values()) for s in samples]
+
+    # Per-container peak across all samples (useful to call out hottest service).
+    per_container = {}
+    all_names = set().union(*(s.keys() for s in samples))
+    for name in all_names:
+        cpu_series = [s[name]["cpu_pct"] for s in samples if name in s]
+        mem_series = [s[name]["mem_mib"] for s in samples if name in s]
+        if cpu_series:
+            per_container[name] = {
+                "peak_cpu_pct": max(cpu_series),
+                "avg_cpu_pct": mean(cpu_series),
+                "peak_mem_mib": max(mem_series),
+                "avg_mem_mib": mean(mem_series),
+            }
+
+    return {
+        "n_samples": len(samples),
+        "peak_cpu_pct": max(total_cpu_per_sample),
+        "avg_cpu_pct": mean(total_cpu_per_sample),
+        "peak_mem_mib": max(total_mem_per_sample),
+        "avg_mem_mib": mean(total_mem_per_sample),
+        "per_container": per_container,
+    }
+
+
+def load_all_stats(results_dir):
+    """Return {arch: {profile: [list of per-rep stats summaries]}}."""
+    by_arch = {a: {p: [] for p in PROFILES} for a in ARCHITECTURES}
+    for arch in ARCHITECTURES:
+        for profile in PROFILES:
+            for rep in range(1, 10):
+                f = results_dir / f"{arch}_{profile}_rep{rep}_stats.jsonl"
+                if not f.exists():
+                    continue
+                try:
+                    s = parse_stats_file(f)
+                    if s:
+                        by_arch[arch][profile].append(s)
+                except Exception as e:
+                    print(f"! Failed to parse stats {f.name}: {e}")
+    return by_arch
+
+
 def aggregate(reps, metric):
     """Mean, std, min, max across reps for a single metric."""
     vals = [r[metric] for r in reps if r.get(metric) is not None]
@@ -166,7 +299,7 @@ def fmt_pct(stat):
     return f"{stat['mean']*100:.2f}% ± {stat['std']*100:.2f}%"
 
 
-def build_report(by_arch):
+def build_report(by_arch, by_arch_stats=None):
     out = []
     out.append("# Statistical Analysis of Performance Experiments\n")
     out.append(f"\nGenerated: {__import__('datetime').datetime.now().isoformat()}\n")
@@ -228,6 +361,49 @@ def build_report(by_arch):
                 out.append(f"| {a} vs {b} | {cmp['p_value']:.4f} | {sig} | {cmp['cliffs_delta']} | "
                            f"{cmp['effect']} | {cmp['faster']} |")
 
+    # ─── Resource consumption (docker stats) ────────────────────────────────
+    if by_arch_stats:
+        out.append("\n## Resource consumption (docker stats during benchmark)\n")
+        out.append("Sums across all workload containers (monitoring sidecars excluded).\n")
+        out.append("CPU% is normalized: 100% = 1 logical core fully used.\n")
+        for profile in PROFILES:
+            any_data = any(by_arch_stats[a][profile] for a in ARCHITECTURES)
+            if not any_data:
+                continue
+            out.append(f"\n### {profile.upper()} — observed resource usage\n")
+            out.append("| Architecture | Peak CPU% | Avg CPU% | Peak RAM (MiB) | Avg RAM (MiB) | n |")
+            out.append("|---|---|---|---|---|---|")
+            for arch in ARCHITECTURES:
+                reps = by_arch_stats[arch][profile]
+                if not reps:
+                    out.append(f"| {arch} | _no data_ | _no data_ | _no data_ | _no data_ | 0 |")
+                    continue
+                peak_cpu = [r["peak_cpu_pct"] for r in reps]
+                avg_cpu = [r["avg_cpu_pct"] for r in reps]
+                peak_mem = [r["peak_mem_mib"] for r in reps]
+                avg_mem = [r["avg_mem_mib"] for r in reps]
+                n = len(reps)
+                pc_m = mean(peak_cpu); pc_s = stdev(peak_cpu) if n > 1 else 0
+                ac_m = mean(avg_cpu); ac_s = stdev(avg_cpu) if n > 1 else 0
+                pm_m = mean(peak_mem); pm_s = stdev(peak_mem) if n > 1 else 0
+                am_m = mean(avg_mem); am_s = stdev(avg_mem) if n > 1 else 0
+                out.append(f"| {arch} | {pc_m:.0f} ± {pc_s:.0f}% | {ac_m:.0f} ± {ac_s:.0f}% | "
+                           f"{pm_m:.0f} ± {pm_s:.0f} | {am_m:.0f} ± {am_s:.0f} | {n} |")
+
+            # Per-container breakdown for the first rep of each arch — shows
+            # which service is the bottleneck inside microservices.
+            out.append("\n#### Per-container peak (first rep)\n")
+            out.append("| Architecture | Container | Peak CPU% | Peak RAM (MiB) |")
+            out.append("|---|---|---|---|")
+            for arch in ARCHITECTURES:
+                reps = by_arch_stats[arch][profile]
+                if not reps:
+                    continue
+                pc = reps[0]["per_container"]
+                for name, m in sorted(pc.items(), key=lambda kv: -kv[1]["peak_cpu_pct"]):
+                    out.append(f"| {arch} | {name} | {m['peak_cpu_pct']:.0f}% | "
+                               f"{m['peak_mem_mib']:.0f} |")
+
     # ─── Interpretation guide ───────────────────────────────────────────────
     out.append("\n## How to read this report\n")
     out.append("- **CV (Coefficient of Variation):** measurement stability. < 5% is good, > 10% suggests noisy environment.")
@@ -254,18 +430,20 @@ def main():
         sys.exit(1)
 
     by_arch = load_all(args.results_dir)
+    by_arch_stats = load_all_stats(args.results_dir)
 
     # Sanity log
     for arch in ARCHITECTURES:
         for profile in PROFILES:
             n = len(by_arch[arch][profile])
-            print(f"  {arch:15s} {profile:10s} : {n} reps loaded")
+            n_stats = len(by_arch_stats[arch][profile])
+            print(f"  {arch:15s} {profile:10s} : {n} reps loaded, {n_stats} stats files")
 
-    report = build_report(by_arch)
+    report = build_report(by_arch, by_arch_stats)
 
     output = args.output or args.results_dir / "analysis.md"
     output.write_text(report, encoding="utf-8")
-    print(f"\n✔ Report written to: {output}")
+    print(f"\nOK Report written to: {output}")
 
     # Also dump raw aggregated JSON
     json_out = args.results_dir / "analysis.json"
@@ -280,7 +458,7 @@ def main():
                 k: aggregate(reps, k) for k in reps[0].keys()
             }
     json_out.write_text(json.dumps(dump, indent=2, default=str), encoding="utf-8")
-    print(f"✔ Raw aggregates: {json_out}")
+    print(f"OK Raw aggregates: {json_out}")
 
 
 if __name__ == "__main__":

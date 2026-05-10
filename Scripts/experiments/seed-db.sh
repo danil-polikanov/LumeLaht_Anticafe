@@ -4,6 +4,13 @@
 
 set -euo pipefail
 
+# Git Bash on Windows rewrites unix-style absolute paths in command args into
+# Windows paths (e.g. `/opt/x` -> `C:/Program Files/Git/opt/x`). That breaks
+# `docker exec ... /opt/mssql-tools18/bin/sqlcmd` because the path is meant to
+# resolve inside the container. Disable the conversion for this script.
+export MSYS_NO_PATHCONV=1
+export MSYS2_ARG_CONV_EXCL='*'
+
 ARCH="${1:-}"
 if [[ -z "$ARCH" ]]; then
     echo "Usage: $0 <monolith|separated|microservices>"
@@ -15,11 +22,14 @@ SEED_PASSWORD='SeedPass123!'
 N_USERS=10000
 N_BOOKINGS=50000
 
-# Generate bcrypt hash for seed password (one hash, all users share it — perf-neutral)
+# Generate bcrypt hash for seed password (one hash, all users share it — perf-neutral).
+# Use `python` not `python3` for cross-platform: on Windows `python3` is a Microsoft
+# Store launcher stub that does not see user-installed packages.
 echo "[seed] Generating bcrypt hash for seed password..."
-HASH=$(python3 -c "import bcrypt; print(bcrypt.hashpw(b'${SEED_PASSWORD}', bcrypt.gensalt(10)).decode())")
+PY=$(command -v python || command -v python3)
+HASH=$("$PY" -c "import bcrypt; print(bcrypt.hashpw(b'${SEED_PASSWORD}', bcrypt.gensalt(10)).decode())")
 if [[ -z "$HASH" ]]; then
-    echo "[seed] ERROR: Python bcrypt not installed. Run: pip3 install bcrypt"
+    echo "[seed] ERROR: Python bcrypt not installed. Run: pip install bcrypt"
     exit 1
 fi
 echo "[seed] Hash: ${HASH:0:7}...${HASH: -7}"

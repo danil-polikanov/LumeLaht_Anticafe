@@ -1,3 +1,4 @@
 monolith
 separated
 microservices
+monolith

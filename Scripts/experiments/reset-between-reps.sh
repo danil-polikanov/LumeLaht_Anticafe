@@ -6,6 +6,10 @@
 
 set -euo pipefail
 
+# See seed-db.sh for explanation.
+export MSYS_NO_PATHCONV=1
+export MSYS2_ARG_CONV_EXCL='*'
+
 ARCH="${1:-}"
 SA_PASSWORD='LumeLaht_Pass123!'
 
