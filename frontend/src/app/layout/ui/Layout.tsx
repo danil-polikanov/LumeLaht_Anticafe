@@ -24,16 +24,25 @@ export const Layout = () => {
     <div className="relative min-h-screen flex flex-col">
       <Toaster
         position="top-right"
+        containerStyle={{ zIndex: 999999 }}
         toastOptions={{
-          duration: 4000,
+          duration: 6000,
           style: {
-            borderRadius: '12px',
-            background: '#333',
+            borderRadius: '14px',
+            background: '#1f2937',
             color: '#fff',
-            fontSize: '14px',
+            fontSize: '15px',
+            padding: '14px 18px',
+            minWidth: '320px',
+            maxWidth: '480px',
+            boxShadow: '0 10px 40px rgba(0,0,0,0.35)',
           },
           success: {
             iconTheme: { primary: '#CE9857', secondary: '#fff' },
+          },
+          error: {
+            duration: 7000,
+            iconTheme: { primary: '#ef4444', secondary: '#fff' },
           },
         }}
       />

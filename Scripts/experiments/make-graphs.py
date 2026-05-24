@@ -7,7 +7,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 ARCHS = ["monolith", "separated", "microservices"]
-PROFILES = ["constant", "rampup"]
+PROFILES = ["constant", "rampup", "spike"]
 ENDPOINTS = [
     ("register_duration", "Register"),
     ("login_duration", "Login"),

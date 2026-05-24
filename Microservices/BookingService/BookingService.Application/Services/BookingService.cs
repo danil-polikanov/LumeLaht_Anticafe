@@ -32,12 +32,19 @@ namespace BookingService.Application.Services
             if (room.Status != "Available")
                 throw new InvalidOperationException("Room is not available");
 
+            var requestUtc = request.StartTime.Kind switch
+            {
+                DateTimeKind.Utc => request.StartTime,
+                DateTimeKind.Local => request.StartTime.ToUniversalTime(),
+                _ => DateTime.SpecifyKind(request.StartTime, DateTimeKind.Utc)
+            };
+
             var startTime = new DateTime(
-                request.StartTime.Year, request.StartTime.Month, request.StartTime.Day,
-                request.StartTime.Hour, 0, 0, DateTimeKind.Utc);
+                requestUtc.Year, requestUtc.Month, requestUtc.Day,
+                requestUtc.Hour, 0, 0, DateTimeKind.Utc);
             var endTime = startTime.AddHours(1);
 
-            if (startTime < DateTime.UtcNow)
+            if (startTime <= DateTime.UtcNow)
                 throw new InvalidOperationException("Cannot book a slot in the past");
 
             var hasConflict = await _unitOfWork.Bookings.HasConflictAsync(

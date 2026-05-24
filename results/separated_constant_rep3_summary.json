@@ -1,0 +1,305 @@
+{
+    "root_group": {
+        "path": "",
+        "id": "d41d8cd98f00b204e9800998ecf8427e",
+        "groups": {
+            "Browse Rooms": {
+                "name": "Browse Rooms",
+                "path": "::Browse Rooms",
+                "id": "0141fb1a36453ca081e01ca01ac2160a",
+                "groups": {},
+                "checks": {
+                        "rooms: status 200": {
+                            "name": "rooms: status 200",
+                            "path": "::Browse Rooms::rooms: status 200",
+                            "id": "3f64fcbbe801f6033c8620bb847a83d6",
+                            "passes": 1034,
+                            "fails": 0
+                        }
+                    }
+            },
+            "Register": {
+                "checks": {
+                    "register: status 200": {
+                        "id": "7a2ac06f0dd830e929e2cbfd16bcee44",
+                        "passes": 1034,
+                        "fails": 0,
+                        "name": "register: status 200",
+                        "path": "::Register::register: status 200"
+                    }
+                },
+                "name": "Register",
+                "path": "::Register",
+                "id": "acfc2bfb894daa61faa1d6c3b5465f9f",
+                "groups": {}
+            },
+            "Login": {
+                "groups": {},
+                "checks": {
+                        "login: status 200": {
+                            "name": "login: status 200",
+                            "path": "::Login::login: status 200",
+                            "id": "249c9932f5f653e43107a3824715be1c",
+                            "passes": 1034,
+                            "fails": 0
+                        }
+                    },
+                "name": "Login",
+                "path": "::Login",
+                "id": "3be6f351497d03a0d837b765965c8d50"
+            },
+            "Select Room": {
+                "checks": {},
+                "name": "Select Room",
+                "path": "::Select Room",
+                "id": "cf817f4b9642fed85b39f68e4b70868a",
+                "groups": {}
+            },
+            "Create Booking": {
+                "groups": {},
+                "checks": {
+                        "booking: status 200": {
+                            "name": "booking: status 200",
+                            "path": "::Create Booking::booking: status 200",
+                            "id": "70155b63c9eff2ca80206cb389c70138",
+                            "passes": 1025,
+                            "fails": 9
+                        }
+                    },
+                "name": "Create Booking",
+                "path": "::Create Booking",
+                "id": "48b08ee3ff4deeba07311f17741a0c6a"
+            },
+            "My Bookings": {
+                "name": "My Bookings",
+                "path": "::My Bookings",
+                "id": "dbe070410080e8d5d5e962a9b34db870",
+                "groups": {},
+                "checks": {
+                        "my bookings: status 200": {
+                            "fails": 0,
+                            "name": "my bookings: status 200",
+                            "path": "::My Bookings::my bookings: status 200",
+                            "id": "0aeff18ef186bff2400608f630285d56",
+                            "passes": 1034
+                        }
+                    }
+            },
+            "Cancel Booking": {
+                "name": "Cancel Booking",
+                "path": "::Cancel Booking",
+                "id": "c2dd4243ba6518ee2d41acf1e8d56361",
+                "groups": {},
+                "checks": {
+                        "cancel: status 204": {
+                            "name": "cancel: status 204",
+                            "path": "::Cancel Booking::cancel: status 204",
+                            "id": "4a0877c67f1d69fee217b3dcac02184a",
+                            "passes": 1025,
+                            "fails": 0
+                        }
+                    }
+            }
+        },
+        "checks": {},
+        "name": ""
+    },
+    "metrics": {
+        "iteration_duration": {
+            "min": 7233.4543,
+            "med": 7383.678,
+            "max": 8173.7705,
+            "p(90)": 7724.17725,
+            "p(95)": 7812.236475,
+            "avg": 7442.7226366537725
+        },
+        "checks": {
+            "passes": 6186,
+            "fails": 9,
+            "value": 0.998547215496368
+        },
+        "http_req_waiting": {
+            "p(90)": 166.3406,
+            "p(95)": 223.14301999999986,
+            "avg": 62.479885903997705,
+            "min": 0.7598,
+            "med": 11.5407,
+            "max": 709.5029
+        },
+        "vus": {
+            "value": 4,
+            "min": 1,
+            "max": 49
+        },
+        "data_received": {
+            "count": 49168541,
+            "rate": 160014.50989674265
+        },
+        "login_duration": {
+            "p(95)": 306.66005499999994,
+            "avg": 150.7513963249518,
+            "min": 93.8032,
+            "med": 115.6677,
+            "max": 512.3476,
+            "p(90)": 249.80740000000003,
+            "thresholds": {
+                "p(95)<10000": false
+            }
+        },
+        "http_req_failed": {
+            "passes": 9,
+            "fails": 7220,
+            "thresholds": {
+                "rate<0.05": false
+            },
+            "value": 0.0012449854751694564
+        },
+        "group_duration": {
+            "p(90)": 166.38079999999997,
+            "p(95)": 223.33395999999996,
+            "avg": 62.913520099598884,
+            "min": 0.7598,
+            "med": 11.847,
+            "max": 709.5029
+        },
+        "vus_max": {
+            "value": 50,
+            "min": 50,
+            "max": 50
+        },
+        "iterations": {
+            "count": 1034,
+            "rate": 3.365058223574946
+        },
+        "http_req_receiving": {
+            "p(95)": 0.568,
+            "avg": 0.11891437266565236,
+            "min": 0,
+            "med": 0,
+            "max": 64.8869,
+            "p(90)": 0.52212
+        },
+        "http_req_blocked": {
+            "p(90)": 0,
+            "p(95)": 0,
+            "avg": 0.00795417070134182,
+            "min": 0,
+            "med": 0,
+            "max": 2.5611
+        },
+        "http_req_tls_handshaking": {
+            "p(95)": 0,
+            "avg": 0,
+            "min": 0,
+            "med": 0,
+            "max": 0,
+            "p(90)": 0
+        },
+        "http_req_sending": {
+            "p(90)": 0,
+            "p(95)": 0,
+            "avg": 0.0049898326186194495,
+            "min": 0,
+            "med": 0,
+            "max": 1.1014
+        },
+        "http_req_duration{expected_response:true}": {
+            "med": 11.602599999999999,
+            "max": 709.5029,
+            "p(90)": 166.36163000000008,
+            "p(95)": 223.30198999999996,
+            "avg": 62.63965181440446,
+            "min": 0.7598
+        },
+        "data_sent": {
+            "count": 3192040,
+            "rate": 10388.20159765974
+        },
+        "rooms_duration": {
+            "min": 3.8261,
+            "med": 6.8428,
+            "max": 380.7444,
+            "p(90)": 50.30467999999998,
+            "p(95)": 106.57815999999987,
+            "avg": 19.55882823984528,
+            "thresholds": {
+                "p(95)<2000": false
+            }
+        },
+        "booking_duration": {
+            "med": 12.2522,
+            "max": 419.5251,
+            "p(90)": 78.82402000000002,
+            "p(95)": 125.90940499999995,
+            "avg": 29.450760638297865,
+            "min": 5.6736,
+            "thresholds": {
+                "p(95)<5000": false
+            }
+        },
+        "http_reqs": {
+            "count": 7229,
+            "rate": 23.526117889964492
+        },
+        "http_req_connecting": {
+            "min": 0,
+            "med": 0,
+            "max": 2.5611,
+            "p(90)": 0,
+            "p(95)": 0,
+            "avg": 0.005671393000414994
+        },
+        "cancel_duration": {
+            "p(90)": 111.5117,
+            "p(95)": 139.55587999999986,
+            "avg": 31.566089658536562,
+            "min": 0.8115,
+            "med": 10.5871,
+            "max": 419.2572,
+            "thresholds": {
+                "p(95)<2000": false
+            }
+        },
+        "http_req_duration": {
+            "avg": 62.603790109282095,
+            "min": 0.7598,
+            "med": 11.6058,
+            "max": 709.5029,
+            "p(90)": 166.3406,
+            "p(95)": 223.29727999999997,
+            "thresholds": {
+                "p(95)<10000": false
+            }
+        },
+        "errors": {
+            "passes": 9,
+            "fails": 6186,
+            "thresholds": {
+                "rate<0.05": false
+            },
+            "value": 0.0014527845036319612
+        },
+        "my_bookings_duration": {
+            "med": 4.237349999999999,
+            "max": 303.459,
+            "p(90)": 75.69293000000008,
+            "p(95)": 107.4549649999999,
+            "avg": 19.677063926499045,
+            "min": 0.7598,
+            "thresholds": {
+                "p(95)<2000": false
+            }
+        },
+        "register_duration": {
+            "avg": 167.39340967118008,
+            "min": 97.3069,
+            "med": 126.2721,
+            "max": 709.5029,
+            "p(90)": 287.96785,
+            "p(95)": 334.65048499999995,
+            "thresholds": {
+                "p(95)<10000": false
+            }
+        }
+    }
+}
