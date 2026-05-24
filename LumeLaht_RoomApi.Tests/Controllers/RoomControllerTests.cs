@@ -23,9 +23,6 @@ using Xunit;
 
 namespace LumeLaht_RoomApi.Tests.Controllers
 {
-    /// <summary>
-    /// Полные тесты для RoomController
-    /// </summary>
     public class RoomControllerTests
     {
         private readonly Mock<IRoomService> _roomServiceMock;
@@ -34,7 +31,6 @@ namespace LumeLaht_RoomApi.Tests.Controllers
         private readonly IMapper _mapper;
         private readonly RoomController _controller;
 
-        // Фиксированные Guid
         private readonly Guid Room1Id = Guid.Parse("aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa");
         private readonly Guid Room2Id = Guid.Parse("bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb");
 

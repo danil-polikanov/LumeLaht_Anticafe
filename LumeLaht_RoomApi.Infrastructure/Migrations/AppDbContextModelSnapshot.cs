@@ -305,9 +305,10 @@ namespace LumeLaht_RoomApi.Infrastructure.Migrations
 
                     b.HasKey("BookingId");
 
-                    b.HasIndex("RoomId");
-
                     b.HasIndex("UserId");
+
+                    b.HasIndex("RoomId", "StartTime", "EndTime")
+                        .HasDatabaseName("IX_Bookings_RoomId_StartTime_EndTime");
 
                     b.ToTable("Bookings");
                 });

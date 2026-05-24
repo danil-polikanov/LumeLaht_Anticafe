@@ -12,10 +12,6 @@ using Xunit;
 
 namespace LumeLaht_RoomApi.Tests.Repositories
 {
-    /// <summary>
-    /// Тесты для базового репозитория Repository<T>
-    /// Используем Address как тестовую сущность, так как она простая
-    /// </summary>
     public class GenericRepositoryTests : IDisposable
     {
         private readonly AppDbContext _context;
@@ -152,7 +148,6 @@ namespace LumeLaht_RoomApi.Tests.Repositories
             Assert.NotNull(result);
             Assert.Equal(address.AddressId, result.AddressId);
 
-            // Проверяем, что сущность действительно сохранена в БД
             var savedAddress = await _context.Address.FindAsync(address.AddressId);
             Assert.NotNull(savedAddress);
             Assert.Equal(address.City, savedAddress.City);
@@ -167,7 +162,7 @@ namespace LumeLaht_RoomApi.Tests.Repositories
             // Act
             await _repository.AddAsync(address, CancellationToken.None);
 
-            // Assert - проверяем, что SaveChanges был вызван автоматически
+            // Assert
             var count = await _context.Address.CountAsync();
             Assert.Equal(1, count);
         }
@@ -212,7 +207,6 @@ namespace LumeLaht_RoomApi.Tests.Repositories
             await _context.Address.AddAsync(address);
             await _context.SaveChangesAsync();
 
-            // Изменяем данные
             address.City = "Новый город";
             address.AddressName = "Новый адрес";
 
@@ -239,7 +233,7 @@ namespace LumeLaht_RoomApi.Tests.Repositories
             // Act
             await _repository.UpdateAsync(address, CancellationToken.None);
 
-            // Assert - создаем новый контекст, чтобы убедиться, что изменения сохранены
+            // Assert
             _context.ChangeTracker.Clear();
             var verifyAddress = await _context.Address.FindAsync(address.AddressId);
             Assert.Equal("Обновлено", verifyAddress.City);
@@ -265,10 +259,8 @@ namespace LumeLaht_RoomApi.Tests.Repositories
             await _context.Address.AddAsync(address);
             await _context.SaveChangesAsync();
 
-            // Отсоединяем сущность
             _context.Entry(address).State = EntityState.Detached;
 
-            // Изменяем отсоединенную сущность
             address.City = "Изменено";
 
             // Act
@@ -309,10 +301,9 @@ namespace LumeLaht_RoomApi.Tests.Repositories
             // Arrange
             var nonExistentId = Guid.NewGuid();
 
-            // Act & Assert - не должно выбросить исключение
+            // Act & Assert
             await _repository.DeleteAsync(nonExistentId, CancellationToken.None);
 
-            // Проверяем, что ничего не произошло
             var count = await _context.Address.CountAsync();
             Assert.Equal(0, count);
         }
@@ -328,7 +319,7 @@ namespace LumeLaht_RoomApi.Tests.Repositories
             // Act
             await _repository.DeleteAsync(address.AddressId, CancellationToken.None);
 
-            // Assert - создаем новый запрос, чтобы убедиться, что изменения сохранены
+            // Assert
             var count = await _context.Address.CountAsync();
             Assert.Equal(0, count);
         }
@@ -343,7 +334,7 @@ namespace LumeLaht_RoomApi.Tests.Repositories
             await _context.Address.AddRangeAsync(address1, address2, address3);
             await _context.SaveChangesAsync();
 
-            // Act - удаляем только второй адрес
+            // Act
             await _repository.DeleteAsync(address2.AddressId, CancellationToken.None);
 
             // Assert
@@ -356,23 +347,23 @@ namespace LumeLaht_RoomApi.Tests.Repositories
 
         #endregion
 
-        #region Integration Tests (комплексные сценарии)
+        #region Integration Tests
 
         [Fact]
         public async Task CompleteWorkflow_AddUpdateDelete_WorksCorrectly()
         {
-            // Arrange & Act - Добавление
+            // Arrange & Act
             var address = CreateAddress("Исходный");
             var added = await _repository.AddAsync(address, CancellationToken.None);
             Assert.Equal(1, await _context.Address.CountAsync());
 
-            // Act - Обновление
+            // Act
             added.City = "Обновленный";
             await _repository.UpdateAsync(added, CancellationToken.None);
             var updated = await _repository.GetByIdAsync(added.AddressId, CancellationToken.None);
             Assert.Equal("Обновленный", updated.City);
 
-            // Act - Удаление
+            // Act
             await _repository.DeleteAsync(added.AddressId, CancellationToken.None);
             var deleted = await _repository.GetByIdAsync(added.AddressId, CancellationToken.None);
             Assert.Null(deleted);
@@ -387,7 +378,7 @@ namespace LumeLaht_RoomApi.Tests.Repositories
                 .Select(i => CreateAddress($"Город {i}"))
                 .ToList();
 
-            // Act - параллельное добавление
+            // Act
             var tasks = addresses.Select(a => _repository.AddAsync(a, CancellationToken.None));
             await Task.WhenAll(tasks);
 

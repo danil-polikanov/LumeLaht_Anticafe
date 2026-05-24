@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RunSettings>
+  <DataCollectionRunSettings>
+    <DataCollectors>
+      <DataCollector friendlyName="XPlat code coverage">
+        <Configuration>
+          <Format>cobertura</Format>
+          <Include>[LumeLaht_RoomApi*]*</Include>
+          <Exclude>[*Tests]*</Exclude>
+          <ExcludeByFile>**/Migrations/*.cs,**/Program.cs,**/Middlewares/*.cs,**/Extensions/*.cs,**/HttpClients/*.cs,**/obj/**/*.cs,**/AppDbContextModelSnapshot.cs</ExcludeByFile>
+          <SingleHit>false</SingleHit>
+          <UseSourceLink>false</UseSourceLink>
+          <IncludeTestAssembly>false</IncludeTestAssembly>
+          <SkipAutoProps>true</SkipAutoProps>
+          <DeterministicReport>false</DeterministicReport>
+        </Configuration>
+      </DataCollector>
+    </DataCollectors>
+  </DataCollectionRunSettings>
+</RunSettings>

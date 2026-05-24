@@ -13,10 +13,10 @@ export const RoomDetailOverlay: React.FC<{
   const token = useAppSelector((state) => state.auth.token);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [showAuthModal, setShowAuthModal] = useState(false);
-  const [selectedDate, setSelectedDate] = useState(() => {
-    const today = new Date();
-    return today.toISOString().split('T')[0];
-  });
+  const toLocalDateStr = (d: Date) =>
+    `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+
+  const [selectedDate, setSelectedDate] = useState(() => toLocalDateStr(new Date()));
   const [selectedHour, setSelectedHour] = useState<number | null>(null);
   const [createBooking, { isLoading: isBooking }] = useCreateBookingMutation();
 
@@ -27,10 +27,22 @@ export const RoomDetailOverlay: React.FC<{
 
   const bookedHours = new Set(roomBookings?.map((b) => new Date(b.startTime).getHours()) ?? []);
 
-  const isToday = selectedDate === new Date().toISOString().split('T')[0];
-  const currentHour = new Date().getHours();
+  const [nowTick, setNowTick] = useState(() => new Date());
+  useEffect(() => {
+    const id = setInterval(() => setNowTick(new Date()), 30_000);
+    return () => clearInterval(id);
+  }, []);
 
-  const timeSlots = Array.from({ length: 13 }, (_, i) => i + 9); // 9:00–21:00
+  const todayLocalStr = toLocalDateStr(nowTick);
+  const isToday = selectedDate === todayLocalStr;
+  const currentHour = nowTick.getHours();
+
+  const timeSlots = Array.from({ length: 13 }, (_, i) => i + 9); // 9:00–21:00 local
+
+  const buildLocalStart = (dateStr: string, hour: number) => {
+    const [year, month, day] = dateStr.split('-').map(Number);
+    return new Date(year, month - 1, day, hour, 0, 0, 0);
+  };
 
   const handleBook = async () => {
     if (!token) {
@@ -41,7 +53,13 @@ export const RoomDetailOverlay: React.FC<{
       toast.error('Please select a time slot');
       return;
     }
-    const startTimeStr = `${selectedDate}T${String(selectedHour).padStart(2, '0')}:00:00`;
+    const localStart = buildLocalStart(selectedDate, selectedHour);
+    if (localStart.getTime() <= Date.now()) {
+      toast.error('Selected time slot has already passed');
+      setSelectedHour(null);
+      return;
+    }
+    const startTimeStr = localStart.toISOString();
     try {
       await createBooking({ roomId: room.roomId!, startTime: startTimeStr }).unwrap();
       toast.success('Booking confirmed!');
@@ -254,7 +272,7 @@ export const RoomDetailOverlay: React.FC<{
                   <input
                     type="date"
                     value={selectedDate}
-                    min={new Date().toISOString().split('T')[0]}
+                    min={todayLocalStr}
                     onChange={(e) => {
                       setSelectedDate(e.target.value);
                       setSelectedHour(null);

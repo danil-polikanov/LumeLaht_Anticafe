@@ -77,7 +77,7 @@ namespace LumaCove_RoomApi.Controllers
             if (updated == null)
                 return NotFound();
 
-            return Ok(updated); // или NoContent() если не возвращаешь ничего
+            return Ok(updated);
         }
 
         [HttpDelete("{id:guid}")]

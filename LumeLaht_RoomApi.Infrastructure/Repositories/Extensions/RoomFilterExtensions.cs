@@ -88,13 +88,12 @@ namespace LumeLaht_RoomApi.Infrastructure.Repositories.Extensions
         public static IQueryable<Room> ApplyActivityFilter(this IQueryable<Room> query, FilterOptions options)
         {
             if (options.Filters.TryGetValue("ActivitiesIds", out var activityIds)
-                && activityIds is List<Guid> ids && ids.Any())
+                && activityIds is List<Guid> ids && ids.Count > 0)
             {
-                foreach (var id in ids)
-                {
-                    var capturedId = id;
-                    query = query.Where(r => r.RoomActivity.Any(ra => ra.ActivityId == capturedId));
-                }
+                var distinctIds = ids.Distinct().ToList();
+                var requiredCount = distinctIds.Count;
+                query = query.Where(r =>
+                    r.RoomActivity.Count(ra => distinctIds.Contains(ra.ActivityId)) == requiredCount);
             }
 
             return query;

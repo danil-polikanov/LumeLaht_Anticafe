@@ -11,10 +11,6 @@ using Xunit;
 
 namespace LumeLaht_RoomApi.Tests.Repositories
 {
-    /// <summary>
-    /// Тесты для базового репозитория с использованием Activity
-    /// Показывает, что Repository<T> работает с любыми сущностями
-    /// </summary>
     public class GenericRepository_ActivityTests : IDisposable
     {
         private readonly AppDbContext _context;
@@ -44,7 +40,8 @@ namespace LumeLaht_RoomApi.Tests.Repositories
             {
                 ActivityId = Guid.NewGuid(),
                 Name = "Йога",
-                Description = "Занятия йогой для начинающих"
+                Description = "Занятия йогой для начинающих",
+                Category = "Sport"
             };
 
             // Act
@@ -62,9 +59,9 @@ namespace LumeLaht_RoomApi.Tests.Repositories
             // Arrange
             var activities = new List<Activity>
             {
-                new Activity { ActivityId = Guid.NewGuid(), Name = "Йога", Description = "Desc 1" },
-                new Activity { ActivityId = Guid.NewGuid(), Name = "Фитнес", Description = "Desc 2" },
-                new Activity { ActivityId = Guid.NewGuid(), Name = "Бокс", Description = "Desc 3" }
+                new Activity { ActivityId = Guid.NewGuid(), Name = "Йога", Description = "Desc 1", Category = "Sport" },
+                new Activity { ActivityId = Guid.NewGuid(), Name = "Фитнес", Description = "Desc 2", Category = "Sport" },
+                new Activity { ActivityId = Guid.NewGuid(), Name = "Бокс", Description = "Desc 3", Category = "Sport" }
             };
             await _context.Activities.AddRangeAsync(activities);
             await _context.SaveChangesAsync();
@@ -90,7 +87,8 @@ namespace LumeLaht_RoomApi.Tests.Repositories
             {
                 ActivityId = Guid.NewGuid(),
                 Name = "Старое название",
-                Description = "Описание"
+                Description = "Описание",
+                Category = "Sport"
             };
             await _context.Activities.AddAsync(activity);
             await _context.SaveChangesAsync();
@@ -112,7 +110,8 @@ namespace LumeLaht_RoomApi.Tests.Repositories
             {
                 ActivityId = Guid.NewGuid(),
                 Name = "Временная активность",
-                Description = "Будет удалена"
+                Description = "Будет удалена",
+                Category = "Sport"
             };
             await _context.Activities.AddAsync(activity);
             await _context.SaveChangesAsync();

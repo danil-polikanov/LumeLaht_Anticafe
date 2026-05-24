@@ -85,7 +85,6 @@ public class ImageController : ControllerBase
         if (uploadIndex < 0) return null;
 
         var afterUpload = path[(uploadIndex + "/upload/".Length)..];
-        // Skip version segment (v1234567890/)
         if (afterUpload.StartsWith('v') && afterUpload.Contains('/'))
             afterUpload = afterUpload[(afterUpload.IndexOf('/') + 1)..];
 

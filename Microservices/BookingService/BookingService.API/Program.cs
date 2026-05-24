@@ -59,10 +59,16 @@ namespace BookingService.API
             });
 
             // DbContext
-            builder.Services.AddDbContext<BookingDbContext>(option =>
+            var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+            if (!string.IsNullOrEmpty(connectionString) &&
+                !connectionString.Contains("Max Pool Size", StringComparison.OrdinalIgnoreCase))
             {
-                option.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"))
-                    .LogTo(Console.WriteLine, LogLevel.Information);
+                connectionString += ";Max Pool Size=100;Connection Timeout=10";
+            }
+            builder.Services.AddDbContextPool<BookingDbContext>(option =>
+            {
+                option.UseSqlServer(connectionString, sql =>
+                    sql.CommandTimeout(30).EnableRetryOnFailure(3));
             });
 
             // JWT Authentication
@@ -102,7 +108,7 @@ namespace BookingService.API
             using (var scope = app.Services.CreateScope())
             {
                 var db = scope.ServiceProvider.GetRequiredService<BookingDbContext>();
-                db.Database.Migrate();
+                db.Database.EnsureCreated();
             }
 
             app.UseCors("AllowReactApp");

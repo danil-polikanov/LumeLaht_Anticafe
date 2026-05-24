@@ -19,12 +19,33 @@ LumeLaht_Anticafe/appsettings.Local.json
 # Personal thesis planning document
 DIPLOMA_PLAN.md
 
-# Thesis document
+# Thesis documents (personal, not for repo)
+Polikanov_prediploma_2026.docx
 Polikanov_diploma_Reworked.docx
-
-# Local tooling / diploma scripts
+Polikanov_diploma_2026.docx
+Polikanov_prediploma_2026_RU.md
+Presentation_script_ee_ru.md
+Presentation_speech_only.md
+section_1.4_related_work.md
+# Local tooling / diploma scripts (used only on author's machine)
 tools/
 Scripts/k6/test-results.md
+Scripts/add_license_authorship.py
+Scripts/add_sisukord.py
+Scripts/create_kokkuvote_resumee.py
+Scripts/update_chapter3_real_results.py
+Scripts/experiments/make_thesis_charts.py
+
+# Claude Code local state
+.claude/scheduled_tasks.lock
+
+# TalTech methodology PDF (third-party)
+frontend/loputoode_struktuur.pdf
+frontend/loputoode_struktuur.txt
+frontend/loputoode_struktuur_utf8.txt
+
+# Experiment results — committed so data is available on all machines
+# results/
 
 # Frontend build output
 frontend/dist/
@@ -380,3 +401,7 @@ MigrationBackup/
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
 .claude/worktrees/
+# ignore uncompressed raw dumps (IDE sometimes decompresses .gz)
+results/*_raw.json
+
+graphs

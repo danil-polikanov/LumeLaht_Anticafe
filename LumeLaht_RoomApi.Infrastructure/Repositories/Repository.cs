@@ -23,7 +23,7 @@ namespace LumeLaht_RoomApi.Infrastructure.Repositories
             _dbSet = context.Set<T>();
         }
         public virtual async Task<List<T>> GetAllAsync(CancellationToken cancellationToken)
-            => await _dbSet.ToListAsync(cancellationToken);
+            => await _dbSet.AsNoTracking().ToListAsync(cancellationToken);
 
         public virtual async Task<T?> GetByIdAsync(Guid id, CancellationToken cancellationToken)
         {

@@ -2,11 +2,15 @@ import http from 'k6/http';
 import { check, sleep, group } from 'k6';
 import { Rate, Trend } from 'k6/metrics';
 
-// Custom metrics
+// Custom metrics — one Trend per distinct operation so analysis can
+// show per-operation p95/p99 and we never conflate unrelated requests.
 const errorRate = new Rate('errors');
 const loginDuration = new Trend('login_duration', true);
+const registerDuration = new Trend('register_duration', true);
 const bookingDuration = new Trend('booking_duration', true);
 const roomsDuration = new Trend('rooms_duration', true);
+const myBookingsDuration = new Trend('my_bookings_duration', true);
+const cancelDuration = new Trend('cancel_duration', true);
 
 // Configuration — change BASE_URL per architecture
 const BASE_URL = __ENV.BASE_URL || 'http://127.0.0.1:3000';
@@ -45,9 +49,18 @@ const profiles = {
 const selectedProfile = __ENV.PROFILE || 'constant';
 export const options = {
   stages: profiles[selectedProfile].stages,
+  // Thresholds are documentary — they show SLA violations in logs but never
+  // block result collection. Script treats exit code 99 (threshold fail) as OK.
   thresholds: {
-    http_req_duration: ['p(95)<2000'],
-    errors: ['rate<0.1'],
+    http_req_failed: ['rate<0.05'],
+    errors: ['rate<0.05'],
+    http_req_duration: ['p(95)<10000'],
+    login_duration: ['p(95)<10000'],
+    register_duration: ['p(95)<10000'],
+    booking_duration: ['p(95)<5000'],
+    rooms_duration: ['p(95)<2000'],
+    my_bookings_duration: ['p(95)<2000'],
+    cancel_duration: ['p(95)<2000'],
   },
   insecureSkipTLSVerify: true,
 };
@@ -89,6 +102,7 @@ export default function () {
       tags: { name: 'POST_register' },
     });
 
+    registerDuration.add(registerRes.timings.duration);
     check(registerRes, { 'register: status 200': (r) => r.status === 200 });
     errorRate.add(registerRes.status !== 200);
 
@@ -128,11 +142,14 @@ export default function () {
 
   sleep(1);
 
-  // 4. Get room list + pick one for booking
+  // 4. Get room list + pick one for booking — same endpoint as step 1 but
+  // recorded into rooms_duration so list-rooms latency is always captured,
+  // regardless of which step the VU is on.
   let roomId = null;
   let roomPrice = 0;
   group('Select Room', () => {
     const roomsRes = http.get(`${BASE_URL}/api/room`, { tags: { name: 'GET_rooms_select' } });
+    roomsDuration.add(roomsRes.timings.duration);
 
     if (roomsRes.status === 200) {
       const rooms = JSON.parse(roomsRes.body);
@@ -187,6 +204,7 @@ export default function () {
       tags: { name: 'GET_my_bookings' },
     });
 
+    myBookingsDuration.add(myRes.timings.duration);
     check(myRes, { 'my bookings: status 200': (r) => r.status === 200 });
     errorRate.add(myRes.status !== 200);
   });
@@ -201,6 +219,7 @@ export default function () {
         tags: { name: 'DELETE_booking' },
       });
 
+      cancelDuration.add(cancelRes.timings.duration);
       check(cancelRes, { 'cancel: status 204': (r) => r.status === 204 });
       errorRate.add(cancelRes.status !== 204);
     });

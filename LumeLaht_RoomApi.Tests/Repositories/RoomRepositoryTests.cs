@@ -55,7 +55,6 @@ namespace LumeLaht_RoomApi.Tests.Repositories
             //Assert
             Assert.NotNull(result);
             Assert.Equal(2,result.Count);
-            // Проверяем, что связанные данные загружены
             Assert.All(result, room =>
             {
                 Assert.NotNull(room.Address);
@@ -260,10 +259,10 @@ namespace LumeLaht_RoomApi.Tests.Repositories
         }
 
         [Theory]
-        [InlineData("pricePerHour", "asc", "Зал А")]
-        [InlineData("pricePerHour", "desc", "Зал B")]
-        [InlineData("name", "asc", "Зал А")]
-        [InlineData("name", "desc", "Зал B")]
+        [InlineData("pricePerHour", "asc", "Cozy Corner")]
+        [InlineData("pricePerHour", "desc", "Game Hub")]
+        [InlineData("name", "asc", "Cozy Corner")]
+        [InlineData("name", "desc", "Game Hub")]
         public async Task GetFilteredRoomsAsync_ShouldSortCorrectly(string sortBy, string sortOrder, string expectedFirstName)
         {
             // Arrange

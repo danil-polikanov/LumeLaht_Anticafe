@@ -41,16 +41,16 @@ export const MyBookings: React.FC = () => {
   const filtered = (bookings ?? []).filter((b) => {
     if (activeTab === 'cancelled') return b.status.toLowerCase() === 'cancelled';
     if (activeTab === 'past')
-      return new Date(b.startTime) < now && b.status.toLowerCase() !== 'cancelled';
-    return new Date(b.startTime) >= now && b.status.toLowerCase() !== 'cancelled';
+      return new Date(b.endTime) <= now && b.status.toLowerCase() !== 'cancelled';
+    return new Date(b.endTime) > now && b.status.toLowerCase() !== 'cancelled';
   });
 
   const tabCounts = {
     upcoming: (bookings ?? []).filter(
-      (b) => new Date(b.startTime) >= now && b.status.toLowerCase() !== 'cancelled',
+      (b) => new Date(b.endTime) > now && b.status.toLowerCase() !== 'cancelled',
     ).length,
     past: (bookings ?? []).filter(
-      (b) => new Date(b.startTime) < now && b.status.toLowerCase() !== 'cancelled',
+      (b) => new Date(b.endTime) <= now && b.status.toLowerCase() !== 'cancelled',
     ).length,
     cancelled: (bookings ?? []).filter((b) => b.status.toLowerCase() === 'cancelled').length,
   };

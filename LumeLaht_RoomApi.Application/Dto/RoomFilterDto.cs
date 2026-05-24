@@ -14,7 +14,6 @@ namespace LumeLaht_RoomApi.Application.Dto
         public SortOptions SortOptions { get; set; }
         public int Page { get; set; } = 1;
         public int PageSize { get; set; } =3;
-        // Конвертируем в универсальный FilterOptions
         public FilterOptions ToFilterOptions()
         {
             return new FilterOptions

@@ -40,6 +40,7 @@ namespace UserService.API
             builder.Services.AddTransient<RequestResponseLoggingMiddleware>();
 
             // Repositories & UnitOfWork
+            builder.Services.AddScoped<IUserRepository, UserRepository>();
             builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
             builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
@@ -51,10 +52,16 @@ namespace UserService.API
             builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection("Jwt"));
 
             // DbContext
-            builder.Services.AddDbContext<UserDbContext>(option =>
+            var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+            if (!string.IsNullOrEmpty(connectionString) &&
+                !connectionString.Contains("Max Pool Size", StringComparison.OrdinalIgnoreCase))
             {
-                option.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"))
-                      .LogTo(Console.WriteLine, LogLevel.Information);
+                connectionString += ";Max Pool Size=100;Connection Timeout=10";
+            }
+            builder.Services.AddDbContextPool<UserDbContext>(option =>
+            {
+                option.UseSqlServer(connectionString, sql =>
+                    sql.CommandTimeout(30).EnableRetryOnFailure(3));
             });
 
             // JWT Authentication
@@ -94,7 +101,7 @@ namespace UserService.API
             using (var scope = app.Services.CreateScope())
             {
                 var db = scope.ServiceProvider.GetRequiredService<UserDbContext>();
-                db.Database.Migrate();
+                db.Database.EnsureCreated();
             }
 
             app.UseCors("AllowReactApp");

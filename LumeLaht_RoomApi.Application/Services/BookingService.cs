@@ -27,20 +27,23 @@ namespace LumeLaht_RoomApi.Application.Services
             if (room.Status != "Available")
                 throw new InvalidOperationException("Room is not available");
 
+            var requestUtc = request.StartTime.Kind switch
+            {
+                DateTimeKind.Utc => request.StartTime,
+                DateTimeKind.Local => request.StartTime.ToUniversalTime(),
+                _ => DateTime.SpecifyKind(request.StartTime, DateTimeKind.Utc)
+            };
+
             var startTime = new DateTime(
-                request.StartTime.Year, request.StartTime.Month, request.StartTime.Day,
-                request.StartTime.Hour, 0, 0, DateTimeKind.Utc);
+                requestUtc.Year, requestUtc.Month, requestUtc.Day,
+                requestUtc.Hour, 0, 0, DateTimeKind.Utc);
             var endTime = startTime.AddHours(1);
 
-            if (startTime < DateTime.UtcNow)
+            if (startTime <= DateTime.UtcNow)
                 throw new InvalidOperationException("Cannot book a slot in the past");
 
-            var allBookings = await _unitOfWork.Bookings.GetAllAsync(cancellationToken);
-            var hasConflict = allBookings.Any(b =>
-                b.RoomId == request.RoomId &&
-                b.Status == "Confirmed" &&
-                b.StartTime < endTime &&
-                b.EndTime > startTime);
+            var hasConflict = await _unitOfWork.Bookings.HasConflictAsync(
+                request.RoomId, startTime, endTime, cancellationToken);
 
             if (hasConflict)
                 throw new InvalidOperationException("This time slot is already booked");
@@ -66,13 +69,10 @@ namespace LumeLaht_RoomApi.Application.Services
         public async Task<List<BookingResponse>> GetUserBookingsAsync(
             Guid userId, CancellationToken cancellationToken)
         {
-            var allBookings = await _unitOfWork.Bookings.GetAllAsync(cancellationToken);
-            var userBookings = allBookings.Where(b => b.UserId == userId).ToList();
+            var userBookings = await _unitOfWork.Bookings.GetByUserIdAsync(userId, cancellationToken);
 
-            var rooms = await _unitOfWork.Rooms.GetAllAsync(cancellationToken);
-            var roomDict = rooms.ToDictionary(r => r.RoomId, r => r.Name);
-
-            return userBookings.Select(b => MapToResponse(b, roomDict.GetValueOrDefault(b.RoomId, "Unknown")))
+            return userBookings
+                .Select(b => MapToResponse(b, b.Room?.Name ?? "Unknown"))
                 .OrderByDescending(b => b.StartTime)
                 .ToList();
         }
@@ -100,21 +100,18 @@ namespace LumeLaht_RoomApi.Application.Services
         public async Task<List<BookingResponse>> GetRoomBookingsAsync(
             Guid roomId, DateTime date, CancellationToken cancellationToken)
         {
-            var allBookings = await _unitOfWork.Bookings.GetAllAsync(cancellationToken);
-            var dayStart = date.Date;
-            var dayEnd = dayStart.AddDays(1);
+            var roomBookings = await _unitOfWork.Bookings.GetByRoomIdAndDateAsync(
+                roomId, date, cancellationToken);
 
-            var roomBookings = allBookings
-                .Where(b => b.RoomId == roomId &&
-                            b.Status == "Confirmed" &&
-                            b.StartTime >= dayStart &&
-                            b.StartTime < dayEnd)
+            var confirmedBookings = roomBookings
+                .Where(b => b.Status == "Confirmed")
                 .ToList();
 
             var room = await _unitOfWork.Rooms.GetByIdAsync(roomId, cancellationToken);
             var roomName = room?.Name ?? "Unknown";
 
-            return roomBookings.Select(b => MapToResponse(b, roomName))
+            return confirmedBookings
+                .Select(b => MapToResponse(b, roomName))
                 .OrderBy(b => b.StartTime)
                 .ToList();
         }

@@ -1,4 +1,4 @@
-﻿using LumeLaht_RoomApi.Core_.Entities;
+using LumeLaht_RoomApi.Core_.Entities;
 using LumeLaht_RoomApi.Core_.Entities.User;
 using LumeLaht_RoomApi.Core_.Interfaces;
 using LumeLaht_RoomApi.Infrastructure.Data;
@@ -13,16 +13,16 @@ namespace LumeLaht_RoomApi.Infrastructure.Repositories
         public IRepository<Address> Addresses { get; }
         public IRepository<Activity> Activities { get; }
         public IRepository<RoomImage> RoomImages { get; }
-        public IRepository<User> Users { get; }
-        public IRepository<Booking> Bookings { get; }
+        public IUserRepository Users { get; }
+        public IBookingRepository Bookings { get; }
 
         public UnitOfWork(AppDbContext context,
                           IRoomRepository rooms,
                           IRepository<Address> addresses,
                           IRepository<Activity> activities,
                           IRepository<RoomImage> roomImages,
-                          IRepository<User> users,
-                          IRepository<Booking> bookings)
+                          IUserRepository users,
+                          IBookingRepository bookings)
         {
             _context = context;
             Rooms = rooms;

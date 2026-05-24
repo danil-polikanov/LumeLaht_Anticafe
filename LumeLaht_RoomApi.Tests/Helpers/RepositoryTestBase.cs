@@ -8,10 +8,6 @@ using System.Threading.Tasks;
 
 namespace LumeLaht_RoomApi.Tests.Helpers
 {
-    /// <summary>
-    /// Базовый класс для тестов репозиториев
-    /// Переиспользуйте его для других репозиториев
-    /// </summary>
     public abstract class RepositoryTestBase : IDisposable
     {
         protected readonly AppDbContext context;
